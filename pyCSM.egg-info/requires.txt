@@ -1,0 +1,6 @@
+requests
+urllib3
+certifi
+Sphinx
+flake8
+pytest

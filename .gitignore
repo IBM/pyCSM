@@ -1,0 +1,8 @@
+main.py
+.tox
+tests.py
+__pycache__
+.DS_Store
+.idea
+docs/html
+docs/index.html

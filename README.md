@@ -1,6 +1,7 @@
 # CSM Python Client
 [![Build Status](https://travis.ibm.com/pyCSM/pyCSM.svg?token=S4B3H6Vzv2oQaoCcyYeT&branch=main)](https://github.ibm.com/pyCSM/pyCSM)
 [![Documentation Status](https://readthedocs.org/projects/pycsm/badge/?version=latest)](https://pycsm.readthedocs.io/en/latest/?badge=latest)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5999/badge)](https://bestpractices.coreinfrastructure.org/projects/5999)
 
 This repository contains the IBM Python client for RESTful communication to an IBM Copy Services Manager server.  The Python client enables full management and monitoring of the replication and the components necessary for replication in a Copy Services Manager environment. 
 

@@ -98,7 +98,7 @@ def get_session_overviews(url, tk, verify=False, cert=None):
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_commands(url, tk, name, verify=False, cert=None):
+def get_available_commands(url, tk, name, verify=False, cert=None):
     """
     Returns the list of available commands
     for a session based on the session's current state
@@ -120,7 +120,7 @@ def get_commands(url, tk, name, verify=False, cert=None):
     return requests.get(getc_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_options(url, tk, name, verify=False, cert=None):
+def get_session_options(url, tk, name, verify=False, cert=None):
     """
     Gets the options for the given session. The results returned
     from this method will vary depending on the session type.
@@ -141,7 +141,7 @@ def get_options(url, tk, name, verify=False, cert=None):
     return requests.get(geto_url, headers=headers, verify=verify, cert=cert)
 
 
-def description(url, tk, name, desc, verify=False, cert=None):
+def modify_session_description(url, tk, name, desc, verify=False, cert=None):
     """
     Changes the description field for a given session.
 
@@ -166,7 +166,7 @@ def description(url, tk, name, desc, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def run_command(url, tk, ses_name, com_name, verify=False, cert=None):
+def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
     """
     Run a command against a session.
 

@@ -155,7 +155,7 @@ class hardwareClient:
                                         self.verify, self.cert)
         return resp
 
-    def export_vol_history(self, session_name, start_time, end_time):
+    def export_vol_writeio_history(self, session_name, start_time, end_time):
         """
         Exports ESE Box History for a session in csv format to a file.
 
@@ -168,13 +168,13 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware.export_vol_history(self.base_url, self.tk,
+        resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
                                            session_name, start_time, end_time,
                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return hardware.export_vol_history(self.base_url, self.tk,
+            return hardware.export_vol_writeio_history(self.base_url, self.tk,
                                                session_name, start_time,
                                                end_time, self.cert,
                                                self.verify)

@@ -7,9 +7,9 @@ import requests
 """
 
 
-def get_cpyst(url, tk, name, verify=False, cert=None):
+def get_copysets(url, tk, name, verify=False, cert=None):
     """
-    Gets all pairs and their info for a given copy set.
+    Gets all copy sets and their info for a given session.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
@@ -28,7 +28,7 @@ def get_cpyst(url, tk, name, verify=False, cert=None):
     return requests.get(getcs_url, headers=headers, verify=verify, cert=cert)
 
 
-def add_cpyst(url, tk, name, copysets, verify=False, cert=None):
+def add_copysets(url, tk, name, copysets, verify=False, cert=None):
     """
     Add copy sets to a given session
 
@@ -55,7 +55,7 @@ def add_cpyst(url, tk, name, copysets, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def remove_cpyst(url, tk, name, force, soft, verify=False, cert=None):
+def remove_copysets(url, tk, name, force, soft, verify=False, cert=None):
     """
     Removes Copy Sets from the given session.
 
@@ -81,7 +81,7 @@ def remove_cpyst(url, tk, name, force, soft, verify=False, cert=None):
                            verify=verify, cert=cert)
 
 
-def export_cpyst(url, tk, file_name, verify=False, cert=None):
+def export_copysets(url, tk, file_name, verify=False, cert=None):
     """
     Exports copysets as a csv file.
 

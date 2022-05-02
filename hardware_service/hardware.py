@@ -151,7 +151,7 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def export_vol_history(url, tk, session_name, start_time, end_time,
+def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
                        verify=False, cert=None):
     """
     Exports ESE Box History for a session in csv format to a file.

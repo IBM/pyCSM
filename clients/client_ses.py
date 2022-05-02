@@ -112,7 +112,7 @@ class sessionClient:
                                                   self.verify, self.cert)
         return resp
 
-    def get_commands(self, name):
+    def get_available_commands(self, name):
         """
         Returns the list of available commands for a session
         based on the session's current state
@@ -124,16 +124,16 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = sessions.get_commands(self.base_url, self.tk, name,
+        resp = sessions.get_available_commands(self.base_url, self.tk, name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return sessions.get_commands(self.base_url, self.tk, name,
+            return sessions.get_available_commands(self.base_url, self.tk, name,
                                          self.verify, self.cert)
         return resp
 
-    def get_options(self, name):
+    def get_session_options(self, name):
         """
         Gets the options for the given session.
         The results returned from this method will vary
@@ -145,16 +145,16 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.get_options(self.base_url, self.tk, name,
+        resp = sessions.get_session_options(self.base_url, self.tk, name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return sessions.get_options(self.base_url, self.tk, name,
+            return sessions.get_session_options(self.base_url, self.tk, name,
                                         self.verify, self.cert)
         return resp
 
-    def description(self, name, desc):
+    def modify_session_description(self, name, desc):
         """
         Changes the description field for a given session.
 
@@ -165,15 +165,15 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.description(self.base_url, self.tk, name, desc,
+        resp = sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            sessions.description(self.base_url, self.tk, name, desc,
+            sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                  self.verify, self.cert)
 
-    def run_command(self, ses_name, com_name):
+    def run_session_command(self, ses_name, com_name):
         """
         Run a command against a session.
 
@@ -184,12 +184,12 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.run_command(self.base_url, self.tk, ses_name, com_name,
+        resp = sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            sessions.run_command(self.base_url, self.tk, ses_name, com_name,
+            sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                  self.verify, self.cert)
 
     def wait_for_state(self, ses_name, state, minutes, debug=False):
@@ -341,7 +341,7 @@ class sessionClient:
             schedule.run_scheduled_task(self.base_url, self.tk, taskid,
                                         self.verify, self.cert)
 
-    def get_cpyst(self, name):
+    def get_copysets(self, name):
         """
         Gets all pairs and their info for a given copy set.
 
@@ -352,16 +352,16 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.get_cpyst(self.base_url, self.tk, name,
+        resp = copysets.get_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return copysets.get_cpyst(self.base_url, self.tk, name,
+            return copysets.get_copysets(self.base_url, self.tk, name,
                                       self.verify, self.cert)
         return resp
 
-    def add_cpyst(self, name, copysets):
+    def add_copysets(self, name, copysets):
         """
         Add copy sets to a given session
 
@@ -374,15 +374,15 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.add_cpyst(self.base_url, self.tk, name,
+        resp = copysets.add_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            copysets.add_cpyst(self.base_url, self.tk, name,
+            copysets.add_copysets(self.base_url, self.tk, name,
                                self.verify, self.cert)
 
-    def remove_cpyst(self, name, force, soft):
+    def remove_copysets(self, name, force, soft):
         """
         Removes Copy Sets from the given session.
 
@@ -397,15 +397,15 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.remove_cpyst(self.base_url, self.tk, name, force, soft,
+        resp = copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                      self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            copysets.remove_cpyst(self.base_url, self.tk, name, force, soft,
+            copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                   self.verify, self.cert)
 
-    def export_cpyst(self, file_name):
+    def export_copysets(self, file_name):
         """
         Exports copysets as a csv file.
 
@@ -415,10 +415,10 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = copysets.export_cpyst(self.base_url, self.tk, file_name,
+        resp = copysets.export_copysets(self.base_url, self.tk, file_name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            copysets.copysets.export_cpyst(self.base_url, self.tk, file_name,
+            copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
                                            self.verify, self.cert)

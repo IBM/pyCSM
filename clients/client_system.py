@@ -28,7 +28,7 @@ class systemClient:
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
         self.tk = auth.get_tk(self.base_url, username, password)
 
-    def make_log_pkgs(self):
+    def create_log_pkg(self):
         """
         This method will package all log files on the server into a .jar file
 
@@ -36,12 +36,12 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system.make_log_pkgs(self.base_url, self.tk,
+        resp = system.create_log_pkg(self.base_url, self.tk,
                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            system.make_log_pkgs(self.base_url, self.tk,
+            system.create_log_pkg(self.base_url, self.tk,
                                  self.verify, self.cert)
 
     def get_log_pkgs(self):

@@ -41,6 +41,7 @@ class hardwareClient:
     def get_devices(self, device_type):
         """
 |
+|
         Use this call to return the storage system for all storage systems of the passed in type.
 
         Args:

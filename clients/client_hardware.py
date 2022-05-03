@@ -42,13 +42,13 @@ class hardwareClient:
         """
 |
 |
-|         |br| Use this call to return the storage system for all storage systems of the passed in type.
+|         Use this call to return the storage system for all storage systems of the passed in type.
 |
 |         Args:
 |             device_type (str): Type of storage device  ex. ds8000 or svc.
 |
 |         Returns:
-|             Returns JSON String representing the result of the command. |br|
+|             Returns JSON String representing the result of the command.
 |
 |
 |

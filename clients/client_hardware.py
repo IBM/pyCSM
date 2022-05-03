@@ -12,7 +12,6 @@ class hardwareClient:
     error and retrieve a new token prior to retrying the call.
 |
 |
-|
     """
 
     def __init__(self, server_address, server_port, username, password,
@@ -45,7 +44,7 @@ class hardwareClient:
 
         Returns:
              Returns JSON String representing the result of the command.
-
+|
         """
         resp = hardware.get_devices(self.base_url, self.tk, device_type,
                                     self.verify, self.cert)
@@ -56,35 +55,30 @@ class hardwareClient:
                                         self.verify, self.cert)
         return resp
 
-    def add_device(self, device_type, device_ip, device_port,
-                   device_username, device_password, second_ip=None,
+    def add_device(self, device_type, device_ip,
+                   device_username, device_password,
+                   device_port=None, second_ip=None,
                    second_port=None, second_username=None,
                    second_password=None):
         """
 
-        Use this method to create a connection from the CSM server
-        to a specified storage system
+        Use this method to create a connection from the CSM server to a specified storage system
 
         Args:
             device_type (str): Type of storage device  ex. ds8000 or svc.
-            device_ip (str): IP address or hostname for the storage system.
-            device_port (str): Port to use for the connection
-            to the storage system.
+            device_ip (str): IP address or hostname for the primary HMC for the storage system.
             device_username (str): Username for the storage system connection.
             device_password (str): Password for the storage system connection.
-            second_ip (str) (OPTIONAL): For DS8000 storage systems,
-            the IP address or hostname of a secondary HMC system.
-            second_port (str) (OPTIONAL): Port to use for the connection
-            to the secondary HMC system for DS8000 connections.
-            second_username (str) (OPTIONAL): Username for the connection
-            to the secondary HMC system for DS8000 connections.
-            second_password (str) (OPTIONAL): Password for the connection
-            to the secondary HMC system for DS8000 connections.
+            device_port (str) (OPTIONAL): Port to use for the connection to the storage system.
+            second_ip (str) (OPTIONAL): For DS8000 storage systems, the IP address or hostname of a secondary HMC.
+            second_port (str) (OPTIONAL): Port to use for the connection to the secondary HMC.
+            second_username (str) (OPTIONAL): Username for the connection to the secondary HMC.
+            second_password (str) (OPTIONAL): Password for the connection to the secondary HMC.
 
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-
+|
         """
         resp = hardware.add_device(self.base_url, self.tk, device_type,
                                    device_ip, device_port, device_username,
@@ -112,7 +106,7 @@ class hardwareClient:
         Returns:
              JSON String representing the result of the command.
              'I' = successful, 'W' = warning, 'E' = error.
-
+|
         """
         resp = hardware.remove_device(self.base_url, self.tk, system_id,
                                       self.verify, self.cert)
@@ -134,7 +128,7 @@ class hardwareClient:
         Returns:
              JSON String representing the result of the command.
              'I' = successful, 'W' = warning, 'E' = error.
-
+|
         """
         resp = hardware.update_device_site_location(self.base_url, self.tk,
                                       system_id, location,
@@ -157,7 +151,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing all the volumes for that storage system.
-
+|
         """
         resp = hardware.get_volumes(self.base_url, self.tk, system_name,
                                     self.verify, self.cert)
@@ -181,7 +175,7 @@ class hardwareClient:
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-
+|
         """
         resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
                                            session_name, start_time, end_time,
@@ -202,7 +196,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing the result of the command.
-
+|
         """
         resp = hardware.get_paths(self.base_url, self.tk,
                                   self.verify, self.cert)
@@ -223,7 +217,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing the result of the command.
-
+|
         """
         resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                  self.verify, self.cert)
@@ -245,7 +239,8 @@ class hardwareClient:
 
         Returns:
             JSON String representing the result of the command.
-
+            'I' = successful, 'W' = warning, 'E' = error.
+|
         """
         resp = hardware.refresh_config(self.base_url, self.tk, system_id,
                                        self.verify, self.cert)

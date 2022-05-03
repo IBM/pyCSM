@@ -42,13 +42,13 @@ class hardwareClient:
         """
 |
 |
-        Use this call to return the storage system for all storage systems of the passed in type.
-
-        Args:
-            device_type (str): Type of storage device  ex. ds8000 or svc.
+|         Use this call to return the storage system for all storage systems of the passed in type.
 |
-        Returns:
-            Returns JSON String representing the result of the command.
+|         Args:
+|             device_type (str): Type of storage device  ex. ds8000 or svc.
+|
+|         Returns:
+|             Returns JSON String representing the result of the command.
 |
 |
 |
@@ -112,14 +112,14 @@ class hardwareClient:
     def remove_device(self, system_id):
         """
         |
-        Use this method to remove the connection to the specified storage system
+        | Use this method to remove the connection to the specified storage system
 
-        Args:
-            system_id (str): The id of the storage system to be removed.
+        | Args:
+        |     system_id (str): The id of the storage system to be removed.
         |
-        Returns:
-            JSON String representing the result of the command.
-            'I' = successful, 'W' = warning, 'E' = error.
+        | Returns:
+        |     JSON String representing the result of the command.
+        |     'I' = successful, 'W' = warning, 'E' = error.
         |
         |
         |
@@ -136,15 +136,15 @@ class hardwareClient:
     def update_device_site_location(self, system_id, location):
         """
         |
-        Set a user defined site location for a given storage system
+        | Set a user defined site location for a given storage system
 
-        Args:
-            system_id (str): The id of the storage system to be updated.
-            location (str): The name of the location to set on the storage system.
+        | Args:
+        |     system_id (str): The id of the storage system to be updated.
+        |     location (str): The name of the location to set on the storage system.
         |
-        Returns:
-            JSON String representing the result of the command.
-            'I' = successful, 'W' = warning, 'E' = error.
+        | Returns:
+        |     JSON String representing the result of the command.
+        |     'I' = successful, 'W' = warning, 'E' = error.
         |
         |
         |

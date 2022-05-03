@@ -1,5 +1,5 @@
 Session Client
 ===============
 
-.. automodule:: clients.client_ses
+.. automodule:: clients.client_session
     :members:

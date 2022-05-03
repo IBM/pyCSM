@@ -2,6 +2,12 @@ from datetime import datetime
 from authorization import auth
 from session_service import sessions, schedule, copysets
 
+"""
+
+    Description: This client module handles calls to manage sessions, copy sets and scheduled tasks handling
+    the authentication calls for the caller
+
+"""
 
 class sessionClient:
     """

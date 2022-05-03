@@ -10,14 +10,14 @@ class hardwareClient:
     username and password only when you __init__ the class which will obtain a token to the server that will be
     used on all calls using the class.  In the event that the token expires, the client will automatically handle the
     error and retrieve a new token prior to retrying the call.
-
-
+|
+|
+|
     """
 
     def __init__(self, server_address, server_port, username, password,
                  verify=False, cert=None):
         """
-|
         Creates a hardware client to store the server_address,
         port, username, password and token once created.
 
@@ -26,9 +26,7 @@ class hardwareClient:
             server_port (str): The port of the CSM server.
             username (str): username for server login.
             password (str): password for server login.
-|
-|
-|
+
         """
         self.username = username
         self.password = password
@@ -40,18 +38,14 @@ class hardwareClient:
 
     def get_devices(self, device_type):
         """
-|
-|
-|         Use this call to return the storage system for all storage systems of the passed in type.
-|
-|         Args:
-|             device_type (str): Type of storage device  ex. ds8000 or svc.
-|
-|         Returns:
-|             Returns JSON String representing the result of the command.
-|
-|
-|
+        Use this call to return the storage system for all storage systems of the passed in type.
+
+        Args:
+             device_type (str): Type of storage device  ex. ds8000 or svc.
+
+        Returns:
+             Returns JSON String representing the result of the command.
+
         """
         resp = hardware.get_devices(self.base_url, self.tk, device_type,
                                     self.verify, self.cert)
@@ -67,7 +61,7 @@ class hardwareClient:
                    second_port=None, second_username=None,
                    second_password=None):
         """
-|
+
         Use this method to create a connection from the CSM server
         to a specified storage system
 
@@ -86,13 +80,11 @@ class hardwareClient:
             to the secondary HMC system for DS8000 connections.
             second_password (str) (OPTIONAL): Password for the connection
             to the secondary HMC system for DS8000 connections.
-|
+
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-|
-|
-|
+
         """
         resp = hardware.add_device(self.base_url, self.tk, device_type,
                                    device_ip, device_port, device_username,
@@ -111,18 +103,16 @@ class hardwareClient:
 
     def remove_device(self, system_id):
         """
-        |
-        | Use this method to remove the connection to the specified storage system
 
-        | Args:
-        |     system_id (str): The id of the storage system to be removed.
-        |
-        | Returns:
-        |     JSON String representing the result of the command.
-        |     'I' = successful, 'W' = warning, 'E' = error.
-        |
-        |
-        |
+        Use this method to remove the connection to the specified storage system
+
+        Args:
+             system_id (str): The id of the storage system to be removed.
+
+        Returns:
+             JSON String representing the result of the command.
+             'I' = successful, 'W' = warning, 'E' = error.
+
         """
         resp = hardware.remove_device(self.base_url, self.tk, system_id,
                                       self.verify, self.cert)
@@ -135,19 +125,16 @@ class hardwareClient:
 
     def update_device_site_location(self, system_id, location):
         """
-        |
-        | Set a user defined site location for a given storage system
+        Set a user defined site location for a given storage system
 
-        | Args:
-        |     system_id (str): The id of the storage system to be updated.
-        |     location (str): The name of the location to set on the storage system.
-        |
-        | Returns:
-        |     JSON String representing the result of the command.
-        |     'I' = successful, 'W' = warning, 'E' = error.
-        |
-        |
-        |
+        Args:
+             system_id (str): The id of the storage system to be updated.
+             location (str): The name of the location to set on the storage system.
+
+        Returns:
+             JSON String representing the result of the command.
+             'I' = successful, 'W' = warning, 'E' = error.
+
         """
         resp = hardware.update_device_site_location(self.base_url, self.tk,
                                       system_id, location,
@@ -162,17 +149,15 @@ class hardwareClient:
 
     def get_volumes(self, system_name):
         """
-        |
+
         Use this method to retrieve all volumes for a given storage system
 
         Args:
             system_name (str): The name of the storage system.
-        |
+
         Returns:
             JSON String representing all the volumes for that storage system.
-        |
-        |
-        |
+
         """
         resp = hardware.get_volumes(self.base_url, self.tk, system_name,
                                     self.verify, self.cert)
@@ -185,20 +170,18 @@ class hardwareClient:
 
     def export_vol_writeio_history(self, session_name, start_time, end_time):
         """
-        |
+
         Exports a summary of the write i/o history for all volumes in a session to a csv file between the given times.
 
         Args:
             session_name (str): The name of the session.
             start_time (str): Start time YYYY-MM-DD.
             end_time (str): End time YYYY-MM-DD.
-        |
+
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-        |
-        |
-        |
+
         """
         resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
                                            session_name, start_time, end_time,
@@ -214,14 +197,12 @@ class hardwareClient:
 
     def get_paths(self):
         """
-        |
+
         Queries all the logical paths for all DS8000 storage systems connected to the CSM server.
-        |
+
         Returns:
             JSON String representing the result of the command.
-        |
-        |
-        |
+
         """
         resp = hardware.get_paths(self.base_url, self.tk,
                                   self.verify, self.cert)
@@ -234,17 +215,15 @@ class hardwareClient:
 
     def get_path_on_storage_system(self, system_id):
         """
-        |
+
         Query for all logical paths on the given DS8000 storage system.
 
         Args:
             system_id (str): The id of the storage system to be updated.
 
-            Returns:
-                JSON String representing the result of the command.
-        |
-        |
-        |
+        Returns:
+            JSON String representing the result of the command.
+
         """
         resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                  self.verify, self.cert)
@@ -257,18 +236,16 @@ class hardwareClient:
 
     def refresh_config(self, system_id):
         """
-        |
+
         Refreshes the configuration for the given storage system.  Issuing this command will force the CSM server
         to requery the hardware for any new or deleted volumes.
 
         Args:
             system_id (str): The id of the storage system to be refreshed.
-        |
+
         Returns:
             JSON String representing the result of the command.
-        |
-        |
-        |
+
         """
         resp = hardware.refresh_config(self.base_url, self.tk, system_id,
                                        self.verify, self.cert)

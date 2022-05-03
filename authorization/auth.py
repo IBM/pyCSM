@@ -5,7 +5,8 @@ import requests
 
 def get_tk(url, username, password, verify=False, cert=None):
     """
-    Creates a REST token to be used for future REST commands.
+
+    Retrieves a REST token from the server to be used for future REST commands.
 
     Args:
         url (str): Base url of csm server ex. https://servername:port/CSM/web.

@@ -17,7 +17,7 @@ class hardwareClient:
     def __init__(self, server_address, server_port, username, password,
                  verify=False, cert=None):
         """
-        |
+|
         Creates a hardware client to store the server_address,
         port, username, password and token once created.
 
@@ -26,9 +26,9 @@ class hardwareClient:
             server_port (str): The port of the CSM server.
             username (str): username for server login.
             password (str): password for server login.
-        |
-        |
-        |
+|
+|
+|
         """
         self.username = username
         self.password = password
@@ -40,17 +40,17 @@ class hardwareClient:
 
     def get_devices(self, device_type):
         """
-        |
+|
         Use this call to return the storage system for all storage systems of the passed in type.
 
         Args:
             device_type (str): Type of storage device  ex. ds8000 or svc.
-        |
+|
         Returns:
             Returns JSON String representing the result of the command.
-        |
-        |
-        |
+|
+|
+|
         """
         resp = hardware.get_devices(self.base_url, self.tk, device_type,
                                     self.verify, self.cert)
@@ -66,7 +66,7 @@ class hardwareClient:
                    second_port=None, second_username=None,
                    second_password=None):
         """
-        |
+|
         Use this method to create a connection from the CSM server
         to a specified storage system
 
@@ -85,13 +85,13 @@ class hardwareClient:
             to the secondary HMC system for DS8000 connections.
             second_password (str) (OPTIONAL): Password for the connection
             to the secondary HMC system for DS8000 connections.
-        |
+|
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-        |
-        |
-        |
+|
+|
+|
         """
         resp = hardware.add_device(self.base_url, self.tk, device_type,
                                    device_ip, device_port, device_username,

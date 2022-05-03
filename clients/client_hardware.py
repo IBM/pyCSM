@@ -40,11 +40,11 @@ class hardwareClient:
         Use this call to return the storage system for all storage systems of the passed in type.
 
         Args:
-             device_type (str): Type of storage device  ex. ds8000 or svc.
+            device_type (str): Type of storage device  ex. ds8000 or svc.
 
         Returns:
              Returns JSON String representing the result of the command.
-|
+
         """
         resp = hardware.get_devices(self.base_url, self.tk, device_type,
                                     self.verify, self.cert)
@@ -78,7 +78,7 @@ class hardwareClient:
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-|
+
         """
         resp = hardware.add_device(self.base_url, self.tk, device_type,
                                    device_ip, device_port, device_username,
@@ -106,7 +106,7 @@ class hardwareClient:
         Returns:
              JSON String representing the result of the command.
              'I' = successful, 'W' = warning, 'E' = error.
-|
+
         """
         resp = hardware.remove_device(self.base_url, self.tk, system_id,
                                       self.verify, self.cert)
@@ -128,7 +128,7 @@ class hardwareClient:
         Returns:
              JSON String representing the result of the command.
              'I' = successful, 'W' = warning, 'E' = error.
-|
+
         """
         resp = hardware.update_device_site_location(self.base_url, self.tk,
                                       system_id, location,
@@ -151,7 +151,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing all the volumes for that storage system.
-|
+
         """
         resp = hardware.get_volumes(self.base_url, self.tk, system_name,
                                     self.verify, self.cert)
@@ -175,7 +175,7 @@ class hardwareClient:
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-|
+
         """
         resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
                                            session_name, start_time, end_time,
@@ -196,7 +196,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing the result of the command.
-|
+
         """
         resp = hardware.get_paths(self.base_url, self.tk,
                                   self.verify, self.cert)
@@ -217,7 +217,7 @@ class hardwareClient:
 
         Returns:
             JSON String representing the result of the command.
-|
+
         """
         resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                  self.verify, self.cert)
@@ -240,7 +240,7 @@ class hardwareClient:
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
-|
+
         """
         resp = hardware.refresh_config(self.base_url, self.tk, system_id,
                                        self.verify, self.cert)

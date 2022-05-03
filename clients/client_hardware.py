@@ -111,7 +111,7 @@ class hardwareClient:
                                           self.verify, self.cert)
         return resp
 
-    def update_device(self, system_id, location):
+    def update_device_site_location(self, system_id, location):
         """
         Set a user defined site location for a given storage system
 
@@ -124,13 +124,13 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
             """
-        resp = hardware.update_device(self.base_url, self.tk,
+        resp = hardware.update_device_site_location(self.base_url, self.tk,
                                       system_id, location,
                                       self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return hardware.update_device(self.base_url, self.tk,
+            return hardware.update_device_site_location(self.base_url, self.tk,
                                           system_id, location,
                                           self.verify, self.cert)
         return resp
@@ -196,7 +196,7 @@ class hardwareClient:
                                       self.verify, self.cert)
         return resp
 
-    def get_path(self, system_id):
+    def get_path_on_storage_system(self, system_id):
         """
         Query for all paths on the given storage system.
 
@@ -206,12 +206,12 @@ class hardwareClient:
             Returns:
                 JSON String representing the result of the command.
             """
-        resp = hardware.get_path(self.base_url, self.tk, system_id,
+        resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                  self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            return hardware.get_path(self.base_url, self.tk, system_id,
+            return hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                      self.verify, self.cert)
         return resp
 

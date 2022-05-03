@@ -322,23 +322,25 @@ class sessionClient:
             schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                             self.verify, self.cert)
 
-    def run_scheduled_task(self, taskid):
+    def run_scheduled_task(self, taskid, synchronous):
         """
-        Run a scheduled task immediately.
+        Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
+        is complete.  False if you want it to run in the asynchronous after the call completes.
 
         Args:
             taskid (str): ID of the schedule task to enable.
+            synchronous (boolean):  True if you don't want the command to complete until the task completes
 
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = schedule.run_scheduled_task(self.base_url, self.tk, taskid,
+        resp = schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_tk(self.base_url, self.username, self.password,
                                   self.verify, self.cert)
-            schedule.run_scheduled_task(self.base_url, self.tk, taskid,
+            schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                         self.verify, self.cert)
 
     def get_copysets(self, name):

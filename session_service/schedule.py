@@ -64,7 +64,7 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def run_scheduled_task(url, tk, taskid, verify=False, cert=None):
+def run_scheduled_task(url, tk, taskid, synchronous=False, verify=False, cert=None):
     """
     Run a scheduled task immediately.
 
@@ -77,7 +77,7 @@ def run_scheduled_task(url, tk, taskid, verify=False, cert=None):
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    run_url = f"{url}/sessions/scheduledtasks/{taskid}"
+    run_url = f"{url}/sessions/scheduledtasks/{taskid}/{synchronous}"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),

@@ -19,7 +19,7 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
     Returns:
         Returns JSON String representing the result of the command.
     """
-    getd_url = f"{url}/storagedevices"
+    getd_url = f"{url}/storagedevices/connectioninfo"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
@@ -104,7 +104,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
                            verify=verify, cert=cert)
 
 
-def update_device(url, tk, system_id, location, verify=False, cert=None):
+def update_device_site_location(url, tk, system_id, location, verify=False, cert=None):
     """
     Set a user defined site location for a given storage system
 
@@ -199,7 +199,7 @@ def get_paths(url, tk, verify=False, cert=None):
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_path(url, tk, system_id, verify=False, cert=None):
+def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
     """
     Query for all paths on the given storage system.
 

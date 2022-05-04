@@ -31,6 +31,7 @@ Welcome to pyCSM's documentation!
    **It is recommended that you use the client classes so that you do not have to manage the authorization in your code.**
 
    Example:
+
    ``sessionClient = client_session.sessionClient("localhost", "9559", "csmadmin", "csm")``
    ``print(sessionClient.get_session_overviews().json())``
 
@@ -44,6 +45,7 @@ Welcome to pyCSM's documentation!
    caller to handle failures when the token expires.
 
    Example:
+
    ``token = auth.get_token("https://localhost:9559/CSM/web", "csmadmin", "csm")``
    ``print(sessions.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
 
@@ -55,6 +57,7 @@ Welcome to pyCSM's documentation!
    The caller will need to obtain a token still in order to pass into the Services calls.
 
    Example:
+
    ``print(sessions.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
 
 =========================================

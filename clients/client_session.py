@@ -4,15 +4,23 @@ from session_service import sessions, schedule, copysets
 
 """
 
-    Description: This client module handles calls to manage sessions, copy sets and scheduled tasks handling
-    the authentication calls for the caller
-
+    The sessionClient class can be used to call various session level commands such as creating sessions, 
+    adding or removing copy sets, running commands against the session or scheduled task, etc.  
+    By using the sessionClient class you enter the username and password only when you instantiate the class 
+    which will obtain a token to the server that will be used on all calls using the class.  
+    In the event that the token expires, the client will automatically handle the error and retrieve a new token 
+    prior to retrying the call.
+|
+|
 """
 
 class sessionClient:
     """
-        Client used to store server information, Rest token
-        and can call methods in the session_service folder.
+        This client is used to store server information and the communication token in order to  call methods on the
+        session service.
+        =======================================
+        Available Methods on the Session Client
+        =======================================
     """
 
     def __init__(self, server_address, server_port, username, password,

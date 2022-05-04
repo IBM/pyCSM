@@ -60,7 +60,7 @@ Welcome to pyCSM's documentation!
 -----------
    There are three clients that can be used for various actions on the CSM server.
 
-   The :doc:`../client_docs/session_client` is where the client doc is.
+   The :doc:`../clients_docs/session_client` is where the client doc is.
 
    The [client_session](clients/client_session.py) class is designed to make calls related to managing CSM sessions and
    replication.

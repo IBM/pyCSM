@@ -47,18 +47,20 @@ Welcome to pyCSM's documentation!
    The caller will need to obtain a token still in order to pass into the Services calls.
 
 =========================================
-**Description on each section in pyCSM.**
+**Authorization, Clients and Services**
 =========================================
 
 **Authorization**
 -----------------
    This section contains the method to obtain a token from the CSM server.
 
+   NOTE: This does not need to be used if you are using one of the clients.
+
 **Clients**
 -----------
    There are three clients that can be used for various actions on the CSM server.
 
-   The :doc:'../client_docs/session_client' is where the client doc is.
+   The :doc:`../client_docs/session_client` is where the client doc is.
 
    The [client_session](clients/client_session.py) class is designed to make calls related to managing CSM sessions and
    replication.

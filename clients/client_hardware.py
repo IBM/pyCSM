@@ -7,7 +7,7 @@ class hardwareClient:
 
     The hardwareClient class can be used to call various hardware level commands such as adding device connections,
     removing device connections, getting lists of volumes, etc.  By using the hardwareClient class you enter the
-    username and password only when you __init__ the class which will obtain a token to the server that will be
+    username and password only when you instantiate the class which will obtain a token to the server that will be
     used on all calls using the class.  In the event that the token expires, the client will automatically handle the
     error and retrieve a new token prior to retrying the call.
 |

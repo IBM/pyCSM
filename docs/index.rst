@@ -69,16 +69,16 @@ Welcome to pyCSM's documentation!
    The :doc:`../hardware_service_docs/hardware` provides methods around managing the hardware connection from
    CSM to the storage system or retrieving information from the storage system.
 
-   The :doc:`../system_service_docs/system` [System service](system_service/system.py) provides methods for configuring the CSM server, creating log packages,
+   The :doc:`../system_service_docs/system` provides methods for configuring the CSM server, creating log packages,
    and other server level commands.
 
-   The :doc:`../session_service_docs/sessions` [Session service](session_service/sessions.py) provides the methods for managing sessions on the CSM server.  This
+   The :doc:`../session_service_docs/sessions` provides the methods for managing sessions on the CSM server.  This
    includes creating and running commands to sessions.
 
-   The :doc:`../session_service_docs/copysets` [Copy Sets service](session_service/copysets.py) provides the methods for adding, removing and exporting copy sets
+   The :doc:`../session_service_docs/copysets` provides the methods for adding, removing and exporting copy sets
    from a CSM session.
 
-   The :doc:`../session_service_docs/schedule` [Schedule service](session_service/schedule.py) provides the methods for viewing and running scheduled tasks on
+   The :doc:`../session_service_docs/schedule` provides the methods for viewing and running scheduled tasks on
    the CSM server.
 
 **Authorization**

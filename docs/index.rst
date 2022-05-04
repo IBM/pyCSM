@@ -9,17 +9,20 @@ The pyCSM library is a python library designed to make RESTAPI calls to an IBM C
 CSM is a product used to manage block level replication for IBM Storage Systems.  Solutions
 in CSM range from point in time and Safeguarded Copy management to more complex two, three or four site replication.
 
-For more details on CSM or for details on the CSM RESTAPI, check out the [CSM Documentation](https://www.ibm.com/docs/en/csm)
+For more details on CSM or for details on the CSM RESTAPI, check out the 'CSM Documentation <https://www.ibm.com/docs/en/csm>'_
 
-**How to use the pyCSM library**::
+==================================
+**How to use the pyCSM library**
+==================================
    The pyCSM library is broken up into three main sections:  Authorization, Clients and Services.
    When you use the library you can choose from one of the following configurations.
 
 **Client class only**
-This option allows the caller to init a python class which manages the authorization automatically
-for all subsequent calls to the server.  The caller can pass in the authentication information once during the init
-and then calls to methods withing that class will ensure a token is obtained or automatically renewed.
-It is recommended that you use the client classes so that you do not have to manage the authorization in your code.
+---------------------
+   This option allows the caller to init a python class which manages the authorization automatically
+   for all subsequent calls to the server.  The caller can pass in the authentication information once during the init
+   and then calls to methods withing that class will ensure a token is obtained or automatically renewed.
+   It is recommended that you use the client classes so that you do not have to manage the authorization in your code.
 
 **Authorization + Services**
 This option allows the caller to manage the authorization calls itself.  You can use the

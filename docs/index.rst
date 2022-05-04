@@ -57,7 +57,6 @@ Welcome to pyCSM's documentation!
    Example:
    ``print(sessions.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
 
-
 =========================================
 **Clients, Authorization and Services**
 =========================================

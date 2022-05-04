@@ -30,6 +30,9 @@ Welcome to pyCSM's documentation!
 
    **It is recommended that you use the client classes so that you do not have to manage the authorization in your code.**
 
+   ``sessionClient = client_session.sessionClient("localhost", "9559", "csmadmin", "csm")``
+   ``print(sessionClient.get_session_overviews().json())``
+
 **Authorization + Services**
 ----------------------------
    This option allows the caller to manage the authorization calls itself.

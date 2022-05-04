@@ -28,7 +28,7 @@ Welcome to pyCSM's documentation!
    The caller can pass in the authentication information once during the init and then calls to methods withing that
    class will ensure a token is obtained or automatically renewed.
 
-   It is recommended that you use the client classes so that you do not have to manage the authorization in your code.
+   **It is recommended that you use the client classes so that you do not have to manage the authorization in your code.**
 
 **Authorization + Services**
 ----------------------------
@@ -47,55 +47,46 @@ Welcome to pyCSM's documentation!
    The caller will need to obtain a token still in order to pass into the Services calls.
 
 =========================================
-**Authorization, Clients and Services**
+**Clients, Authorization and Services**
 =========================================
 
-**Authorization**
------------------
-   This section contains the method to obtain a token from the CSM server.
-
-   NOTE: This does not need to be used if you are using one of the clients.
 
 **Clients**
 -----------
    There are three clients that can be used for various actions on the CSM server.
 
-   The :doc:`../clients_docs/session_client` is where the client doc is.
-
-   The [client_session](clients/client_session.py) class is designed to make calls related to managing CSM sessions and
+   The :doc:`../clients_docs/session_client` class is designed to make calls related to managing CSM sessions and
    replication.
 
-   The [client_hardware](clients/client_hardware.py) class is designed to make calls for actions pertaining to setting
+   The :doc:`../clients_docs/hardware_client` class is designed to make calls for actions pertaining to setting
    up and managing connections from CSM to the Storage System.
 
-   The [client_system](clients/client_system.py) class is designed to make calls pertaining to the server and system
+   The :doc:`../clients_docs/system_client` class is designed to make calls pertaining to the server and system
    configuration.
 
 **Services**
 ------------
-   The [Hardware service](hardware_service/hardware.py) provides methods around managing the hardware connection from
+   The :doc:`../hardware_services_docs/hardware` [Hardware service](hardware_service/hardware.py) provides methods around managing the hardware connection from
    CSM to the storage system or retrieving information from the storage system.
 
-   The [System service](system_service/system.py) provides methods for configuring the CSM server, creating log packages,
+   The :doc:`../hardware_services_docs/system` [System service](system_service/system.py) provides methods for configuring the CSM server, creating log packages,
    and other server level commands.
 
-   The [Session service](session_service/sessions.py) provides the methods for managing sessions on the CSM server.  This
+   The :doc:`../hardware_services_docs/sessions` [Session service](session_service/sessions.py) provides the methods for managing sessions on the CSM server.  This
    includes creating and running commands to sessions.
 
-   The [Copy Sets service](session_service/copysets.py) provides the methods for adding, removing and exporting copy sets
+   The :doc:`../hardware_services_docs/copysets` [Copy Sets service](session_service/copysets.py) provides the methods for adding, removing and exporting copy sets
    from a CSM session.
 
-   The [Schedule service](session_service/schedule.py) provides the methods for viewing and running scheduled tasks on
+   The :doc:`../hardware_services_docs/schedule` [Schedule service](session_service/schedule.py) provides the methods for viewing and running scheduled tasks on
    the CSM server.
 
+**Authorization**
+-----------------
+   The :doc:`../authorization_docs/authorization` module contains the method to obtain a token from the CSM server.
 
+   **NOTE: This does not need to be used if you are using one of the clients.**
 
-.. toctree::
-   :glob:
-   :maxdepth: 2
-   :caption: Authorization Documentation
-
-   authorization_docs/*
 
 .. toctree::
    :glob:
@@ -124,6 +115,13 @@ Welcome to pyCSM's documentation!
    :caption: System Services Documentation
 
    system_service_docs/*
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: Authorization Documentation
+
+   authorization_docs/*
 
 Indices and tables
 ==================

@@ -1,7 +1,7 @@
 import requests
 
 
-def make_log_pkgs(url, tk, verify=False, cert=None):
+def create_log_pkg(url, tk, verify=False, cert=None):
     """
     This method will package all log files on the server into a .jar file
 

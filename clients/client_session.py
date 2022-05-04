@@ -3,10 +3,19 @@ from authorization import auth
 from session_service import sessions, schedule, copysets
 
 
+
 class sessionClient:
     """
-        Client used to store server information, Rest token
-        and can call methods in the session_service folder.
+        The sessionClient class can be used to call various session level commands such as creating sessions,
+        adding or removing copy sets, running commands against the session or scheduled task, etc.
+        By using the sessionClient class you enter the username and password only when you instantiate the class
+        which will obtain a token to the server that will be used on all calls using the class.
+        In the event that the token expires, the client will automatically handle the error and retrieve a new token
+        prior to retrying the call.
+|
+        The client makes RESTAPI calls to the server and returns the results.  For more details on what is returned from a call,
+        see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
+|
     """
 
     def __init__(self, server_address, server_port, username, password,
@@ -27,8 +36,8 @@ class sessionClient:
         self.cert = cert
         self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                              self.verify, self.cert)
+        self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                 self.verify, self.cert)
 
     def create_session(self, name, sess_type, desc):
         """
@@ -48,8 +57,8 @@ class sessionClient:
                                        name, sess_type, desc,
                                        self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.create_session(self.base_url, self.tk,
                                     name, sess_type, desc,
                                     self.verify, self.cert)
@@ -69,8 +78,8 @@ class sessionClient:
         resp = sessions.delete_session(self.base_url, self.tk, name,
                                        self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.delete_session(self.base_url, self.tk, name,
                                     self.verify, self.cert)
 
@@ -88,8 +97,8 @@ class sessionClient:
         resp = sessions.get_session_info(self.base_url, self.tk, name,
                                          self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_session_info(self.base_url, self.tk, name,
                                              self.verify, self.cert)
         return resp
@@ -106,13 +115,13 @@ class sessionClient:
         resp = sessions.get_session_overviews(self.base_url, self.tk,
                                               self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_session_overviews(self.base_url, self.tk,
                                                   self.verify, self.cert)
         return resp
 
-    def get_commands(self, name):
+    def get_available_commands(self, name):
         """
         Returns the list of available commands for a session
         based on the session's current state
@@ -124,16 +133,16 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = sessions.get_commands(self.base_url, self.tk, name,
+        resp = sessions.get_available_commands(self.base_url, self.tk, name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            return sessions.get_commands(self.base_url, self.tk, name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_available_commands(self.base_url, self.tk, name,
                                          self.verify, self.cert)
         return resp
 
-    def get_options(self, name):
+    def get_session_options(self, name):
         """
         Gets the options for the given session.
         The results returned from this method will vary
@@ -145,16 +154,16 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.get_options(self.base_url, self.tk, name,
+        resp = sessions.get_session_options(self.base_url, self.tk, name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            return sessions.get_options(self.base_url, self.tk, name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_session_options(self.base_url, self.tk, name,
                                         self.verify, self.cert)
         return resp
 
-    def description(self, name, desc):
+    def modify_session_description(self, name, desc):
         """
         Changes the description field for a given session.
 
@@ -165,15 +174,15 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.description(self.base_url, self.tk, name, desc,
+        resp = sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            sessions.description(self.base_url, self.tk, name, desc,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                  self.verify, self.cert)
 
-    def run_command(self, ses_name, com_name):
+    def run_session_command(self, ses_name, com_name):
         """
         Run a command against a session.
 
@@ -184,12 +193,12 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.run_command(self.base_url, self.tk, ses_name, com_name,
+        resp = sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            sessions.run_command(self.base_url, self.tk, ses_name, com_name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                  self.verify, self.cert)
 
     def wait_for_state(self, ses_name, state, minutes, debug=False):
@@ -200,9 +209,8 @@ class sessionClient:
         Args:
             ses_name (str): The name of the session.
             state (str): state of the server that user wants to wait for.
-            minutes (double): amount of minutes before it times out
-            debug (boolean): True if you want the state
-            and status to print in console
+            minutes (double): number of minutes before it times out
+            debug (boolean): True if you want the state and status to print in console
 
         Returns:
             JSON String representing the result of the command.
@@ -213,16 +221,15 @@ class sessionClient:
                                        self.verify, self.cert)
         if resp.status_code == 401:
             minutes = (datetime.utcnow() - start_time).total_seconds()
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.wait_for_state(self.base_url, self.tk, ses_name,
                                     state, minutes, debug,
                                     self.verify, self.cert)
 
     def sgc_recover(self, ses_name, com_name, role, backup_id):
         """
-        Run a specified command that requires a backup ID parameter
-        on a specified SGC session.
+        Run a Recover command to the specified Safeguarded Copy backup ID.
 
         Args:
             ses_name (str): The name of the session.
@@ -237,8 +244,8 @@ class sessionClient:
                                     ses_name, com_name, role, backup_id,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.sgc_recover(self.base_url, self.tk, ses_name,
                                  com_name, role, backup_id,
                                  self.verify, self.cert)
@@ -259,8 +266,8 @@ class sessionClient:
                                            name, role, backup_id,
                                            self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_backup_details(self.base_url, self.tk,
                                                name, role, backup_id,
                                                self.verify, self.cert)
@@ -277,8 +284,8 @@ class sessionClient:
         resp = schedule.get_scheduled_tasks(self.base_url, self.tk,
                                             self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return schedule.get_scheduled_tasks(self.base_url, self.tk,
                                                 self.verify, self.cert)
         return resp
@@ -298,14 +305,14 @@ class sessionClient:
         resp = schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
                                               self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
                                            self.verify, self.cert)
 
     def disable_scheduled_task(self, taskid):
         """
-        Disable a scheduled task.
+        Disable a scheduled task from running automatically.
 
         Args:
             taskid (str): ID of the schedule task to enable.
@@ -317,33 +324,35 @@ class sessionClient:
         resp = schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                                self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                             self.verify, self.cert)
 
-    def run_scheduled_task(self, taskid):
+    def run_scheduled_task(self, taskid, synchronous=False):
         """
-        Run a scheduled task immediately.
+        Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
+        is complete.  False if you want it to run in the asynchronous after the call completes.
 
         Args:
             taskid (str): ID of the schedule task to enable.
+            synchronous (boolean):  True if you don't want the command to complete until the task completes
 
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = schedule.run_scheduled_task(self.base_url, self.tk, taskid,
+        resp = schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                            self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            schedule.run_scheduled_task(self.base_url, self.tk, taskid,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                         self.verify, self.cert)
 
-    def get_cpyst(self, name):
+    def get_copysets(self, name):
         """
-        Gets all pairs and their info for a given copy set.
+        Gets all copy sets and their info for a given session.
 
         Args:
             name (str): The name of the session.
@@ -352,16 +361,16 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.get_cpyst(self.base_url, self.tk, name,
+        resp = copysets.get_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            return copysets.get_cpyst(self.base_url, self.tk, name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return copysets.get_copysets(self.base_url, self.tk, name,
                                       self.verify, self.cert)
         return resp
 
-    def add_cpyst(self, name, copysets):
+    def add_copysets(self, name, copysets):
         """
         Add copy sets to a given session
 
@@ -374,40 +383,38 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.add_cpyst(self.base_url, self.tk, name,
+        resp = copysets.add_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            copysets.add_cpyst(self.base_url, self.tk, name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            copysets.add_copysets(self.base_url, self.tk, name,
                                self.verify, self.cert)
 
-    def remove_cpyst(self, name, force, soft):
+    def remove_copysets(self, name, force, soft):
         """
         Removes Copy Sets from the given session.
 
         Args:
             name (str): The name of the session.
-            force (boolean): Force Set to true if you wish to
-            remove the pair from CSM ignoring hardware errors.
-            soft (boolean): Keep base relationships on the
-            hardware but remove the copy set from the session.
+            force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
+            soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
 
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.remove_cpyst(self.base_url, self.tk, name, force, soft,
+        resp = copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            copysets.remove_cpyst(self.base_url, self.tk, name, force, soft,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                   self.verify, self.cert)
 
-    def export_cpyst(self, file_name):
+    def export_copysets(self, file_name):
         """
-        Exports copysets as a csv file.
+        Exports copysets as a csv file and downloads it to the calling system.
 
         Args:
             file_name: Name for the csv file location
@@ -415,10 +422,10 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = copysets.export_cpyst(self.base_url, self.tk, file_name,
+        resp = copysets.export_copysets(self.base_url, self.tk, file_name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            copysets.copysets.export_cpyst(self.base_url, self.tk, file_name,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
                                            self.verify, self.cert)

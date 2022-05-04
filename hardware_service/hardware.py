@@ -18,8 +18,9 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
 
     Returns:
         Returns JSON String representing the result of the command.
+|
     """
-    getd_url = f"{url}/storagedevices"
+    getd_url = f"{url}/storagedevices/connectioninfo"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
@@ -31,35 +32,30 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
                         verify=verify, cert=cert)
 
 
-def add_device(url, tk, device_type, device_ip, device_port, device_username,
-               device_password, second_ip=None, second_port=None,
+def add_device(url, tk, device_type, device_ip, device_username,
+               device_password, device_port=None, second_ip=None, second_port=None,
                second_username=None, second_password=None,
                verify=False, cert=None):
     """
-    This method will create a connection from the
-    server to a specified storage system.
+    Use this method to create a connection from the CSM server to a specified storage system
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         device_type (str): Type of storage device  ex. ds8000 or svc.
-        device_ip (str): IP address or hostname for the storage system.
-        device_port (str): Port for the connection to the storage system.
+        device_ip (str): IP address or hostname for the primary HMC for the storage system.
         device_username (str): Username for the storage system connection.
         device_password (str): Password for the storage system connection.
-        second_ip (str) (OPTIONAL): For DS8000 storage systems,
-        the IP address or hostname of a secondary HMC system.
-        second_port (str) (OPTIONAL): Port to use for the connection
-        to the secondary HMC system for DS8000 connections
-        second_username (str) (OPTIONAL): Username for the connection
-        to the secondary HMC system for DS8000 connections.
-        second_password (str) (OPTIONAL): Password for the connection
-        to the secondary HMC system for DS8000 connections.
+        device_port (str) (OPTIONAL): Port to use for the connection to the storage system.
+        second_ip (str) (OPTIONAL): For DS8000 storage systems, the IP address or hostname of a secondary HMC.
+        second_port (str) (OPTIONAL): Port to use for the connection to the secondary HMC.
+        second_username (str) (OPTIONAL): Username for the connection to the secondary HMC.
+        second_password (str) (OPTIONAL): Password for the connection to the secondary HMC.
 
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-
+|
     """
 
     addd_url = f"{url}/storagedevices"
@@ -84,7 +80,7 @@ def add_device(url, tk, device_type, device_ip, device_port, device_username,
 
 def remove_device(url, tk, system_id, verify=False, cert=None):
     """
-    This method will remove a specified storage system connection
+    Use this method to remove the connection to the specified storage system
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -94,6 +90,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
+|
     """
     remove_url = f"{url}/storagedevices/{system_id}"
     headers = {
@@ -104,7 +101,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
                            verify=verify, cert=cert)
 
 
-def update_device(url, tk, system_id, location, verify=False, cert=None):
+def update_device_site_location(url, tk, system_id, location, verify=False, cert=None):
     """
     Set a user defined site location for a given storage system
 
@@ -117,6 +114,7 @@ def update_device(url, tk, system_id, location, verify=False, cert=None):
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
+|
     """
     update_url = f"{url}/storagedevices/{system_id}"
     headers = {
@@ -132,8 +130,7 @@ def update_device(url, tk, system_id, location, verify=False, cert=None):
 
 def get_volumes(url, tk, system_name, verify=False, cert=None):
     """
-    This method will return all volumes for a given
-    storage system based off the input system name.
+    Use this method to retrieve all volumes for a given storage system
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -142,6 +139,7 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
 
     Returns:
         JSON String representing all the volumes for that storage system.
+|
     """
     get_url = f"{url}/storagedevices/volumes/{system_name}"
     headers = {
@@ -151,10 +149,10 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def export_vol_history(url, tk, session_name, start_time, end_time,
+def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
                        verify=False, cert=None):
     """
-    Exports ESE Box History for a session in csv format to a file.
+    Exports a summary of the write i/o history for all volumes in a session to a csv file between the given times.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -166,6 +164,7 @@ def export_vol_history(url, tk, session_name, start_time, end_time,
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
+|
     """
     export_url = f"{url}/sessions/{session_name}/exportesevolumehistory"
     headers = {
@@ -182,7 +181,7 @@ def export_vol_history(url, tk, session_name, start_time, end_time,
 
 def get_paths(url, tk, verify=False, cert=None):
     """
-    Queries all the logical paths on the storage system.
+   Queries all the logical paths for all DS8000 storage systems connected to the CSM server.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -190,6 +189,7 @@ def get_paths(url, tk, verify=False, cert=None):
 
     Returns:
         JSON String representing the result of the command.
+|
     """
     get_url = f"{url}/storagedevices/paths"
     headers = {
@@ -199,9 +199,9 @@ def get_paths(url, tk, verify=False, cert=None):
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_path(url, tk, system_id, verify=False, cert=None):
+def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
     """
-    Query for all paths on the given storage system.
+    Query for all logical paths on the given DS8000 storage system.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -210,6 +210,7 @@ def get_path(url, tk, system_id, verify=False, cert=None):
 
     Returns:
         JSON String representing the result of the command.
+|
     """
     get_url = f"{url}/storagedevices/paths/{system_id}"
     headers = {
@@ -221,7 +222,8 @@ def get_path(url, tk, system_id, verify=False, cert=None):
 
 def refresh_config(url, tk, system_id, verify=False, cert=None):
     """
-    Refreshes the configuration for the given storage system.
+    Refreshes the configuration for the given storage system.  Issuing this command will force the CSM server
+        to requery the hardware for any new or deleted volumes.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -230,6 +232,8 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
 
     Returns:
         JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+|
     """
     refresh_url = f"{url}/storagedevices/{system_id}/refreshconfig"
     headers = {

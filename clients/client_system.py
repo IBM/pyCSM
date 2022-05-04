@@ -4,8 +4,16 @@ from system_service import system
 
 class systemClient:
     """
-        Client used to store server information, Rest token and
-        can call methods in the system_service folder.
+        The systemClient class can be used to call various server level commands such as creating log packages,
+        backing up the server, setting up active/standby support, etc.
+        By using the systemClient class you enter the username and password only when you instantiate the class
+        which will obtain a token to the server that will be used on all calls using the class.
+        In the event that the token expires, the client will automatically handle the error and retrieve a new token
+        prior to retrying the call.
+|
+        The client makes RESTAPI calls to the server and returns the results.  For more details on what is returned from a call,
+        see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
+|
     """
 
     def __init__(self, server_address, server_port, username, password,
@@ -26,9 +34,9 @@ class systemClient:
         self.cert = cert
         self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_tk(self.base_url, username, password)
+        self.tk = auth.get_token(self.base_url, username, password)
 
-    def make_log_pkgs(self):
+    def create_log_pkg(self):
         """
         This method will package all log files on the server into a .jar file
 
@@ -36,12 +44,12 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system.make_log_pkgs(self.base_url, self.tk,
+        resp = system.create_log_pkg(self.base_url, self.tk,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
-            system.make_log_pkgs(self.base_url, self.tk,
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            system.create_log_pkg(self.base_url, self.tk,
                                  self.verify, self.cert)
 
     def get_log_pkgs(self):
@@ -55,8 +63,8 @@ class systemClient:
         resp = system.get_log_pkgs(self.base_url, self.tk,
                                    self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return system.get_log_pkgs(self.base_url, self.tk, self.verify,
                                        self.cert)
         return resp
@@ -73,8 +81,8 @@ class systemClient:
         resp = system.backup_server(self.base_url, self.tk,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             system.backup_server(self.base_url, self.tk,
                                  self.verify, self.cert)
 
@@ -98,7 +106,7 @@ class systemClient:
                                             active_server, self.verify,
                                             self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             system.set_server_as_standby(self.base_url, self.tk,
                                          active_server, self.verify, self.cert)

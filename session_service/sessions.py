@@ -98,7 +98,7 @@ def get_session_overviews(url, tk, verify=False, cert=None):
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_commands(url, tk, name, verify=False, cert=None):
+def get_available_commands(url, tk, name, verify=False, cert=None):
     """
     Returns the list of available commands
     for a session based on the session's current state
@@ -120,7 +120,7 @@ def get_commands(url, tk, name, verify=False, cert=None):
     return requests.get(getc_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_options(url, tk, name, verify=False, cert=None):
+def get_session_options(url, tk, name, verify=False, cert=None):
     """
     Gets the options for the given session. The results returned
     from this method will vary depending on the session type.
@@ -141,7 +141,7 @@ def get_options(url, tk, name, verify=False, cert=None):
     return requests.get(geto_url, headers=headers, verify=verify, cert=cert)
 
 
-def description(url, tk, name, desc, verify=False, cert=None):
+def modify_session_description(url, tk, name, desc, verify=False, cert=None):
     """
     Changes the description field for a given session.
 
@@ -166,7 +166,7 @@ def description(url, tk, name, desc, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def run_command(url, tk, ses_name, com_name, verify=False, cert=None):
+def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
     """
     Run a command against a session.
 
@@ -202,9 +202,8 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         tk (str): Rest token for the CSM server.
         ses_name (str): The name of the session.
         state (str): state of the server that user wants to wait for.
-        minutes (double): amount of minutes before it times out
-        debug (boolean): True if you want the state and
-        status to print in console
+        minutes (double): number of minutes before it times out
+        debug (boolean): True if you want the state and status to print in console
 
     Returns:
         JSON String representing the result of the command.
@@ -236,8 +235,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
 def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
                 verify=False, cert=None):
     """
-    Run a specified command that requires a backup ID parameter
-    on a specified SGC session.
+   Run a Recover command to the specified Safeguarded Copy backup ID.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.

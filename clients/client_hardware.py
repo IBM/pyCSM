@@ -11,6 +11,8 @@ class hardwareClient:
     used on all calls using the class.  In the event that the token expires, the client will automatically handle the
     error and retrieve a new token prior to retrying the call.
 |
+    The client makes RESTAPI calls to the server and returns the results.  For more details on what is returned from a call,
+    see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
 |
     """
 

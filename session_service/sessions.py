@@ -202,9 +202,8 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         tk (str): Rest token for the CSM server.
         ses_name (str): The name of the session.
         state (str): state of the server that user wants to wait for.
-        minutes (double): amount of minutes before it times out
-        debug (boolean): True if you want the state and
-        status to print in console
+        minutes (double): number of minutes before it times out
+        debug (boolean): True if you want the state and status to print in console
 
     Returns:
         JSON String representing the result of the command.
@@ -236,8 +235,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
 def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
                 verify=False, cert=None):
     """
-    Run a specified command that requires a backup ID parameter
-    on a specified SGC session.
+   Run a Recover command to the specified Safeguarded Copy backup ID.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.

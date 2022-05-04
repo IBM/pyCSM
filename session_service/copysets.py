@@ -63,10 +63,8 @@ def remove_copysets(url, tk, name, force, soft, verify=False, cert=None):
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
-        force (boolean): Force Set to true if you wish to remove the pair
-        from CSM ignoring hardware errors.
-        soft (boolean): Keep base relationships on the hardware but
-        remove the copy set from the session.
+        force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
+        soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
 
     Returns:
         JSON String representing the result of the command.
@@ -83,7 +81,7 @@ def remove_copysets(url, tk, name, force, soft, verify=False, cert=None):
 
 def export_copysets(url, tk, file_name, verify=False, cert=None):
     """
-    Exports copysets as a csv file.
+    Exports copysets as a csv file and downloads it to the calling system.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.

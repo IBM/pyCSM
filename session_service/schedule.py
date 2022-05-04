@@ -44,7 +44,7 @@ def enable_scheduled_task(url, tk, taskid, verify=False, cert=None):
 
 def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
     """
-    Disable a scheduled task.
+    Disable a scheduled task from running automatically.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
@@ -66,7 +66,8 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
 
 def run_scheduled_task(url, tk, taskid, synchronous=False, verify=False, cert=None):
     """
-    Run a scheduled task immediately.
+    Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
+    is complete.  False if you want it to run in the asynchronous after the call completes.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.

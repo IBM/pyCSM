@@ -4,8 +4,16 @@ from system_service import system
 
 class systemClient:
     """
-        Client used to store server information, Rest token and
-        can call methods in the system_service folder.
+        The systemClient class can be used to call various server level commands such as creating log packages,
+        backing up the server, setting up active/standby support, etc.
+        By using the systemClient class you enter the username and password only when you instantiate the class
+        which will obtain a token to the server that will be used on all calls using the class.
+        In the event that the token expires, the client will automatically handle the error and retrieve a new token
+        prior to retrying the call.
+|
+        The client makes RESTAPI calls to the server and returns the results.  For more details on what is returned from a call,
+        see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
+|
     """
 
     def __init__(self, server_address, server_port, username, password,

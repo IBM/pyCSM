@@ -209,9 +209,8 @@ class sessionClient:
         Args:
             ses_name (str): The name of the session.
             state (str): state of the server that user wants to wait for.
-            minutes (double): amount of minutes before it times out
-            debug (boolean): True if you want the state
-            and status to print in console
+            minutes (double): number of minutes before it times out
+            debug (boolean): True if you want the state and status to print in console
 
         Returns:
             JSON String representing the result of the command.
@@ -230,8 +229,7 @@ class sessionClient:
 
     def sgc_recover(self, ses_name, com_name, role, backup_id):
         """
-        Run a specified command that requires a backup ID parameter
-        on a specified SGC session.
+        Run a Recover command to the specified Safeguarded Copy backup ID.
 
         Args:
             ses_name (str): The name of the session.
@@ -314,7 +312,7 @@ class sessionClient:
 
     def disable_scheduled_task(self, taskid):
         """
-        Disable a scheduled task.
+        Disable a scheduled task from running automatically.
 
         Args:
             taskid (str): ID of the schedule task to enable.
@@ -331,7 +329,7 @@ class sessionClient:
             schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                             self.verify, self.cert)
 
-    def run_scheduled_task(self, taskid, synchronous):
+    def run_scheduled_task(self, taskid, synchronous=False):
         """
         Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
         is complete.  False if you want it to run in the asynchronous after the call completes.
@@ -354,7 +352,7 @@ class sessionClient:
 
     def get_copysets(self, name):
         """
-        Gets all pairs and their info for a given copy set.
+        Gets all copy sets and their info for a given session.
 
         Args:
             name (str): The name of the session.
@@ -399,10 +397,8 @@ class sessionClient:
 
         Args:
             name (str): The name of the session.
-            force (boolean): Force Set to true if you wish to
-            remove the pair from CSM ignoring hardware errors.
-            soft (boolean): Keep base relationships on the
-            hardware but remove the copy set from the session.
+            force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
+            soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
 
         Returns:
             JSON String representing the result of the command.
@@ -418,7 +414,7 @@ class sessionClient:
 
     def export_copysets(self, file_name):
         """
-        Exports copysets as a csv file.
+        Exports copysets as a csv file and downloads it to the calling system.
 
         Args:
             file_name: Name for the csv file location

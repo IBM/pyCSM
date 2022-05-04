@@ -88,6 +88,10 @@ Welcome to pyCSM's documentation!
    **NOTE: This does not need to be used if you are using one of the clients.**
 
 
+=============================
+Index for pyCSM Documentation
+=============================
+
 .. toctree::
    :glob:
    :maxdepth: 2

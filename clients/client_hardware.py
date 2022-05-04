@@ -32,8 +32,8 @@ class hardwareClient:
         self.cert = cert
         self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_tk(self.base_url, username, password,
-                              self.verify, self.cert)
+        self.tk = auth.get_token(self.base_url, username, password,
+                                 self.verify, self.cert)
 
     def get_devices(self, device_type):
         """
@@ -49,8 +49,8 @@ class hardwareClient:
         resp = hardware.get_devices(self.base_url, self.tk, device_type,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.get_devices(self.base_url, self.tk, device_type,
                                         self.verify, self.cert)
         return resp
@@ -86,8 +86,8 @@ class hardwareClient:
                                    second_username, second_password,
                                    self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.add_device(self.base_url, self.tk, device_type,
                                        device_ip, device_port, device_username,
                                        device_password, second_ip, second_port,
@@ -111,8 +111,8 @@ class hardwareClient:
         resp = hardware.remove_device(self.base_url, self.tk, system_id,
                                       self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.remove_device(self.base_url, self.tk, system_id,
                                           self.verify, self.cert)
         return resp
@@ -134,8 +134,8 @@ class hardwareClient:
                                       system_id, location,
                                       self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.update_device_site_location(self.base_url, self.tk,
                                           system_id, location,
                                           self.verify, self.cert)
@@ -156,8 +156,8 @@ class hardwareClient:
         resp = hardware.get_volumes(self.base_url, self.tk, system_name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.get_volumes(self.base_url, self.tk, system_name,
                                         self.verify, self.cert)
         return resp
@@ -181,8 +181,8 @@ class hardwareClient:
                                            session_name, start_time, end_time,
                                            self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.export_vol_writeio_history(self.base_url, self.tk,
                                                session_name, start_time,
                                                end_time, self.cert,
@@ -201,8 +201,8 @@ class hardwareClient:
         resp = hardware.get_paths(self.base_url, self.tk,
                                   self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.get_paths(self.base_url, self.tk,
                                       self.verify, self.cert)
         return resp
@@ -222,8 +222,8 @@ class hardwareClient:
         resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                  self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
                                      self.verify, self.cert)
         return resp
@@ -245,8 +245,8 @@ class hardwareClient:
         resp = hardware.refresh_config(self.base_url, self.tk, system_id,
                                        self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return hardware.refresh_config(self.base_url, self.tk, system_id,
                                            self.verify, self.cert)
         return resp

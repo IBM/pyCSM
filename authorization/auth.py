@@ -3,7 +3,7 @@ import warnings
 import requests
 
 
-def get_tk(url, username, password, verify=False, cert=None):
+def get_token(url, username, password, verify=False, cert=None):
     """
 
     Retrieves a REST token from the server to be used for future REST commands.

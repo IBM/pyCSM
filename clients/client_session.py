@@ -33,8 +33,8 @@ class sessionClient:
         self.cert = cert
         self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                              self.verify, self.cert)
+        self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                 self.verify, self.cert)
 
     def create_session(self, name, sess_type, desc):
         """
@@ -54,8 +54,8 @@ class sessionClient:
                                        name, sess_type, desc,
                                        self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.create_session(self.base_url, self.tk,
                                     name, sess_type, desc,
                                     self.verify, self.cert)
@@ -75,8 +75,8 @@ class sessionClient:
         resp = sessions.delete_session(self.base_url, self.tk, name,
                                        self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.delete_session(self.base_url, self.tk, name,
                                     self.verify, self.cert)
 
@@ -94,8 +94,8 @@ class sessionClient:
         resp = sessions.get_session_info(self.base_url, self.tk, name,
                                          self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_session_info(self.base_url, self.tk, name,
                                              self.verify, self.cert)
         return resp
@@ -112,8 +112,8 @@ class sessionClient:
         resp = sessions.get_session_overviews(self.base_url, self.tk,
                                               self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_session_overviews(self.base_url, self.tk,
                                                   self.verify, self.cert)
         return resp
@@ -133,8 +133,8 @@ class sessionClient:
         resp = sessions.get_available_commands(self.base_url, self.tk, name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_available_commands(self.base_url, self.tk, name,
                                          self.verify, self.cert)
         return resp
@@ -154,8 +154,8 @@ class sessionClient:
         resp = sessions.get_session_options(self.base_url, self.tk, name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_session_options(self.base_url, self.tk, name,
                                         self.verify, self.cert)
         return resp
@@ -174,8 +174,8 @@ class sessionClient:
         resp = sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.modify_session_description(self.base_url, self.tk, name, desc,
                                  self.verify, self.cert)
 
@@ -193,8 +193,8 @@ class sessionClient:
         resp = sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
                                  self.verify, self.cert)
 
@@ -219,8 +219,8 @@ class sessionClient:
                                        self.verify, self.cert)
         if resp.status_code == 401:
             minutes = (datetime.utcnow() - start_time).total_seconds()
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.wait_for_state(self.base_url, self.tk, ses_name,
                                     state, minutes, debug,
                                     self.verify, self.cert)
@@ -243,8 +243,8 @@ class sessionClient:
                                     ses_name, com_name, role, backup_id,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             sessions.sgc_recover(self.base_url, self.tk, ses_name,
                                  com_name, role, backup_id,
                                  self.verify, self.cert)
@@ -265,8 +265,8 @@ class sessionClient:
                                            name, role, backup_id,
                                            self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return sessions.get_backup_details(self.base_url, self.tk,
                                                name, role, backup_id,
                                                self.verify, self.cert)
@@ -283,8 +283,8 @@ class sessionClient:
         resp = schedule.get_scheduled_tasks(self.base_url, self.tk,
                                             self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return schedule.get_scheduled_tasks(self.base_url, self.tk,
                                                 self.verify, self.cert)
         return resp
@@ -304,8 +304,8 @@ class sessionClient:
         resp = schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
                                               self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
                                            self.verify, self.cert)
 
@@ -323,8 +323,8 @@ class sessionClient:
         resp = schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                                self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
                                             self.verify, self.cert)
 
@@ -344,8 +344,8 @@ class sessionClient:
         resp = schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                            self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
                                         self.verify, self.cert)
 
@@ -363,8 +363,8 @@ class sessionClient:
         resp = copysets.get_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return copysets.get_copysets(self.base_url, self.tk, name,
                                       self.verify, self.cert)
         return resp
@@ -385,8 +385,8 @@ class sessionClient:
         resp = copysets.add_copysets(self.base_url, self.tk, name,
                                   self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             copysets.add_copysets(self.base_url, self.tk, name,
                                self.verify, self.cert)
 
@@ -408,8 +408,8 @@ class sessionClient:
         resp = copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
                                   self.verify, self.cert)
 
@@ -426,7 +426,7 @@ class sessionClient:
         resp = copysets.export_copysets(self.base_url, self.tk, file_name,
                                      self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
                                            self.verify, self.cert)

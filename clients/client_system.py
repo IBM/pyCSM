@@ -26,7 +26,7 @@ class systemClient:
         self.cert = cert
         self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_tk(self.base_url, username, password)
+        self.tk = auth.get_token(self.base_url, username, password)
 
     def create_log_pkg(self):
         """
@@ -39,8 +39,8 @@ class systemClient:
         resp = system.create_log_pkg(self.base_url, self.tk,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             system.create_log_pkg(self.base_url, self.tk,
                                  self.verify, self.cert)
 
@@ -55,8 +55,8 @@ class systemClient:
         resp = system.get_log_pkgs(self.base_url, self.tk,
                                    self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             return system.get_log_pkgs(self.base_url, self.tk, self.verify,
                                        self.cert)
         return resp
@@ -73,8 +73,8 @@ class systemClient:
         resp = system.backup_server(self.base_url, self.tk,
                                     self.verify, self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             system.backup_server(self.base_url, self.tk,
                                  self.verify, self.cert)
 
@@ -98,7 +98,7 @@ class systemClient:
                                             active_server, self.verify,
                                             self.cert)
         if resp.status_code == 401:
-            self.tk = auth.get_tk(self.base_url, self.username, self.password,
-                                  self.verify, self.cert)
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
             system.set_server_as_standby(self.base_url, self.tk,
                                          active_server, self.verify, self.cert)

@@ -219,17 +219,17 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         time.sleep(10)
         resp = get_session_info(url, tk, ses_name)
         if resp.status_code == 401:
-            return resp
+            return False, resp
         time_passed = (datetime.utcnow() - start_time).total_seconds()
 
     if time_passed < minutes * 60:
         if debug:
             print(f"Session has reached {state} state.")
-        return True
+        return True, resp
     else:
         if debug:
             print(f'Timeout: Command exceeded {minutes} minutes.')
-        return False
+        return False, resp
 
 
 def sgc_recover(url, tk, ses_name, com_name, role, backup_id,

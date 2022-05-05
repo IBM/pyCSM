@@ -123,3 +123,23 @@ def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(set_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_dual_control_state(url, tk, verify=False, cert=None):
+    """
+    Use this method to determine if dual control is currently enabled of disabled on the server.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/dualcontrol"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

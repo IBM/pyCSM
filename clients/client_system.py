@@ -141,3 +141,19 @@ class systemClient:
                                      self.verify, self.cert)
             system.set_server_as_standby(self.base_url, self.tk,
                                          active_server, self.verify, self.cert)
+
+    def get_dual_control_state(self):
+        """
+        Use this method to determine if dual control is currently enabled of disabled on the server.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_dual_control_state(self.base_url, self.tk,
+                                             self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            system.get_dual_control_state(self.base_url, self.tk,
+                                          self.verify, self.cert)

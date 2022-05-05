@@ -62,6 +62,25 @@ def backup_server(url, tk, verify=False, cert=None):
     return requests.put(backup_url, headers=headers, verify=verify, cert=cert)
 
 
+def backup_download_server(url, tk, verify=False, cert=None):
+    """
+    Create and downloads a server backup.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        A file downloaded into the client.
+    """
+    backup_url = f"{url}/system/backupserver/download"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
+
+
 def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
     """
     Issue this command to the server that you want to be the standby server.

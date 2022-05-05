@@ -86,6 +86,21 @@ class systemClient:
             system.backup_server(self.base_url, self.tk,
                                  self.verify, self.cert)
 
+    def backup_download_server(self):
+        """
+        Create and downloads a server backup.
+
+        Returns:
+            A file downloaded into the client.
+        """
+        resp = system.backup_dowload_server(self.base_url, self.tk,
+                                    self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            system.backup_dowload_server(self.base_url, self.tk,
+                                 self.verify, self.cert)
+
     def set_server_as_standby(self, active_server):
         """
         Issue this command to the server that

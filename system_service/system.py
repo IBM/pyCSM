@@ -143,3 +143,25 @@ def get_dual_control_state(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def change_dual_control_state(url, tk, enable, verify=False, cert=None):
+    """
+    Use this method to enable or disable dual control on the CSM server.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        enable (bool): Set to 'true' if you want to enable dual control or 'false' if you want to disable.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/dualcontrol/{enable}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.post(get_url, headers=headers, verify=verify, cert=cert)
+

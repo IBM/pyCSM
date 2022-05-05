@@ -45,12 +45,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.create_log_pkg(self.base_url, self.tk,
-                                    self.verify, self.cert)
+                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             system.create_log_pkg(self.base_url, self.tk,
-                                 self.verify, self.cert)
+                                  self.verify, self.cert)
 
     def get_log_pkgs(self):
         """
@@ -86,6 +86,22 @@ class systemClient:
             system.backup_server(self.base_url, self.tk,
                                  self.verify, self.cert)
 
+    def get_server_backups(self):
+        """
+        Retrieves a list of all server backups.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_server_backups(self.base_url, self.tk,
+                                         self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            system.get_server_backups(self.base_url, self.tk,
+                                      self.verify, self.cert)
+
     def backup_download_server(self):
         """
         Create and downloads a server backup.
@@ -94,12 +110,12 @@ class systemClient:
             A file downloaded into the client.
         """
         resp = system.backup_dowload_server(self.base_url, self.tk,
-                                    self.verify, self.cert)
+                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             system.backup_dowload_server(self.base_url, self.tk,
-                                 self.verify, self.cert)
+                                         self.verify, self.cert)
 
     def set_server_as_standby(self, active_server):
         """

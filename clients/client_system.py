@@ -166,10 +166,26 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system.get_dual_control_state(self.base_url, self.tk, enable,
-                                             self.verify, self.cert)
+        resp = system.change_dual_control_state(self.base_url, self.tk, enable,
+                                                self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.get_dual_control_state(self.base_url, self.tk, enable,
-                                          self.verify, self.cert)
+            system.change_dual_control_state(self.base_url, self.tk, enable,
+                                             self.verify, self.cert)
+
+    def get_dual_control_requests(self):
+        """
+        Returns a list of dual control events waiting for approval or rejection
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_dual_control_requests(self.base_url, self.tk,
+                                                self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            system.get_dual_control_requests(self.base_url, self.tk,
+                                             self.verify, self.cert)

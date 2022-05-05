@@ -225,11 +225,11 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
     if time_passed < minutes * 60:
         if debug:
             print(f"Session has reached {state} state.")
-        return resp
+        return True
     else:
         if debug:
             print(f'Timeout: Command exceeded {minutes} minutes.')
-        return resp
+        return False
 
 
 def sgc_recover(url, tk, ses_name, com_name, role, backup_id,

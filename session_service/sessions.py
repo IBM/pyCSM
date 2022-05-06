@@ -206,7 +206,8 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         debug (boolean): True if you want the state and status to print in console
 
     Returns:
-        JSON String representing the result of the command.
+        A dictionary with "state_reached": boolean for whether the state was reached
+        and "session_info": JSON string representing the response of the command
     """
     start_time = datetime.utcnow()
     resp = get_session_info(url, tk, ses_name, verify=verify, cert=cert)
@@ -219,17 +220,17 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         time.sleep(10)
         resp = get_session_info(url, tk, ses_name)
         if resp.status_code == 401:
-            return False, resp
+            return {"state_reached": False, "session_info": resp}
         time_passed = (datetime.utcnow() - start_time).total_seconds()
 
     if time_passed < minutes * 60:
         if debug:
             print(f"Session has reached {state} state.")
-        return True, resp
+        return {"state_reached": True, "session_info": resp}
     else:
         if debug:
             print(f'Timeout: Command exceeded {minutes} minutes.')
-        return False, resp
+        return {"state_reached": False, "session_info": resp}
 
 
 def sgc_recover(url, tk, ses_name, com_name, role, backup_id,

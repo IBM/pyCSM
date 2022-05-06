@@ -3,7 +3,6 @@ from authorization import auth
 from session_service import sessions, schedule, copysets
 
 
-
 class sessionClient:
     """
         The sessionClient class can be used to call various session level commands such as creating sessions,
@@ -134,12 +133,12 @@ class sessionClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = sessions.get_available_commands(self.base_url, self.tk, name,
-                                     self.verify, self.cert)
+                                               self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return sessions.get_available_commands(self.base_url, self.tk, name,
-                                         self.verify, self.cert)
+                                                   self.verify, self.cert)
         return resp
 
     def get_session_options(self, name):
@@ -155,12 +154,12 @@ class sessionClient:
             JSON String representing the result of the command.
         """
         resp = sessions.get_session_options(self.base_url, self.tk, name,
-                                    self.verify, self.cert)
+                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return sessions.get_session_options(self.base_url, self.tk, name,
-                                        self.verify, self.cert)
+                                                self.verify, self.cert)
         return resp
 
     def modify_session_description(self, name, desc):
@@ -175,12 +174,12 @@ class sessionClient:
             JSON String representing the result of the command.
         """
         resp = sessions.modify_session_description(self.base_url, self.tk, name, desc,
-                                    self.verify, self.cert)
+                                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             sessions.modify_session_description(self.base_url, self.tk, name, desc,
-                                 self.verify, self.cert)
+                                                self.verify, self.cert)
 
     def run_session_command(self, ses_name, com_name):
         """
@@ -194,12 +193,12 @@ class sessionClient:
             JSON String representing the result of the command.
         """
         resp = sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
-                                    self.verify, self.cert)
+                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
-                                 self.verify, self.cert)
+                                         self.verify, self.cert)
 
     def wait_for_state(self, ses_name, state, minutes, debug=False):
         """
@@ -213,19 +212,22 @@ class sessionClient:
             debug (boolean): True if you want the state and status to print in console
 
         Returns:
-            JSON String representing the result of the command.
+            A dictionary with "state_reached": boolean for whether the state was reached
+            and "session_info": JSON string representing the response of the command
         """
         start_time = datetime.utcnow()
-        resp = sessions.wait_for_state(self.base_url, self.tk,
-                                       ses_name, state, minutes, debug,
-                                       self.verify, self.cert)
+        result_dict = sessions.wait_for_state(self.base_url, self.tk,
+                                              ses_name, state, minutes, debug,
+                                              self.verify, self.cert)
+        resp = result_dict["state_reached"]
         if resp.status_code == 401:
             minutes = (datetime.utcnow() - start_time).total_seconds()
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.wait_for_state(self.base_url, self.tk, ses_name,
-                                    state, minutes, debug,
-                                    self.verify, self.cert)
+            return sessions.wait_for_state(self.base_url, self.tk, ses_name,
+                                           state, minutes, debug,
+                                           self.verify, self.cert)
+        return result_dict
 
     def sgc_recover(self, ses_name, com_name, role, backup_id):
         """
@@ -362,12 +364,12 @@ class sessionClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = copysets.get_copysets(self.base_url, self.tk, name,
-                                  self.verify, self.cert)
+                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return copysets.get_copysets(self.base_url, self.tk, name,
-                                      self.verify, self.cert)
+                                         self.verify, self.cert)
         return resp
 
     def add_copysets(self, name, copysets):
@@ -384,12 +386,12 @@ class sessionClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = copysets.add_copysets(self.base_url, self.tk, name,
-                                  self.verify, self.cert)
+                                     self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             copysets.add_copysets(self.base_url, self.tk, name,
-                               self.verify, self.cert)
+                                  self.verify, self.cert)
 
     def remove_copysets(self, name, force, soft):
         """
@@ -405,12 +407,12 @@ class sessionClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
-                                     self.verify, self.cert)
+                                        self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
-                                  self.verify, self.cert)
+                                     self.verify, self.cert)
 
     def export_copysets(self, file_name):
         """
@@ -423,9 +425,9 @@ class sessionClient:
             JSON String representing the result of the command.
         """
         resp = copysets.export_copysets(self.base_url, self.tk, file_name,
-                                     self.verify, self.cert)
+                                        self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
-                                           self.verify, self.cert)
+                                                  self.verify, self.cert)

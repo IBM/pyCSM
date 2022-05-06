@@ -245,3 +245,20 @@ class systemClient:
             return system.reject_dual_control_request(self.base_url, self.tk, id, comment,
                                                       self.verify, self.cert)
         return resp
+
+    def get_active_standby_status(self):
+        """
+        Get the current state of the active standby server connection
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_active_standby_status(self.base_url, self.tk,
+                                                self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.get_active_standby_status(self.base_url, self.tk,
+                                                    self.verify, self.cert)
+        return resp

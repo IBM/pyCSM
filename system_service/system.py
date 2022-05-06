@@ -230,3 +230,23 @@ def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_active_standby_status(url, tk, verify=False, cert=None):
+    """
+    Get the current state of the active standby server connection
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/ha"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

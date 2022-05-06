@@ -222,3 +222,26 @@ class systemClient:
             return system.approve_dual_control_request(self.base_url, self.tk, id,
                                                        self.verify, self.cert)
         return resp
+
+    def reject_dual_control_request(self, id, comment):
+        """
+        Reject a dual control request
+
+        Args:
+            id (int): ID of the request caller wants to approve.
+            ID from the 'requestid' field return from getDualControlEvents.
+            comment (str): Comment to the creator of the event on why the
+            request was rejected.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.reject_dual_control_request(self.base_url, self.tk, id, comment,
+                                                  self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.reject_dual_control_request(self.base_url, self.tk, id, comment,
+                                                      self.verify, self.cert)
+        return resp

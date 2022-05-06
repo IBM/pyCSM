@@ -201,9 +201,32 @@ def approve_dual_control_request(url, tk, id, verify=False, cert=None):
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    get_url = f"{url}/system/dualcontrol/approve/{id}"
+    post_url = f"{url}/system/dualcontrol/approve/{id}"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
     }
-    return requests.post(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+
+
+def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
+    """
+    Reject a dual control request
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        id (int): ID of the request caller wants to approve.
+        ID from the 'requestid' field return from getDualControlEvents.
+        comment (str): Comment to the creator of the event on why the request was rejected.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    post_url = f"{url}/system/dualcontrol/reject/{id})/{comment}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.post(post_url, headers=headers, verify=verify, cert=cert)

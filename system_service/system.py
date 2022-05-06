@@ -152,7 +152,8 @@ def change_dual_control_state(url, tk, enable, verify=False, cert=None):
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        enable (bool): Set to 'true' if you want to enable dual control or 'false' if you want to disable.
+        enable (bool): Set to 'true' if you want to enable dual control or
+        'false' if you want to disable.
 
     Returns:
         JSON String representing the result of the command.
@@ -184,3 +185,25 @@ def get_dual_control_requests(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def approve_dual_control_request(url, tk, id, verify=False, cert=None):
+    """
+    Approve a dual control request
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        id (int): ID of the request caller wants to approve.
+        ID from the 'requestid' field return from getDualControlEvents.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/dualcontrol/approve/{id}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.post(get_url, headers=headers, verify=verify, cert=cert)

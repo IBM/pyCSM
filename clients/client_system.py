@@ -168,6 +168,10 @@ class systemClient:
         """
         Use this method to enable or disable dual control on the CSM server.
 
+        Args:
+            enable (bool): Set to 'true' if you want to enable dual control
+            or 'false' if you want to disable.
+
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
@@ -196,4 +200,25 @@ class systemClient:
                                      self.verify, self.cert)
             return system.get_dual_control_requests(self.base_url, self.tk,
                                                     self.verify, self.cert)
+        return resp
+
+    def approve_dual_control_request(self, id):
+        """
+        Approve a dual control request
+
+        Args:
+            id (int): ID of the request caller wants to approve.
+            ID from the 'requestid' field return from getDualControlEvents.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.approve_dual_control_request(self.base_url, self.tk, id,
+                                                   self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.approve_dual_control_request(self.base_url, self.tk, id,
+                                                       self.verify, self.cert)
         return resp

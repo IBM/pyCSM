@@ -58,9 +58,10 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.create_session(self.base_url, self.tk,
-                                    name, sess_type, desc,
-                                    self.verify, self.cert)
+            return sessions.create_session(self.base_url, self.tk,
+                                           name, sess_type, desc,
+                                           self.verify, self.cert)
+        return resp
 
     def delete_session(self, name):
         """
@@ -79,8 +80,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.delete_session(self.base_url, self.tk, name,
-                                    self.verify, self.cert)
+            return sessions.delete_session(self.base_url, self.tk, name,
+                                           self.verify, self.cert)
+        return resp
 
     def get_session_info(self, name):
         """
@@ -178,8 +180,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.modify_session_description(self.base_url, self.tk, name, desc,
-                                                self.verify, self.cert)
+            return sessions.modify_session_description(self.base_url, self.tk, name, desc,
+                                                       self.verify, self.cert)
+        return resp
 
     def run_session_command(self, ses_name, com_name):
         """
@@ -197,8 +200,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
-                                         self.verify, self.cert)
+            return sessions.run_session_command(self.base_url, self.tk, ses_name, com_name,
+                                                self.verify, self.cert)
+        return resp
 
     def wait_for_state(self, ses_name, state, minutes, debug=False):
         """
@@ -248,9 +252,10 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            sessions.sgc_recover(self.base_url, self.tk, ses_name,
-                                 com_name, role, backup_id,
-                                 self.verify, self.cert)
+            return sessions.sgc_recover(self.base_url, self.tk, ses_name,
+                                        com_name, role, backup_id,
+                                        self.verify, self.cert)
+        return resp
 
     def get_backup_details(self, name, role, backup_id):
         """
@@ -309,8 +314,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
-                                           self.verify, self.cert)
+            return schedule.enable_scheduled_task(self.base_url, self.tk, taskid,
+                                                  self.verify, self.cert)
+        return resp
 
     def disable_scheduled_task(self, taskid):
         """
@@ -328,8 +334,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
-                                            self.verify, self.cert)
+            return schedule.disable_scheduled_task(self.base_url, self.tk, taskid,
+                                                   self.verify, self.cert)
+        return resp
 
     def run_scheduled_task(self, taskid, synchronous=False):
         """
@@ -349,8 +356,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
-                                        self.verify, self.cert)
+            return schedule.run_scheduled_task(self.base_url, self.tk, taskid, synchronous,
+                                               self.verify, self.cert)
+        return resp
 
     def get_copysets(self, name):
         """
@@ -390,8 +398,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            copysets.add_copysets(self.base_url, self.tk, name,
-                                  self.verify, self.cert)
+            return copysets.add_copysets(self.base_url, self.tk, name,
+                                         self.verify, self.cert)
+        return resp
 
     def remove_copysets(self, name, force, soft):
         """
@@ -411,8 +420,9 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
-                                     self.verify, self.cert)
+            return copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
+                                            self.verify, self.cert)
+        return resp
 
     def export_copysets(self, file_name):
         """
@@ -429,5 +439,6 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
-                                                  self.verify, self.cert)
+            return copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
+                                                         self.verify, self.cert)
+        return resp

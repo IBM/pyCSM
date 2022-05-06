@@ -49,8 +49,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.create_log_pkg(self.base_url, self.tk,
-                                  self.verify, self.cert)
+            return system.create_log_pkg(self.base_url, self.tk,
+                                         self.verify, self.cert)
+        return resp
 
     def get_log_pkgs(self):
         """
@@ -83,8 +84,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.backup_server(self.base_url, self.tk,
-                                 self.verify, self.cert)
+            return system.backup_server(self.base_url, self.tk,
+                                        self.verify, self.cert)
+        return resp
 
     def get_server_backups(self):
         """
@@ -99,8 +101,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.get_server_backups(self.base_url, self.tk,
-                                      self.verify, self.cert)
+            return system.get_server_backups(self.base_url, self.tk,
+                                             self.verify, self.cert)
+        return resp
 
     def backup_download_server(self):
         """
@@ -114,8 +117,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.backup_dowload_server(self.base_url, self.tk,
-                                         self.verify, self.cert)
+            return system.backup_dowload_server(self.base_url, self.tk,
+                                                self.verify, self.cert)
+        return resp
 
     def set_server_as_standby(self, active_server):
         """
@@ -139,8 +143,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.set_server_as_standby(self.base_url, self.tk,
-                                         active_server, self.verify, self.cert)
+            return system.set_server_as_standby(self.base_url, self.tk,
+                                                active_server, self.verify, self.cert)
+        return resp
 
     def get_dual_control_state(self):
         """
@@ -155,8 +160,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.get_dual_control_state(self.base_url, self.tk,
-                                          self.verify, self.cert)
+            return system.get_dual_control_state(self.base_url, self.tk,
+                                                 self.verify, self.cert)
+        return resp
 
     def change_dual_control_state(self, enable):
         """
@@ -171,8 +177,9 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.change_dual_control_state(self.base_url, self.tk, enable,
-                                             self.verify, self.cert)
+            return system.change_dual_control_state(self.base_url, self.tk, enable,
+                                                    self.verify, self.cert)
+        return resp
 
     def get_dual_control_requests(self):
         """
@@ -187,5 +194,6 @@ class systemClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            system.get_dual_control_requests(self.base_url, self.tk,
-                                             self.verify, self.cert)
+            return system.get_dual_control_requests(self.base_url, self.tk,
+                                                    self.verify, self.cert)
+        return resp

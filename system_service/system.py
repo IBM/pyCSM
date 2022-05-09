@@ -270,3 +270,24 @@ def reconnect_active_standby_server(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+
+
+def remove_active_or_standby_server(url, tk, haServer, verify=False, cert=None):
+    """
+    Remove the alternate server
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        haServer (str): hostname of the server to remove
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/ha/removeHaServer/{haServer}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.put(put_url, headers=headers, verify=verify, cert=cert)

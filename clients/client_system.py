@@ -272,28 +272,57 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.reconnect_active_standby_server(self.base_url, self.tk,
-                                                self.verify, self.cert)
+                                                      self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return system.reconnect_active_standby_server(self.base_url, self.tk,
-                                                    self.verify, self.cert)
+                                                          self.verify, self.cert)
         return resp
 
-    def remove_active_or_standby_server(self, haServer):
+    def remove_active_or_standby_server(self, ha_server):
         """
-        Reconnect the active standby connection
+        This method removes the alternate CSM server.
+        If issued to the active server the standby will be removed.
+
+        Args:
+            ha_server (str): hostname of the server to remove
 
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system.remove_active_or_standby_server(self.base_url, self.tk, haServer,
+        resp = system.remove_active_or_standby_server(self.base_url, self.tk, ha_server,
                                                       self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return system.remove_active_or_standby_server(self.base_url, self.tk, haServer,
+            return system.remove_active_or_standby_server(self.base_url, self.tk, ha_server,
                                                           self.verify, self.cert)
         return resp
-    
+
+    def set_standby_server(self, standby_server, standby_username, standby_password):
+        """
+        Reconnect the active standby connection
+
+        Args:
+            standby_server (str): IP or hostname of the standby server
+            standby_username (str): Username to create a connection to the
+            standby server
+            standby_password (str): Password for the user to create a connection
+            to the standby server
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.set_standby_server(self.base_url, self.tk, standby_server,
+                                         standby_username, standby_password,
+                                         self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.set_standby_server(self.base_url, self.tk, standby_server,
+                                             standby_username, standby_password,
+                                             self.verify, self.cert)
+        return resp

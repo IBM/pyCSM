@@ -291,3 +291,29 @@ def remove_active_or_standby_server(url, tk, haServer, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+
+
+def set_standby_server(url, tk, standby_server, standby_username, standby_password, verify=False, cert=None):
+    """
+    Sets the server passed in to be the standby server. All data on the passed
+    in server will be replaced with the data from the called server
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        standby_server (str): IP or hostname of the standby server
+        standby_username (str): Username to create a connection to the
+        standby server
+        standby_password (str): Password for the user to create a connection
+        to the standby server
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/ha/setStandbyServer/{standby_server}/{standby_username}/{standby_password}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.put(put_url, headers=headers, verify=verify, cert=cert)

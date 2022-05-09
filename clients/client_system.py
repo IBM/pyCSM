@@ -402,3 +402,24 @@ class systemClient:
             return system.get_session_types(self.base_url, self.tk,
                                             self.verify, self.cert)
         return resp
+
+    def get_server_version(self):
+        """
+        Get the version of the server being called
+
+        Args:
+            url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+            tk (str): Rest token for the CSM server.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_server_version(self.base_url, self.tk,
+                                        self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.get_server_version(self.base_url, self.tk,
+                                            self.verify, self.cert)
+        return resp

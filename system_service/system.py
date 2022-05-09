@@ -426,3 +426,23 @@ def get_server_version(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_volume_counts(url, tk, verify=False, cert=None):
+    """
+    Get a summary of the volume usage on the server
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/volcounts"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

@@ -386,3 +386,23 @@ def create_and_download_log_pkg(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_session_types(url, tk, verify=False, cert=None):
+    """
+    Get supported session types
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/sessiontypes"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

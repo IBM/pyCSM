@@ -378,10 +378,27 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.create_and_download_log_pkg(self.base_url, self.tk,
-                                     self.verify, self.cert)
+                                                  self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return system.create_and_download_log_pkg(self.base_url, self.tk,
-                                         self.verify, self.cert)
+                                                      self.verify, self.cert)
+        return resp
+
+    def get_session_types(self):
+        """
+        Get supported session types
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_session_types(self.base_url, self.tk,
+                                        self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.get_session_types(self.base_url, self.tk,
+                                            self.verify, self.cert)
         return resp

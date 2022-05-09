@@ -317,3 +317,23 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
         "X-Auth-Token": str(tk),
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+
+
+def takeover_standby_server(url, tk, verify=False, cert=None):
+    """
+    Issues a takeover on the standby server making the standby server an active server
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/ha/takeover"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.put(put_url, headers=headers, verify=verify, cert=cert)

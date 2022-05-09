@@ -366,3 +366,22 @@ class systemClient:
                                          count, session,
                                          self.verify, self.cert)
         return resp
+
+    def create_and_download_log_pkg(self):
+        """
+        This method will package all log files on the server into a .jar file
+        that can be used for support - this call is a synchronous call and
+        will not return to caller until package is complete. Call make take a while
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.create_and_download_log_pkg(self.base_url, self.tk,
+                                     self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.create_and_download_log_pkg(self.base_url, self.tk,
+                                         self.verify, self.cert)
+        return resp

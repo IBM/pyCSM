@@ -364,3 +364,25 @@ def get_log_events(url, tk, count, session=None, verify=False, cert=None):
     }
     return requests.get(get_url, headers=headers, data=params,
                         verify=verify, cert=cert)
+
+
+def create_and_download_log_pkg(url, tk, verify=False, cert=None):
+    """
+    This method will package all log files on the server into a .jar file
+    that can be used for support - this call is a synchronous call and
+    will not return to caller until package is complete. Call make take a while
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/logpackages/synchronous"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.put(put_url, headers=headers, verify=verify, cert=cert)

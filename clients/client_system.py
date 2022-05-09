@@ -336,10 +336,33 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.takeover_standby_server(self.base_url, self.tk,
-                                                      self.verify, self.cert)
+                                              self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return system.takeover_standby_server(self.base_url, self.tk,
-                                                          self.verify, self.cert)
+                                                  self.verify, self.cert)
+        return resp
+
+    def get_log_events(self, count, session=None):
+        """
+        get a list of the most recent log events
+
+        Args:
+            count (int): The number of messages to return
+            session (string): (optional) filter messages on session
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.get_log_events(self.base_url, self.tk,
+                                     count, session,
+                                     self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.get_log_events(self.base_url, self.tk,
+                                         count, session,
+                                         self.verify, self.cert)
         return resp

@@ -337,3 +337,30 @@ def takeover_standby_server(url, tk, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_log_events(url, tk, count, session=None, verify=False, cert=None):
+    """
+    get a list of the most recent log events
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        count (int): The number of messages to return
+        session (string): (optional) filter messages on session
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/logevents"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    params = {
+        "count": count,
+        "session": session
+    }
+    return requests.get(get_url, headers=headers, data=params,
+                        verify=verify, cert=cert)

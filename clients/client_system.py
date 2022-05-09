@@ -262,3 +262,21 @@ class systemClient:
             return system.get_active_standby_status(self.base_url, self.tk,
                                                     self.verify, self.cert)
         return resp
+
+    def reconnect_active_standby_server(self):
+        """
+        Reconnect the active standby connection
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system.reconnect_active_standby_server(self.base_url, self.tk,
+                                                self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return system.reconnect_active_standby_server(self.base_url, self.tk,
+                                                    self.verify, self.cert)
+        return resp
+    

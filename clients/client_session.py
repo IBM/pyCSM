@@ -442,3 +442,26 @@ class sessionClient:
             return copysets.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
                                                          self.verify, self.cert)
         return resp
+
+    def get_pair_info(self, name, rolepair):
+        """
+        Get all the pairs for the session in a given role pair.
+
+        Args:
+            url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+            tk (str): Rest token for the CSM server.
+            name (str): The name of the session.
+            rolepair (str): The name of the role pair to query in the session
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful,'W' = warning, 'E' = error.
+        """
+        resp = copysets.get_pair_info(self.base_url, self.tk, name,
+                                        rolepair, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return copysets.get_pair_info.export_cpyst(self.base_url, self.tk, name,
+                                                         rolepair, self.verify, self.cert)
+        return resp

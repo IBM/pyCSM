@@ -100,3 +100,25 @@ def export_copysets(url, tk, file_name, verify=False, cert=None):
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
+
+
+def get_pair_info(url, tk, name, rolepair, verify=False, cert=None):
+    """
+    Get all the pairs for the session in a given role pair.
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        rolepair (str): The name of the role pair to query in the session
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful,'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/sessions/{name}/pairs/{rolepair}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

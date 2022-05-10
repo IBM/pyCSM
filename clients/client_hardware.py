@@ -300,3 +300,31 @@ class hardwareClient:
             return hardware.refresh_config(self.base_url, self.tk, device_id,
                                            self.verify, self.cert)
         return resp
+
+    def unmap_volumes_to_host(self, device_id, force,
+                              hostname, is_host_cluster, scsi,
+                              volumes):
+        """
+        Use this method to retrieve all volumes for a given storage system
+
+        Args:
+            device_id (str): The id for the storage device
+            force (bool): boolean of whether user would like to force command
+            hostname (str): name of the host
+            is_host_cluster (bool): boolean variable that indicates whether host is a cluster
+            scsi (str)
+            volumes (str)
+
+        Returns:
+            JSON String representing all the volumes for that storage system.
+        """
+        resp = hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                              hostname, is_host_cluster, scsi,
+                                              volumes, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                  hostname, is_host_cluster, scsi,
+                                                  volumes, self.verify, self.cert)
+        return resp

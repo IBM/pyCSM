@@ -270,7 +270,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
-def get_svchosts(url, tk, device_id,  verify=False, cert=None):
+def get_svchosts(url, tk, device_id, verify=False, cert=None):
     """
     Get the hosts defined on the SVC based storage system
 
@@ -289,3 +289,39 @@ def get_svchosts(url, tk, device_id,  verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def unmap_volumes_to_host(url, tk, device_id, force,
+                          hostname, is_host_cluster, scsi,
+                          volumes, verify=False, cert=None):
+    """
+    UnMap volumes from a host
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_id (str): The id for the storage device
+        force (bool): boolean of whether user would like to force command
+        hostname (str): name of the host
+        is_host_cluster (bool): boolean variable that indicates whether host is a cluster
+        scsi (str)
+        volumes (str)
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/storagedevices/unmapvolstohost"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    params = {
+        "deviceid": device_id,
+        "force": force,
+        "hostname": hostname,
+        "isHostCluster": is_host_cluster,
+        "scsi": scsi,
+        "volumes": volumes
+    }
+    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)

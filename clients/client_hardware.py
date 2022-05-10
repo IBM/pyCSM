@@ -354,3 +354,24 @@ class hardwareClient:
                                            device_password, device_username, connection_name,
                                            self.verify, self.cert)
         return resp
+
+    def get_volumes_by_wwn(self, wwn_name):
+        """
+        Return the information for all volumes based on the list of WWNs passed in.
+
+        Args:
+            wwn_name (str): The volume wwn you would like to find, or a
+            subset of the volume wwn to retrieve a list of volumes
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = hardware.refresh_config(self.base_url, self.tk, wwn_name,
+                                       self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return hardware.refresh_config(self.base_url, self.tk, wwn_name,
+                                           self.verify, self.cert)
+        return resp

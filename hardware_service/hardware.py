@@ -344,7 +344,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    get_url = f"{url}/storagedevices/updatehmc"
+    put_url = f"{url}/storagedevices/updatehmc"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
@@ -355,6 +355,33 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
         "devicepassword": device_password,
         "deviceusername": device_username,
         "name": connection_name
+    }
+
+    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+
+
+def get_volumes_by_wwn(url, tk, wwn_name, verify=False, cert=None):
+    """
+    Return the information for all volumes based on the list of WWNs passed in.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        wwn_name (str): The volume wwn you would like to find, or a
+        subset of the volume wwn to retrieve a list of volumes
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/updatehmc"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+
+    params = {
+        "name": wwn_name
     }
 
     return requests.get(get_url, headers=headers, data=params, verify=verify, cert=cert)

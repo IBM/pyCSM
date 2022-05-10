@@ -18,7 +18,6 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
 
     Returns:
         Returns JSON String representing the result of the command.
-|
     """
     getd_url = f"{url}/storagedevices/connectioninfo"
     headers = {
@@ -55,7 +54,6 @@ def add_device(url, tk, device_type, device_ip, device_username,
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-|
     """
 
     addd_url = f"{url}/storagedevices"
@@ -90,7 +88,6 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-|
     """
     remove_url = f"{url}/storagedevices/{system_id}"
     headers = {
@@ -114,7 +111,6 @@ def update_device_site_location(url, tk, system_id, location, verify=False, cert
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-|
     """
     update_url = f"{url}/storagedevices/{system_id}"
     headers = {
@@ -139,7 +135,6 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
 
     Returns:
         JSON String representing all the volumes for that storage system.
-|
     """
     get_url = f"{url}/storagedevices/volumes/{system_name}"
     headers = {
@@ -150,7 +145,7 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
 
 
 def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
-                       verify=False, cert=None):
+                               verify=False, cert=None):
     """
     Exports a summary of the write i/o history for all volumes in a session to a csv file between the given times.
 
@@ -164,7 +159,6 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-|
     """
     export_url = f"{url}/sessions/{session_name}/exportesevolumehistory"
     headers = {
@@ -189,7 +183,6 @@ def get_paths(url, tk, verify=False, cert=None):
 
     Returns:
         JSON String representing the result of the command.
-|
     """
     get_url = f"{url}/storagedevices/paths"
     headers = {
@@ -210,7 +203,6 @@ def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
 
     Returns:
         JSON String representing the result of the command.
-|
     """
     get_url = f"{url}/storagedevices/paths/{system_id}"
     headers = {
@@ -233,7 +225,6 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
-|
     """
     refresh_url = f"{url}/storagedevices/{system_id}/refreshconfig"
     headers = {
@@ -241,3 +232,39 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.put(refresh_url, headers=headers, verify=verify, cert=cert)
+
+
+def map_volumes_to_host(url, tk, device_id, force,
+                        hostname, is_host_cluster, scsi,
+                        volumes, verify=False, cert=None):
+    """
+    Map volumes to a host
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_id (str): The id for the storage device
+        force (bool): boolean of whether user would like to force command
+        hostname (str): name of the host
+        is_host_cluster (bool): boolean variable that indicates whether host is a cluster
+        scsi (str)
+        volumes (str)
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/storagedevices/mapvolstohost"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    params = {
+        "deviceid": device_id,
+        "force": force,
+        "hostname": hostname,
+        "isHostCluster": is_host_cluster,
+        "scsi": scsi,
+        "volumes": volumes
+    }
+    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)

@@ -133,14 +133,14 @@ class hardwareClient:
 
         """
         resp = hardware.update_device_site_location(self.base_url, self.tk,
-                                      system_id, location,
-                                      self.verify, self.cert)
+                                                    system_id, location,
+                                                    self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.update_device_site_location(self.base_url, self.tk,
-                                          system_id, location,
-                                          self.verify, self.cert)
+                                                        system_id, location,
+                                                        self.verify, self.cert)
         return resp
 
     def get_volumes(self, system_name):
@@ -180,15 +180,15 @@ class hardwareClient:
 
         """
         resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
-                                           session_name, start_time, end_time,
-                                           self.verify, self.cert)
+                                                   session_name, start_time, end_time,
+                                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.export_vol_writeio_history(self.base_url, self.tk,
-                                               session_name, start_time,
-                                               end_time, self.cert,
-                                               self.verify)
+                                                       session_name, start_time,
+                                                       end_time, self.cert,
+                                                       self.verify)
         return resp
 
     def get_paths(self):
@@ -222,12 +222,12 @@ class hardwareClient:
 
         """
         resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
-                                 self.verify, self.cert)
+                                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
-                                     self.verify, self.cert)
+                                                       self.verify, self.cert)
         return resp
 
     def refresh_config(self, system_id):
@@ -251,4 +251,32 @@ class hardwareClient:
                                      self.verify, self.cert)
             return hardware.refresh_config(self.base_url, self.tk, system_id,
                                            self.verify, self.cert)
+        return resp
+
+    def map_volumes_to_host(self, device_id, force,
+                            hostname, is_host_cluster, scsi,
+                            volumes):
+        """
+        Use this method to retrieve all volumes for a given storage system
+
+        Args:
+            device_id (str): The id for the storage device
+            force (bool): boolean of whether user would like to force command
+            hostname (str): name of the host
+            is_host_cluster (bool): boolean variable that indicates whether host is a cluster
+            scsi (str)
+            volumes (str)
+
+        Returns:
+            JSON String representing all the volumes for that storage system.
+        """
+        resp = hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                            hostname, is_host_cluster, scsi,
+                                            volumes, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                hostname, is_host_cluster, scsi,
+                                                volumes, self.verify, self.cert)
         return resp

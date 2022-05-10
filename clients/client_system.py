@@ -412,12 +412,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.get_server_version(self.base_url, self.tk,
-                                        self.verify, self.cert)
+                                         self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return system.get_server_version(self.base_url, self.tk,
-                                            self.verify, self.cert)
+                                             self.verify, self.cert)
         return resp
 
     def get_volume_counts(self):
@@ -429,10 +429,10 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system.get_volume_counts(self.base_url, self.tk,
-                                         self.verify, self.cert)
+                                        self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return system.get_volume_counts(self.base_url, self.tk,
-                                             self.verify, self.cert)
+                                            self.verify, self.cert)
         return resp

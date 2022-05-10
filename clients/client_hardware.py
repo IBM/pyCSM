@@ -328,3 +328,29 @@ class hardwareClient:
                                                   hostname, is_host_cluster, scsi,
                                                   volumes, self.verify, self.cert)
         return resp
+
+    def update_connection_info(self, device_ip, device_password, device_username,
+                               connection_name):
+        """
+        Update the userid/pw for a given storage system
+
+        Args:
+            device_ip (str): Primary IP address for the storage system.
+            device_password (str): New password for the storage system connection
+            device_username (str): New user name for the storage system connection
+            connection_name (str): Name of the connection. ex. HMC:9.11.114.59
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = hardware.refresh_config(self.base_url, self.tk, device_ip,
+                                       device_password, device_username, connection_name,
+                                       self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return hardware.refresh_config(self.base_url, self.tk, device_ip,
+                                           device_password, device_username, connection_name,
+                                           self.verify, self.cert)
+        return resp

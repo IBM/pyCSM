@@ -325,3 +325,36 @@ def unmap_volumes_to_host(url, tk, device_id, force,
         "volumes": volumes
     }
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+
+
+def update_connection_info(url, tk, device_ip, device_password, device_username,
+                           connection_name, verify=False, cert=None):
+    """
+    Update the userid/pw for a given storage system
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_ip (str): Primary IP address for the storage system.
+        device_password (str): New password for the storage system connection
+        device_username (str): New user name for the storage system connection
+        connection_name (str): Name of the connection. ex. HMC:9.11.114.59
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/updatehmc"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+
+    params = {
+        "deviceip": device_ip,
+        "devicepassword": device_password,
+        "deviceusername": device_username,
+        "name": connection_name
+    }
+
+    return requests.get(get_url, headers=headers, data=params, verify=verify, cert=cert)

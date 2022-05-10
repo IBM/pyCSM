@@ -268,3 +268,24 @@ def map_volumes_to_host(url, tk, device_id, force,
         "volumes": volumes
     }
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+
+
+def get_svchosts(url, tk, device_id,  verify=False, cert=None):
+    """
+    Get the hosts defined on the SVC based storage system
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_id (str): The id of the storage system being used.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/svchost/{device_id}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

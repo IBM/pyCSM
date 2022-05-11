@@ -527,3 +527,27 @@ class sessionClient:
             return copysets.run_scheduled_task_at_time(self.base_url, self.tk, task_id,
                                                        start_time, self.verify, self.cert)
         return resp
+
+    def run_backup_command(self, name, role, backup_id, cmd):
+        """
+        Used to perform a recover or expire for the specified backup.
+
+        Args:
+            name (str): The name of the session.
+            role: The name of role where the backups reside.
+            backup_id: The ID of the backup to send to the run command.
+            cmd (str): command to run
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.run_backup_command(self.base_url, self.tk,
+                                           name, role, backup_id,
+                                           cmd, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.run_backup_command(self.base_url, self.tk,
+                                               name, role, backup_id,
+                                               cmd, self.verify, self.cert)
+        return resp

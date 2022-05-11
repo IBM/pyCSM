@@ -303,3 +303,27 @@ def get_backup_details(url, tk, name, role, backup_id,
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def run_backup_command(url, tk, name, role, backup_id,
+                       cmd, verify=False, cert=None):
+    """
+    Used to perform a recover or expire for the specified backup.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        role: The name of role where the backups reside.
+        backup_id: The ID of the backup to send to the run command.
+        cmd (str): command to run
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    post_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.post(post_url, headers=headers, verify=verify, cert=cert)

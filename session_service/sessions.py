@@ -98,6 +98,27 @@ def get_session_overviews(url, tk, verify=False, cert=None):
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
 
+def get_session_overviews_short(url, tk, verify=False, cert=None):
+    """
+    This method returns minimal overview summary information
+    for all sessions managed by the server.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    gets_url = f"{url}/sessions/short"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
+
+
 def get_available_commands(url, tk, name, verify=False, cert=None):
     """
     Returns the list of available commands

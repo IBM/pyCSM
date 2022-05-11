@@ -122,6 +122,24 @@ class sessionClient:
                                                   self.verify, self.cert)
         return resp
 
+    def get_session_overviews_short(self):
+        """
+        This method returns minimal overview summary
+        information for all sessions managed by the server.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = sessions.get_session_overviews_short(self.base_url, self.tk,
+                                                    self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_session_overviews_short(self.base_url, self.tk,
+                                                        self.verify, self.cert)
+        return resp
+
     def get_available_commands(self, name):
         """
         Returns the list of available commands for a session

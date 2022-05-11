@@ -145,3 +145,26 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, ce
         "X-Auth-Token": str(tk),
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+
+
+def run_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, cert=None):
+    """
+    Run a scheduled task immediately.
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        task_id (int): ID of the schedule task to enable
+        start_time (str): Time to enable the task.
+        Format of yyyy-MM-dd'T'HH-mm.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful,'W' = warning, 'E' = error.
+    """
+    post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.post(post_url, headers=headers, verify=verify, cert=cert)

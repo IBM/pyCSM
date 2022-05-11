@@ -645,3 +645,23 @@ class sessionClient:
             return sessions.get_rpo_history(self.base_url, self.tk,
                                             name, self.verify, self.cert)
         return resp
+
+    def get_recovered_backup_details(self, name, backup_id):
+        """
+        Gets the pair information for a specific recovered backup on a specific session
+
+        Args:
+            name (str): The name of the session.
+            backup_id (int): the backupid to get the detailed info for
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_rpo_history(self.base_url, self.tk,
+                                        name, backup_id, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_rpo_history(self.base_url, self.tk,
+                                            name, backup_id, self.verify, self.cert)
+        return resp

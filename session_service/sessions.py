@@ -429,3 +429,24 @@ def get_recovered_backups(url, tk, name, verify=False, cert=None):
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=None):
+    """
+    Gets the pair information for a specific recovered backup on a specific session
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        backup_id (int): the backupid to get the detailed info for
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/recoveredbackups/{backup_id}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

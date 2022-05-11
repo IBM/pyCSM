@@ -665,3 +665,23 @@ class sessionClient:
             return sessions.get_rpo_history(self.base_url, self.tk,
                                             name, backup_id, self.verify, self.cert)
         return resp
+
+    def get_rolepair_info(self, name, rolepair):
+        """
+        Gets a summary for a given role pair in a session.
+
+        Args:
+            name (str): The name of the session.
+            rolepair (str): The name of the role pair.
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_rpo_history(self.base_url, self.tk,
+                                        name, rolepair, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_rpo_history(self.base_url, self.tk,
+                                            name, rolepair, self.verify, self.cert)
+        return resp

@@ -450,3 +450,24 @@ def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=No
         "X-Auth-Token": str(tk),
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_rolepair_info(url, tk, name, rolepair, verify=False, cert=None):
+    """
+    Gets a summary for a given role pair in a session.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        rolepair (str): The name of the role pair.
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/sequences/{rolepair}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

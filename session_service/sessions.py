@@ -360,7 +360,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
 def export_device_writeio_history(url, tk, name, start_time,
                                   end_time, verify=False, cert=None):
     """
-    Export LSS OOS History for a session in csv format to a file
+    Export ESE Box History for a session in csv format to a file
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.

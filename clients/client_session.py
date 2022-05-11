@@ -580,11 +580,9 @@ class sessionClient:
     def export_device_writeio_history(self, name, start_time,
                                       end_time):
         """
-        Export LSS OOS History for a session in csv format to a file
+        Export ESE Box History for a session in csv format to a file
 
         Args:
-            url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
-            tk (str): Rest token for the CSM server.
             name (str): The name of the session.
             start_time (str): Start time YYYY-MM-DD
             end_time (str): End time YYYY-MM-DD

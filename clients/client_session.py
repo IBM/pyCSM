@@ -626,3 +626,22 @@ class sessionClient:
                                             name, rolepair, start_time,
                                             end_time, self.verify, self.cert)
         return resp
+
+    def get_recovered_backups(self, name):
+        """
+        Gets all recovered backups for Spec V Safeguarded Copy session.
+
+        Args:
+            name (str): The name of the session.
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_rpo_history(self.base_url, self.tk,
+                                        name, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_rpo_history(self.base_url, self.tk,
+                                            name, self.verify, self.cert)
+        return resp

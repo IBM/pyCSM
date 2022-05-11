@@ -409,3 +409,23 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
         "endtime": end_time
     }
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+
+
+def get_recovered_backups(url, tk, name, verify=False, cert=None):
+    """
+    Gets all recovered backups for Spec V Safeguarded Copy session.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/recoveredbackups"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)

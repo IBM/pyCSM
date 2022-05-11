@@ -382,3 +382,30 @@ def export_device_writeio_history(url, tk, name, start_time,
         "endtime": end_time
     }
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+
+
+def get_rpo_history(url, tk, name, rolepair, start_time,
+                    end_time, verify=False, cert=None):
+    """
+    Export ESE Box History for a session in csv format to a file
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        start_time (str): Start time YYYY-MM-DD
+        end_time (str): End time YYYY-MM-DD
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    put_url = f"{url}/sessions/{name}/getrpohistory/{rolepair}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+    }
+    params = {
+        "starttime": start_time,
+        "endtime": end_time
+    }
+    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)

@@ -600,3 +600,29 @@ class sessionClient:
                                                    name, start_time,
                                                    end_time, self.verify, self.cert)
         return resp
+
+    def get_rpo_history(self, name, rolepair, start_time,
+                        end_time):
+        """
+        Export ESE Box History for a session in csv format to a file
+
+        Args:
+            url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+            tk (str): Rest token for the CSM server.
+            name (str): The name of the session.
+            start_time (str): Start time YYYY-MM-DD
+            end_time (str): End time YYYY-MM-DD
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_rpo_history(self.base_url, self.tk,
+                                        name, rolepair, start_time,
+                                        end_time, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_rpo_history(self.base_url, self.tk,
+                                            name, rolepair, start_time,
+                                            end_time, self.verify, self.cert)
+        return resp

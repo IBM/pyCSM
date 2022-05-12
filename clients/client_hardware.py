@@ -83,16 +83,17 @@ class hardwareClient:
 
         """
         resp = hardware.add_device(self.base_url, self.tk, device_type,
-                                   device_ip, device_port, device_username,
-                                   device_password, second_ip, second_port,
+                                   device_ip, device_username,
+                                   device_password, device_port, second_ip, second_port,
                                    second_username, second_password,
                                    self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.add_device(self.base_url, self.tk, device_type,
-                                       device_ip, device_port, device_username,
-                                       device_password, second_ip, second_port,
+                                       device_ip, device_username,
+                                       device_password, device_port,
+                                       second_ip, second_port,
                                        second_username, second_password,
                                        self.verify, self.cert)
         return resp

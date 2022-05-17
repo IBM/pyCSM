@@ -63,8 +63,11 @@ def remove_copysets(url, tk, name, force, soft, copyset, verify=False, cert=None
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
+        copysets (str): List of copy sets to add to the session.
+            ex. "DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"
         force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
         soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
+
 
     Returns:
         JSON String representing the result of the command.

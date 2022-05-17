@@ -83,7 +83,7 @@ def remove_copysets(url, tk, name, force, soft, copyset, verify=False, cert=None
         "copysets": copyset
     }
     return requests.delete(remove_url, headers=headers,
-                           data=params, varify=verify, cert=cert)
+                           data=params, verify=verify, cert=cert)
 
 
 def export_copysets(url, tk, file_name, verify=False, cert=None):

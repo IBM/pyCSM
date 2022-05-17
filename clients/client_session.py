@@ -398,7 +398,7 @@ class sessionClient:
                                          self.verify, self.cert)
         return resp
 
-    def add_copysets(self, name, copysets):
+    def add_copysets(self, name, copyset):
         """
         Add copy sets to a given session
 
@@ -411,16 +411,16 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copysets.add_copysets(self.base_url, self.tk, name,
+        resp = copysets.add_copysets(self.base_url, self.tk, name, copyset,
                                      self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return copysets.add_copysets(self.base_url, self.tk, name,
+            return copysets.add_copysets(self.base_url, self.tk, name, copyset,
                                          self.verify, self.cert)
         return resp
 
-    def remove_copysets(self, name, force, soft):
+    def remove_copysets(self, name, force, soft, copyset):
         """
         Removes Copy Sets from the given session.
 
@@ -434,12 +434,12 @@ class sessionClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
-                                        self.verify, self.cert)
+                                        copyset, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return copysets.remove_copysets(self.base_url, self.tk, name, force, soft,
-                                            self.verify, self.cert)
+                                            copyset, self.verify, self.cert)
         return resp
 
     def export_copysets(self, file_name):

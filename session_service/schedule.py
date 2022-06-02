@@ -56,6 +56,7 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     disable_url = f"{url}/sessions/scheduledtasks/disable/{taskid}"
+
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),

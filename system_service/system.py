@@ -224,7 +224,7 @@ def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    post_url = f"{url}/system/dualcontrol/reject/{id})/{comment}"
+    post_url = f"{url}/system/dualcontrol/reject/{id}/{comment}"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),

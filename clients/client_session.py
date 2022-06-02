@@ -639,12 +639,12 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.get_rpo_history(self.base_url, self.tk,
+        resp = sessions.get_recovered_backups(self.base_url, self.tk,
                                         name, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return sessions.get_rpo_history(self.base_url, self.tk,
+            return sessions.get_recovered_backups(self.base_url, self.tk,
                                             name, self.verify, self.cert)
         return resp
 
@@ -659,12 +659,12 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.get_rpo_history(self.base_url, self.tk,
+        resp = sessions.get_recovered_backup_details(self.base_url, self.tk,
                                         name, backup_id, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return sessions.get_rpo_history(self.base_url, self.tk,
+            return sessions.get_recovered_backup_details(self.base_url, self.tk,
                                             name, backup_id, self.verify, self.cert)
         return resp
 
@@ -679,11 +679,11 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.get_rpo_history(self.base_url, self.tk,
+        resp = sessions.get_rolepair_info(self.base_url, self.tk,
                                         name, rolepair, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return sessions.get_rpo_history(self.base_url, self.tk,
+            return sessions.get_rolepair_info(self.base_url, self.tk,
                                             name, rolepair, self.verify, self.cert)
         return resp

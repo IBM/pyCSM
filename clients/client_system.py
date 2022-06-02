@@ -112,12 +112,12 @@ class systemClient:
         Returns:
             A file downloaded into the client.
         """
-        resp = system.backup_dowload_server(self.base_url, self.tk,
+        resp = system.backup_download_server(self.base_url, self.tk,
                                             self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return system.backup_dowload_server(self.base_url, self.tk,
+            return system.backup_download_server(self.base_url, self.tk,
                                                 self.verify, self.cert)
         return resp
 

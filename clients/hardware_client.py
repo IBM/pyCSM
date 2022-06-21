@@ -1,5 +1,5 @@
 from authorization import auth
-from hardware_service import hardware
+from hardware_service import hardware_service
 
 
 class hardwareClient:
@@ -48,13 +48,13 @@ class hardwareClient:
              Returns JSON String representing the result of the command.
 
         """
-        resp = hardware.get_devices(self.base_url, self.tk, device_type,
-                                    self.verify, self.cert)
+        resp = hardware_service.get_devices(self.base_url, self.tk, device_type,
+                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.get_devices(self.base_url, self.tk, device_type,
-                                        self.verify, self.cert)
+            return hardware_service.get_devices(self.base_url, self.tk, device_type,
+                                                self.verify, self.cert)
         return resp
 
     def add_device(self, device_type, device_ip,
@@ -82,20 +82,20 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware.add_device(self.base_url, self.tk, device_type,
-                                   device_ip, device_username,
-                                   device_password, device_port, second_ip, second_port,
-                                   second_username, second_password,
-                                   self.verify, self.cert)
+        resp = hardware_service.add_device(self.base_url, self.tk, device_type,
+                                           device_ip, device_username,
+                                           device_password, device_port, second_ip, second_port,
+                                           second_username, second_password,
+                                           self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.add_device(self.base_url, self.tk, device_type,
-                                       device_ip, device_username,
-                                       device_password, device_port,
-                                       second_ip, second_port,
-                                       second_username, second_password,
-                                       self.verify, self.cert)
+            return hardware_service.add_device(self.base_url, self.tk, device_type,
+                                               device_ip, device_username,
+                                               device_password, device_port,
+                                               second_ip, second_port,
+                                               second_username, second_password,
+                                               self.verify, self.cert)
         return resp
 
     def remove_device(self, system_id):
@@ -111,13 +111,13 @@ class hardwareClient:
              'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware.remove_device(self.base_url, self.tk, system_id,
-                                      self.verify, self.cert)
+        resp = hardware_service.remove_device(self.base_url, self.tk, system_id,
+                                              self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.remove_device(self.base_url, self.tk, system_id,
-                                          self.verify, self.cert)
+            return hardware_service.remove_device(self.base_url, self.tk, system_id,
+                                                  self.verify, self.cert)
         return resp
 
     def update_device_site_location(self, system_id, location):
@@ -133,15 +133,15 @@ class hardwareClient:
              'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware.update_device_site_location(self.base_url, self.tk,
-                                                    system_id, location,
-                                                    self.verify, self.cert)
+        resp = hardware_service.update_device_site_location(self.base_url, self.tk,
+                                                            system_id, location,
+                                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.update_device_site_location(self.base_url, self.tk,
-                                                        system_id, location,
-                                                        self.verify, self.cert)
+            return hardware_service.update_device_site_location(self.base_url, self.tk,
+                                                                system_id, location,
+                                                                self.verify, self.cert)
         return resp
 
     def get_volumes(self, system_name):
@@ -156,13 +156,13 @@ class hardwareClient:
             JSON String representing all the volumes for that storage system.
 
         """
-        resp = hardware.get_volumes(self.base_url, self.tk, system_name,
-                                    self.verify, self.cert)
+        resp = hardware_service.get_volumes(self.base_url, self.tk, system_name,
+                                            self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.get_volumes(self.base_url, self.tk, system_name,
-                                        self.verify, self.cert)
+            return hardware_service.get_volumes(self.base_url, self.tk, system_name,
+                                                self.verify, self.cert)
         return resp
 
     def export_vol_writeio_history(self, session_name, start_time, end_time):
@@ -180,16 +180,16 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware.export_vol_writeio_history(self.base_url, self.tk,
-                                                   session_name, start_time, end_time,
-                                                   self.verify, self.cert)
+        resp = hardware_service.export_vol_writeio_history(self.base_url, self.tk,
+                                                           session_name, start_time, end_time,
+                                                           self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.export_vol_writeio_history(self.base_url, self.tk,
-                                                       session_name, start_time,
-                                                       end_time, self.cert,
-                                                       self.verify)
+            return hardware_service.export_vol_writeio_history(self.base_url, self.tk,
+                                                               session_name, start_time,
+                                                               end_time, self.cert,
+                                                               self.verify)
         return resp
 
     def get_paths(self):
@@ -201,13 +201,13 @@ class hardwareClient:
             JSON String representing the result of the command.
 
         """
-        resp = hardware.get_paths(self.base_url, self.tk,
-                                  self.verify, self.cert)
+        resp = hardware_service.get_paths(self.base_url, self.tk,
+                                          self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.get_paths(self.base_url, self.tk,
-                                      self.verify, self.cert)
+            return hardware_service.get_paths(self.base_url, self.tk,
+                                              self.verify, self.cert)
         return resp
 
     def get_path_on_storage_system(self, system_id):
@@ -222,13 +222,13 @@ class hardwareClient:
             JSON String representing the result of the command.
 
         """
-        resp = hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
-                                                   self.verify, self.cert)
+        resp = hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id,
+                                                           self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.get_path_on_storage_system(self.base_url, self.tk, system_id,
-                                                       self.verify, self.cert)
+            return hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id,
+                                                               self.verify, self.cert)
         return resp
 
     def refresh_config(self, system_id):
@@ -245,13 +245,13 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware.refresh_config(self.base_url, self.tk, system_id,
-                                       self.verify, self.cert)
+        resp = hardware_service.refresh_config(self.base_url, self.tk, system_id,
+                                               self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.refresh_config(self.base_url, self.tk, system_id,
-                                           self.verify, self.cert)
+            return hardware_service.refresh_config(self.base_url, self.tk, system_id,
+                                                   self.verify, self.cert)
         return resp
 
     def map_volumes_to_host(self, device_id, force,
@@ -271,15 +271,15 @@ class hardwareClient:
         Returns:
             JSON String representing all the volumes for that storage system.
         """
-        resp = hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                            hostname, is_host_cluster,
-                                            volumes, scsi, self.verify, self.cert)
+        resp = hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                    hostname, is_host_cluster,
+                                                    volumes, scsi, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                hostname, is_host_cluster,
-                                                volumes, scsi, self.verify, self.cert)
+            return hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                        hostname, is_host_cluster,
+                                                        volumes, scsi, self.verify, self.cert)
         return resp
 
     def get_svchosts(self, device_id):
@@ -293,13 +293,13 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware.get_svchosts(self.base_url, self.tk, device_id,
-                                     self.verify, self.cert)
+        resp = hardware_service.get_svchosts(self.base_url, self.tk, device_id,
+                                             self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.get_svchosts(self.base_url, self.tk, device_id,
-                                         self.verify, self.cert)
+            return hardware_service.get_svchosts(self.base_url, self.tk, device_id,
+                                                 self.verify, self.cert)
         return resp
 
     def unmap_volumes_to_host(self, device_id, force,
@@ -318,15 +318,15 @@ class hardwareClient:
         Returns:
             JSON String representing all the volumes for that storage system.
         """
-        resp = hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                              hostname, is_host_cluster,
-                                              volumes, self.verify, self.cert)
+        resp = hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                      hostname, is_host_cluster,
+                                                      volumes, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                  hostname, is_host_cluster,
-                                                  volumes, self.verify, self.cert)
+            return hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                          hostname, is_host_cluster,
+                                                          volumes, self.verify, self.cert)
         return resp
 
     def update_connection_info(self, device_ip, device_password, device_username,
@@ -344,15 +344,15 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware.update_connection_info(self.base_url, self.tk, device_ip,
-                                               device_password, device_username, connection_name,
-                                               self.verify, self.cert)
+        resp = hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
+                                                       device_password, device_username, connection_name,
+                                                       self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return hardware.update_connection_info(self.base_url, self.tk, device_ip,
-                                                   device_password, device_username, connection_name,
-                                                   self.verify, self.cert)
+            return hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
+                                                           device_password, device_username, connection_name,
+                                                           self.verify, self.cert)
         return resp
 
     def get_volumes_by_wwn(self, wwn_name):
@@ -366,11 +366,11 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware.get_volumes_by_wwn(self.base_url, self.tk, wwn_name,
-                                       self.verify, self.cert)
+        resp = hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name,
+                                                   self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                               self.verify, self.cert)
-            return hardware.get_volumes_by_wwn(self.base_url, self.tk, wwn_name,
-                                               self.verify, self.cert)
+            return hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name,
+                                                       self.verify, self.cert)
         return resp

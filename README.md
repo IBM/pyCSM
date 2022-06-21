@@ -6,7 +6,7 @@
 This repository contains the IBM Python client for RESTful communication to an IBM Copy Services Manager server.  The Python client enables full management and monitoring of the replication and the components necessary for replication in a Copy Services Manager environment. 
 
 The repository provides two options for implementations.  
-- **Clients**      - The client classes are [client_ses.py](clients/client_session.py), [client_hardware.py](clients/client_hardware.py), and [client_system.py](clients/client_system.py).  These classes are designed to automatically obtain and manage a token to CSM for communication.  A client class can be instantiated and then used to call the methods that perform the desired actions.   
+- **Clients**      - The client classes are [client_ses.py](clients/session_client.py), [client_hardware.py](clients/hardware_client.py), and [client_system.py](clients/system_client.py).  These classes are designed to automatically obtain and manage a token to CSM for communication.  A client class can be instantiated and then used to call the methods that perform the desired actions.   
 - **Services**     - The service classes are located under [Session_service](session_service), [hardware_service](hardware_service), and [system_service](system_service) and can be used if the caller wishes to manage the connection and token themselves.  These are the same classes that are called from the client classes. 
 
 ## Python Compatibility

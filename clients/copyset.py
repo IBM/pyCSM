@@ -1,13 +1,13 @@
 class createNewCopyset:
     """
         The createCopyset class can be used to create copysets to be used in
-        the add_copysets method in the copysets.py file.
+        the add_copysets method in the copyset_service.py file.
     """
 
     def __init__(self, copyset):
         """
         Creates a single copyset that can be added to with add_to_copyset
-        and used in the add_copysets method in the copysets.py file.
+        and used in the add_copysets method in the copyset_service.py file.
 
         Args:
             copyset(list): list of host and target volume for a copyset.

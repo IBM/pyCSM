@@ -36,8 +36,11 @@ def add_copysets(url, tk, name, copysets, verify=False, cert=None):
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
-        copysets (str): List of copy sets to add to the session.
-            ex. "DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"
+        copysets (str): A copyset object made from the client.copyset file or
+        List of copy set hosts and targets to add to the session.
+            ex. new_copyset.createNewCopyset(["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"])
+            ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101],
+            ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
 
     Returns:
         JSON String representing the result of the command.
@@ -47,15 +50,16 @@ def add_copysets(url, tk, name, copysets, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+
     }
     params = {
-        'copysets': "[[" + copysets + "]]"
+        "copysets": str(copysets)
     }
     return requests.post(add_url, headers=headers, data=params,
                          verify=verify, cert=cert)
 
 
-def remove_copysets(url, tk, name, force, soft, copyset, verify=False, cert=None):
+def remove_copysets(url, tk, name, copyset, force, soft, verify=False, cert=None):
     """
     Removes Copy Sets from the given session.
 
@@ -63,8 +67,8 @@ def remove_copysets(url, tk, name, force, soft, copyset, verify=False, cert=None
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
-        copysets (str): List of copy sets to add to the session.
-            ex. "DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"
+        copyset (str): list of copyset hosts to remove from a session
+            ex. "[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101]"
         force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
         soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
 
@@ -80,7 +84,7 @@ def remove_copysets(url, tk, name, force, soft, copyset, verify=False, cert=None
         "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
-        "copysets": copyset
+        "copysets": str(copyset)
     }
     return requests.delete(remove_url, headers=headers,
                            data=params, verify=verify, cert=cert)

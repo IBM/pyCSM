@@ -6,3 +6,4 @@ __pycache__
 .idea
 docs/html
 docs/index.html
+pyCSM.egg-info

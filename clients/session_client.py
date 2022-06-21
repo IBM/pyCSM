@@ -427,11 +427,15 @@ class sessionClient:
 
         Args:
             name (str): The name of the session.
-            copyset (str): List of copy sets to add to the session.
-                ex. [["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"]]
-                ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"], ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
-            roleorder (list): Optional list of the role names depicting the order of the roles in the session,
-                similar to a csv import of copysets ex. ["H1", "H2"]
+            copysets (list): List of copysets to add to a session
+                ex. (Single Copy set with two volumes)
+                    [["DS8000:2107.GXZ91:VOL:D000","DS8000:2107.GXZ91:VOL:D001"]]
+                ex. (Two Copy sets with two volumes each)
+                    "[[DS8000:1245.KTLM:VOL:0001","DS8000:1245.KTLM:VOL:0101"],
+                      ["DS8000:2107.GXZ91:VOL:D004","DS8000:2107.GXZ91:VOL:D005"]]"
+            roleorder (list): Optional list of the role names depicting the order of the volumes passed in on copysets
+                ex. ["H1", "H2"]
+
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
@@ -445,7 +449,7 @@ class sessionClient:
                                                 roleorder, self.verify, self.cert)
         return resp
 
-    def remove_copysets(self, name, copyset, force, soft):
+    def remove_copysets(self, name, copysets, force=None, soft=None):
         """
         Removes Copy Sets from the given session.
 
@@ -460,12 +464,12 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copyset_service.remove_copysets(self.base_url, self.tk, name, copyset, force, soft,
+        resp = copyset_service.remove_copysets(self.base_url, self.tk, name, copysets, force, soft,
                                                self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return copyset_service.remove_copysets(self.base_url, self.tk, name, copyset, force, soft,
+            return copyset_service.remove_copysets(self.base_url, self.tk, name, copysets, force, soft,
                                                    self.verify, self.cert)
         return resp
 

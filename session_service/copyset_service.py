@@ -37,10 +37,12 @@ def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=Non
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
         copysets (list): List of copysets to add to a session
-            ex. [["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"]]
-            ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"], ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
-        roleorder (list): Optional list of the role names depicting the order of the roles in the session,
-            similar to a csv import of copysets
+            ex. (Single Copy set with two volumes)
+                [["DS8000:2107.GXZ91:VOL:D000","DS8000:2107.GXZ91:VOL:D001"]]
+            ex. (Two Copy sets with two volumes each)
+                "[[DS8000:1245.KTLM:VOL:0001","DS8000:1245.KTLM:VOL:0101"],
+                  ["DS8000:2107.GXZ91:VOL:D004","DS8000:2107.GXZ91:VOL:D005"]]"
+        roleorder (list): Optional list of the role names depicting the order of the volumes passed in on copysets
             ex. ["H1", "H2"]
 
     Returns:
@@ -62,7 +64,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=Non
                          verify=verify, cert=cert)
 
 
-def remove_copysets(url, tk, name, copyset, force, soft, verify=False, cert=None):
+def remove_copysets(url, tk, name, copysets, force=False, soft=False, verify=False, cert=None):
     """
     Removes Copy Sets from the given session.
 
@@ -88,7 +90,7 @@ def remove_copysets(url, tk, name, copyset, force, soft, verify=False, cert=None
         "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
-        "copysets": str(copyset)
+        "copysets": str(copysets)
     }
     return requests.delete(remove_url, headers=headers,
                            data=params, verify=verify, cert=cert)

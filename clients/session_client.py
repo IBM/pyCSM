@@ -421,26 +421,28 @@ class sessionClient:
                                                 self.verify, self.cert)
         return resp
 
-    def add_copysets(self, name, copyset):
+    def add_copysets(self, name, copyset, roleorder = None):
         """
         Add copy sets to a given session
 
         Args:
             name (str): The name of the session.
-            copysets (str): List of copy sets to add to the session.
-            ex."DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"
-
+            copyset (str): List of copy sets to add to the session.
+                ex. [["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"]]
+                ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"], ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
+            roleorder (list): Optional list of the role names depicting the order of the roles in the session,
+                similar to a csv import of copysets ex. ["H1", "H2"]
         Returns:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = copyset_service.add_copysets(self.base_url, self.tk, name, copyset,
-                                            self.verify, self.cert)
+                                            roleorder, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return copyset_service.add_copysets(self.base_url, self.tk, name, copyset,
-                                                self.verify, self.cert)
+                                                roleorder, self.verify, self.cert)
         return resp
 
     def remove_copysets(self, name, copyset, force, soft):
@@ -449,7 +451,7 @@ class sessionClient:
 
         Args:
             name (str): The name of the session.
-            copysets (str): List of copy sets to add to the session.
+            copyset (str): List of copy sets to add to the session.
                 ex. "DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"
             force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
             soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.

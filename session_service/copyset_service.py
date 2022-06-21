@@ -90,22 +90,24 @@ def remove_copysets(url, tk, name, copyset, force, soft, verify=False, cert=None
                            data=params, verify=verify, cert=cert)
 
 
-def export_copysets(url, tk, file_name, verify=False, cert=None):
+def export_copysets(url, tk, name, file_name, verify=False, cert=None):
     """
     Exports copysets as a csv file and downloads it to the calling system.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        file_name: Name for the csv file location
+        name:  Name of the session to export copysets for
+        file_name: Name for the csv file location  (ex.  ""/Users/myuser/CSM/Export/myexport.csv")
 
     Returns:
         JSON String representing the result of the command.
     """
-    export_url = f"{url}/sessions/dog/copysets/download"
+    export_url = f"{url}/sessions/{name}/copysets/download"
     headers = {
         "Accept-Language": "en-US",
-        "X-Auth-Token": str(tk)
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     resp = requests.get(export_url, headers=headers, verify=verify, cert=cert)
     with open(file_name, 'wb') as f:

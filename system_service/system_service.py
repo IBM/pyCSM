@@ -82,23 +82,28 @@ def get_server_backups(url, tk, verify=False, cert=None):
     return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
 
 
-def backup_download_server(url, tk, verify=False, cert=None):
+def backup_server_and_download(url, tk, file_name, verify=False, cert=None):
     """
     Create and downloads a server backup.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
+        file_name:  The file to write the server backup to
 
     Returns:
-        A file downloaded into the client.
+        A file downloaded into the client with the specified filename
     """
     backup_url = f"{url}/system/backupserver/download"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
     }
-    return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
+
+    resp = requests.get(backup_url, headers=headers, verify=verify, cert=cert)
+    with open(file_name, 'wb') as f:
+        f.write(resp.content)
+    return resp
 
 
 def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
@@ -364,7 +369,7 @@ def get_log_events(url, tk, count, session=None, verify=False, cert=None):
                         verify=verify, cert=cert)
 
 
-def create_and_download_log_pkg(url, tk, verify=False, cert=None):
+def create_and_download_log_pkg(url, tk, file_name, verify=False, cert=None):
     """
     This method will package all log files on the server into a .jar file
     that can be used for support - this call is a synchronous call and
@@ -373,17 +378,21 @@ def create_and_download_log_pkg(url, tk, verify=False, cert=None):
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
+        file_name: Name of the file to write the log package to
 
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    put_url = f"{url}/system/logpackages/synchronous"
+    put_url = f"{url}/system/logpackages/synchronous/download"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
     }
-    return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+    resp = requests.get(put_url, headers=headers, verify=verify, cert=cert)
+    with open(file_name, 'wb') as f:
+        f.write(resp.content)
+    return resp
 
 
 def get_session_types(url, tk, verify=False, cert=None):

@@ -467,22 +467,23 @@ class sessionClient:
                                                    self.verify, self.cert)
         return resp
 
-    def export_copysets(self, file_name):
+    def export_copysets(self, name, file_name):
         """
-        Exports copysets as a csv file and downloads it to the calling system.
+        Exports copysets from given session as a csv file and downloads it to the calling system.
 
         Args:
-            file_name: Name for the csv file location
+            name:  Name of the session to export copysets for
+            file_name: Name for the csv file location  (ex.  ""/Users/myuser/CSM/Export/myexport.csv")
 
         Returns:
             JSON String representing the result of the command.
         """
-        resp = copyset_service.export_copysets(self.base_url, self.tk, file_name,
+        resp = copyset_service.export_copysets(self.base_url, self.tk, name, file_name,
                                                self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return copyset_service.export_copysets.export_cpyst(self.base_url, self.tk, file_name,
+            return copyset_service.export_copysets.export_cpyst(self.base_url, self.tk, name, file_name,
                                                                 self.verify, self.cert)
         return resp
 

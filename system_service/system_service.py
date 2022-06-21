@@ -17,6 +17,7 @@ def create_log_pkg(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(make_url, headers=headers, verify=verify, cert=cert)
 
@@ -37,6 +38,7 @@ def get_log_pkgs(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -58,6 +60,7 @@ def backup_server(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(backup_url, headers=headers, verify=verify, cert=cert)
 
@@ -78,6 +81,7 @@ def get_server_backups(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
 
@@ -98,6 +102,7 @@ def backup_server_and_download(url, tk, file_name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
 
     resp = requests.get(backup_url, headers=headers, verify=verify, cert=cert)
@@ -126,6 +131,7 @@ def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(set_url, headers=headers, verify=verify, cert=cert)
 
@@ -146,6 +152,7 @@ def get_dual_control_state(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -168,6 +175,7 @@ def change_dual_control_state(url, tk, enable, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
@@ -188,6 +196,7 @@ def get_dual_control_requests(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -210,6 +219,7 @@ def approve_dual_control_request(url, tk, id, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
@@ -233,6 +243,7 @@ def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
@@ -253,6 +264,7 @@ def get_active_standby_status(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -273,6 +285,7 @@ def reconnect_active_standby_server(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
@@ -294,6 +307,7 @@ def remove_active_or_standby_server(url, tk, haServer, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
@@ -318,6 +332,7 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
@@ -338,6 +353,7 @@ def takeover_standby_server(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
@@ -360,6 +376,7 @@ def get_log_events(url, tk, count, session=None, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "count": count,
@@ -388,6 +405,7 @@ def create_and_download_log_pkg(url, tk, file_name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     resp = requests.get(put_url, headers=headers, verify=verify, cert=cert)
     with open(file_name, 'wb') as f:
@@ -411,6 +429,7 @@ def get_session_types(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -431,6 +450,7 @@ def get_server_version(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -451,5 +471,6 @@ def get_volume_counts(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)

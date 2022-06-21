@@ -17,6 +17,7 @@ def get_scheduled_tasks(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getst_url, headers=headers, verify=verify, cert=cert)
 
@@ -38,6 +39,7 @@ def enable_scheduled_task(url, tk, taskid, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(enable_url, headers=headers, verify=verify, cert=cert)
 
@@ -60,6 +62,7 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(disable_url, headers=headers,
                          verify=verify, cert=cert)
@@ -83,5 +86,6 @@ def run_scheduled_task(url, tk, taskid, synchronous=False, verify=False, cert=No
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(run_url, headers=headers, verify=verify, cert=cert)

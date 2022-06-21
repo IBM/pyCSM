@@ -51,6 +51,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=Non
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
 
     }
     params = {
@@ -136,6 +137,7 @@ def get_pair_info(url, tk, name, rolepair, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -159,6 +161,7 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, ce
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
@@ -182,5 +185,6 @@ def run_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, cert=
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)

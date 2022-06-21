@@ -24,6 +24,7 @@ def create_session(url, tk, name, sess_type, desc=None,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "type": sess_type,
@@ -51,6 +52,7 @@ def delete_session(url, tk, name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.delete(delete_url, headers=headers,
                            verify=verify, cert=cert)
@@ -73,6 +75,7 @@ def get_session_info(url, tk, name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getsi_url, headers=headers, verify=verify, cert=cert)
 
@@ -94,6 +97,7 @@ def get_session_overviews(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
@@ -115,6 +119,7 @@ def get_session_overviews_short(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
@@ -137,6 +142,7 @@ def get_available_commands(url, tk, name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getc_url, headers=headers, verify=verify, cert=cert)
 
@@ -158,6 +164,7 @@ def get_session_options(url, tk, name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(geto_url, headers=headers, verify=verify, cert=cert)
 
@@ -179,6 +186,7 @@ def modify_session_description(url, tk, name, desc, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "description": desc
@@ -204,6 +212,7 @@ def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "cmd": com_name
@@ -274,6 +283,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "cmd": com_name
@@ -301,6 +311,7 @@ def get_backup_details(url, tk, name, role, backup_id,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -376,6 +387,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "starttime": start_time,
@@ -431,6 +443,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "starttime": start_time,
@@ -455,6 +468,7 @@ def get_recovered_backups(url, tk, name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -476,6 +490,7 @@ def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=No
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -540,5 +555,6 @@ def get_rolepair_info(url, tk, name, rolepair, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)

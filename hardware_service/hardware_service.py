@@ -23,6 +23,7 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "type": {device_type}
@@ -60,6 +61,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "type": device_type,
@@ -93,6 +95,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.delete(remove_url, headers=headers,
                            verify=verify, cert=cert)
@@ -116,6 +119,7 @@ def update_device_site_location(url, tk, system_id, location, verify=False, cert
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "location": location
@@ -140,6 +144,7 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -164,6 +169,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "starttime": start_time,
@@ -188,6 +194,7 @@ def get_paths(url, tk, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -208,6 +215,7 @@ def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -230,6 +238,7 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(refresh_url, headers=headers, verify=verify, cert=cert)
 
@@ -258,6 +267,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     if scsi == "":
         params = {
@@ -297,6 +307,7 @@ def get_svchosts(url, tk, device_id, verify=False, cert=None):
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
@@ -324,6 +335,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "deviceId": device_id,
@@ -356,6 +368,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
 
     params = {

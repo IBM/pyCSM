@@ -302,10 +302,8 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         standby_server (str): IP or hostname of the standby server
-        standby_username (str): Username to create a connection to the
-        standby server
-        standby_password (str): Password for the user to create a connection
-        to the standby server
+        standby_username (str): Username to create a connection to the standby server
+        standby_password (str): Password for the user to create a connection to the standby server
 
     Returns:
         JSON String representing the result of the command.

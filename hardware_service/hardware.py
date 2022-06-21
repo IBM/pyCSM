@@ -235,20 +235,20 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
 
 
 def map_volumes_to_host(url, tk, device_id, force,
-                        hostname, is_host_cluster, scsi,
-                        volumes, verify=False, cert=None):
+                        hostname, is_host_cluster,
+                        volumes, scsi="", verify=False, cert=None):
     """
     Map volumes to a host
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        device_id (str): The id for the storage device
+        device_id (str): The id for the storage device    (ex. "FAB3-DEV13")
         force (bool): boolean of whether user would like to force command
         hostname (str): name of the host
         is_host_cluster (bool): boolean variable that indicates whether host is a cluster
-        scsi (str)
-        volumes (str)
+        scsi (str)  Specify the scsi id if desired otherwise ""
+        volumes (str)  List of volumes to map to the host  (ex. ["mVol0_211115100540","mVol1_211115100540"])
 
     Returns:
         JSON String representing the result of the command.
@@ -259,14 +259,24 @@ def map_volumes_to_host(url, tk, device_id, force,
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
     }
-    params = {
-        "deviceid": device_id,
-        "force": force,
-        "hostname": hostname,
-        "isHostCluster": is_host_cluster,
-        "scsi": scsi,
-        "volumes": volumes
-    }
+    if scsi == "":
+        params = {
+            "deviceId": device_id,
+            "force": force,
+            "hostname": hostname,
+            "isHostCluster": is_host_cluster,
+            "volumes": str(volumes)
+        }
+    else :
+        params = {
+            "deviceId": device_id,
+            "force": force,
+            "hostname": hostname,
+            "isHostCluster": is_host_cluster,
+            "scsi": scsi,
+            "volumes": str(volumes)
+        }
+
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
@@ -277,7 +287,7 @@ def get_svchosts(url, tk, device_id, verify=False, cert=None):
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        device_id (str): The id of the storage system being used.
+        device_id (str): The id of the storage system being used. (ex. "FAB3-DEV13")
 
     Returns:
         JSON String representing the result of the command.
@@ -292,7 +302,7 @@ def get_svchosts(url, tk, device_id, verify=False, cert=None):
 
 
 def unmap_volumes_to_host(url, tk, device_id, force,
-                          hostname, is_host_cluster, scsi,
+                          hostname, is_host_cluster,
                           volumes, verify=False, cert=None):
     """
     UnMap volumes from a host
@@ -300,12 +310,11 @@ def unmap_volumes_to_host(url, tk, device_id, force,
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        device_id (str): The id for the storage device
+        device_id (str): The id for the storage device   (ex. "FAB3-DEV13")
         force (bool): boolean of whether user would like to force command
         hostname (str): name of the host
         is_host_cluster (bool): boolean variable that indicates whether host is a cluster
-        scsi (str)
-        volumes (str)
+        volumes (str) List of volumes to map to the host  (ex. ["mVol0_211115100540","mVol1_211115100540"])
 
     Returns:
         JSON String representing the result of the command.
@@ -317,12 +326,11 @@ def unmap_volumes_to_host(url, tk, device_id, force,
         "X-Auth-Token": str(tk),
     }
     params = {
-        "deviceid": device_id,
+        "deviceId": device_id,
         "force": force,
         "hostname": hostname,
         "isHostCluster": is_host_cluster,
-        "scsi": scsi,
-        "volumes": volumes
+        "volumes": str(volumes)
     }
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
@@ -367,17 +375,17 @@ def get_volumes_by_wwn(url, tk, wwn_name, verify=False, cert=None):
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
-        wwn_name (str): The volume wwn you would like to find, or a
-        subset of the volume wwn to retrieve a list of volumes
+        wwn_name (str):  The volume wwn you would like to query or a subset of the volume wwn for a volume list
 
     Returns:
         JSON String representing the result of the command.
         'I' = successful, 'W' = warning, 'E' = error.
     """
-    get_url = f"{url}/storagedevices/updatehmc"
+    get_url = f"{url}/storagedevices/volumes/volwwn/{wwn_name}"
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
 
     params = {

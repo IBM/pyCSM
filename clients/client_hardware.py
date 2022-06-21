@@ -255,31 +255,31 @@ class hardwareClient:
         return resp
 
     def map_volumes_to_host(self, device_id, force,
-                            hostname, is_host_cluster, scsi,
-                            volumes):
+                            hostname, is_host_cluster,
+                            volumes, scsi=""):
         """
         Use this method to retrieve all volumes for a given storage system
 
         Args:
-            device_id (str): The id for the storage device
+            device_id (str): The id for the storage device.   (ex. "FAB3-DEV13")
             force (bool): boolean of whether user would like to force command
             hostname (str): name of the host
             is_host_cluster (bool): boolean variable that indicates whether host is a cluster
-            scsi (str)
-            volumes (str)
+            scsi (str) Specify the scsi id if desired otherwise ""
+            volumes (str)  List of volumes to map to the host  (ex. ["mVol0_211115100540","mVol1_211115100540"])
 
         Returns:
             JSON String representing all the volumes for that storage system.
         """
         resp = hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                            hostname, is_host_cluster, scsi,
-                                            volumes, self.verify, self.cert)
+                                            hostname, is_host_cluster,
+                                            volumes, scsi, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.map_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                hostname, is_host_cluster, scsi,
-                                                volumes, self.verify, self.cert)
+                                                hostname, is_host_cluster,
+                                                volumes, scsi, self.verify, self.cert)
         return resp
 
     def get_svchosts(self, device_id):
@@ -287,7 +287,7 @@ class hardwareClient:
         Get the hosts defined on the SVC based storage system
 
         Args:
-            device_id (str): The id of the storage system being used.
+            device_id (str): The id of the storage system being used.  (ex. "FAB3-DEV13")
 
         Returns:
             JSON String representing the result of the command.
@@ -303,30 +303,29 @@ class hardwareClient:
         return resp
 
     def unmap_volumes_to_host(self, device_id, force,
-                              hostname, is_host_cluster, scsi,
+                              hostname, is_host_cluster,
                               volumes):
         """
         Use this method to retrieve all volumes for a given storage system
 
         Args:
-            device_id (str): The id for the storage device
+            device_id (str): The id for the storage device   (ex. "FAB3-DEV13")
             force (bool): boolean of whether user would like to force command
             hostname (str): name of the host
             is_host_cluster (bool): boolean variable that indicates whether host is a cluster
-            scsi (str)
-            volumes (str)
+            volumes (str) List of volumes to map to the host  (ex. ["mVol0_211115100540","mVol1_211115100540"])
 
         Returns:
             JSON String representing all the volumes for that storage system.
         """
         resp = hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                              hostname, is_host_cluster, scsi,
+                                              hostname, is_host_cluster,
                                               volumes, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
             return hardware.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                  hostname, is_host_cluster, scsi,
+                                                  hostname, is_host_cluster,
                                                   volumes, self.verify, self.cert)
         return resp
 
@@ -361,8 +360,7 @@ class hardwareClient:
         Return the information for all volumes based on the list of WWNs passed in.
 
         Args:
-            wwn_name (str): The volume wwn you would like to find, or a
-            subset of the volume wwn to retrieve a list of volumes
+            wwn_name (str): The volume wwn you would like to query or a subset of the volume wwn for a volume list
 
         Returns:
             JSON String representing the result of the command.

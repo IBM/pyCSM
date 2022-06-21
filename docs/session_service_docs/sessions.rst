@@ -1,5 +1,5 @@
 Sessions
 ===============
 
-.. automodule:: session_service.sessions_service
+.. automodule:: session_service.session_service
     :members:

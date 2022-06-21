@@ -1,5 +1,5 @@
 Copysets
 ===============
 
-.. automodule:: session_service.copysets_service
+.. automodule:: session_service.copyset_service
     :members:

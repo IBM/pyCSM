@@ -1,5 +1,5 @@
 System Client
 ===============
 
-.. automodule:: clients.client_system
+.. automodule:: clients.system_client
     :members:

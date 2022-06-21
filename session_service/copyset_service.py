@@ -28,7 +28,7 @@ def get_copysets(url, tk, name, verify=False, cert=None):
     return requests.get(getcs_url, headers=headers, verify=verify, cert=cert)
 
 
-def add_copysets(url, tk, name, copysets, verify=False, cert=None):
+def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=None):
     """
     Add copy sets to a given session
 
@@ -36,11 +36,12 @@ def add_copysets(url, tk, name, copysets, verify=False, cert=None):
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
-        copysets (str): A copyset object made from the client.copyset file or
-        List of copy set hosts and targets to add to the session.
-            ex. new_copyset.createNewCopyset(["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"])
-            ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101],
-            ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
+        copysets (list): List of copysets to add to a session
+            ex. [["DS8000:2107.GXZ91:VOL:D000", "DS8000:2107.GXZ91:VOL:D001"]]
+            ex. "[[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101"], ["DS8000:2107.GXZ91:VOL:D004", "DS8000:2107.GXZ91:VOL:D005"]]"
+        roleorder (list): Optional list of the role names depicting the order of the roles in the session,
+            similar to a csv import of copysets
+            ex. ["H1", "H2"]
 
     Returns:
         JSON String representing the result of the command.
@@ -53,7 +54,8 @@ def add_copysets(url, tk, name, copysets, verify=False, cert=None):
 
     }
     params = {
-        "copysets": str(copysets)
+        "copysets": str(copysets),
+        "roleOrder": str(roleorder)
     }
     return requests.post(add_url, headers=headers, data=params,
                          verify=verify, cert=cert)
@@ -68,7 +70,8 @@ def remove_copysets(url, tk, name, copyset, force, soft, verify=False, cert=None
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
         copyset (str): list of copyset hosts to remove from a session
-            ex. "[DS8000:1245.KTLM:VOL:0001", "DS8000:1245.KTLM:VOL:0101]"
+            ex. ["DS8000:2107.GXZ91:VOL:D000"]
+            ex. ["DS8000:1245.KTLM:VOL:0001", "DS8000:2107.GXZ91:VOL:D004"]
         force (boolean): Force Set to true if you wish to remove the pair from CSM ignoring hardware errors.
         soft (boolean): Keep base relationships on the hardware but remove the copy set from the session.
 

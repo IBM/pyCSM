@@ -304,6 +304,29 @@ def get_backup_details(url, tk, name, role, backup_id,
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
+def get_snapshot_details_by_name(url, tk, name, role, snapshot_name,
+                       verify=False, cert=None):
+    """
+    Gets detailed information for a given snapshot in a session.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        role: The name of role where the snapshot resides.
+        snapshot_name: The name of the snapshot to return
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/snapshotsByName/{role}/{snapshot_name}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
 
 def run_backup_command(url, tk, name, role, backup_id,
                        cmd, verify=False, cert=None):
@@ -316,7 +339,7 @@ def run_backup_command(url, tk, name, role, backup_id,
         name (str): The name of the session.
         role: The name of role where the backups reside.
         backup_id: The ID of the backup to send to the run command.
-        cmd (str): command to run
+        cmd (str): command to run  (ex.  "Recover Backup", "Expire Backup")
 
     Returns:
         JSON String representing the result of the command.
@@ -325,8 +348,12 @@ def run_backup_command(url, tk, name, role, backup_id,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    params = {
+        "cmd": cmd
+    }
+    return requests.post(post_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
 def export_lss_oos_history(url, tk, name, rolepair, start_time,
@@ -376,6 +403,7 @@ def export_device_writeio_history(url, tk, name, start_time,
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "starttime": start_time,
@@ -393,8 +421,8 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
         tk (str): Rest token for the CSM server.
         name (str): The name of the session.
-        start_time (str): Start time YYYY-MM-DD
-        end_time (str): End time YYYY-MM-DD
+        start_time (str): Start time YYYY-MM-DD (ex. "2020-04-22")
+        end_time (str): End time YYYY-MM-DD (ex. "2020-04-22")
 
     Returns:
         JSON String representing the result of the command.
@@ -448,6 +476,49 @@ def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=No
     headers = {
         "Accept-Language": "en-US",
         "X-Auth-Token": str(tk),
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_snapshot_clones(url, tk, name, verify=False, cert=None):
+    """
+    Gets all clones for snapshots in for Spec V Safeguarded Copy session.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/clones"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name, verify=False, cert=None):
+    """
+    Gets the pair details for the thin clone of the specified snapshot in the session
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        snapshot_name (str): the name of the snapshot to get clone details for
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/clonesBySnapshotName/{snapshot_name}"
+    headers = {
+        "Accept-Language": "en-US",
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 

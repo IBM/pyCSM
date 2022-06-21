@@ -307,10 +307,8 @@ class systemClient:
 
         Args:
             standby_server (str): IP or hostname of the standby server
-            standby_username (str): Username to create a connection to the
-            standby server
-            standby_password (str): Password for the user to create a connection
-            to the standby server
+            standby_username (str): Username to create a connection to the standby server
+            standby_password (str): Password for the user to create a connection to the standby server
 
         Returns:
             JSON String representing the result of the command.

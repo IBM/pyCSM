@@ -298,6 +298,29 @@ class sessionClient:
                                                self.verify, self.cert)
         return resp
 
+    def get_snapshot_details_by_name(self, name, role, snapshot_name):
+        """
+        Gets detailed information for a given snapshot in a session.
+
+        Args:
+            name (str): The name of the session.
+            role: The name of role where the snapshot resides.
+            snapshot_name: The name of the snapshot to return
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_snapshot_details_by_name(self.base_url, self.tk,
+                                           name, role, snapshot_name,
+                                           self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_snapshot_details_by_name(self.base_url, self.tk,
+                                               name, role, snapshot_name,
+                                               self.verify, self.cert)
+        return resp
+
     def get_scheduled_tasks(self):
         """
         Returns a list of scheduled tasks defined on the server
@@ -321,7 +344,7 @@ class sessionClient:
         schedule defined on the task.
 
         Args:
-            taskid (str): ID of the schedule task to enable.
+            taskid (str): ID of the schedule task to enable.  Use the get_scheduled_task() command to get the task id
 
         Returns:
             JSON String representing the result of the command.
@@ -341,7 +364,7 @@ class sessionClient:
         Disable a scheduled task from running automatically.
 
         Args:
-            taskid (str): ID of the schedule task to enable.
+            taskid (str): ID of the schedule task to enable.  Use the get_scheduled_task() command to get the task id
 
         Returns:
             JSON String representing the result of the command.
@@ -492,8 +515,7 @@ class sessionClient:
 
         Args:
             task_id (int): ID of the schedule task to enable
-            start_time (str): Time to enable the task.
-            Format of yyyy-MM-dd'T'HH-mm.
+            start_time (str): Time to enable the task. Format of yyyy-MM-dd'T'HH-mm (ex. "2022-07-04T12-00")
 
         Returns:
             JSON String representing the result of the command.
@@ -514,8 +536,7 @@ class sessionClient:
 
         Args:
             task_id (int): ID of the schedule task to enable
-            start_time (str): Time to enable the task.
-            Format of yyyy-MM-dd'T'HH-mm.
+            start_time (str): Time to enable the task.  Format of yyyy-MM-dd'T'HH-mm (ex. "2022-07-04T12-00")
 
         Returns:
             JSON String representing the result of the command.
@@ -538,7 +559,7 @@ class sessionClient:
             name (str): The name of the session.
             role: The name of role where the backups reside.
             backup_id: The ID of the backup to send to the run command.
-            cmd (str): command to run
+            cmd (str): command to run  (ex.  "Recover Backup", "Expire Backup")
 
         Returns:
             JSON String representing the result of the command.
@@ -592,13 +613,13 @@ class sessionClient:
         Returns:
             JSON String representing the result of the command.
         """
-        resp = sessions.export_lss_oos_history(self.base_url, self.tk,
+        resp = sessions.export_device_writeio_history(self.base_url, self.tk,
                                                name, start_time,
                                                end_time, self.verify, self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
                                      self.verify, self.cert)
-            return sessions.export_lss_oos_history(self.base_url, self.tk,
+            return sessions.export_device_writeio_history(self.base_url, self.tk,
                                                    name, start_time,
                                                    end_time, self.verify, self.cert)
         return resp
@@ -612,8 +633,8 @@ class sessionClient:
             url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
             tk (str): Rest token for the CSM server.
             name (str): The name of the session.
-            start_time (str): Start time YYYY-MM-DD
-            end_time (str): End time YYYY-MM-DD
+            start_time (str): Start time YYYY-MM-DD  (ex. "2020-04-22")
+            end_time (str): End time YYYY-MM-DD   (ex. "2020-04-22")
 
         Returns:
             JSON String representing the result of the command.
@@ -666,6 +687,45 @@ class sessionClient:
                                      self.verify, self.cert)
             return sessions.get_recovered_backup_details(self.base_url, self.tk,
                                             name, backup_id, self.verify, self.cert)
+        return resp
+
+    def get_snapshot_clones(self, name):
+        """
+        Gets all clones for snapshots in for Spec V Safeguarded Copy session.
+
+        Args:
+            name (str): The name of the session.
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_snapshot_clones(self.base_url, self.tk,
+                                        name, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_snapshot_clones(self.base_url, self.tk,
+                                            name, self.verify, self.cert)
+        return resp
+
+    def get_snapshot_clone_details_by_name(self, name, snapshot_name):
+        """
+        Gets the pair details for the thin clone of the specified snapshot in the session
+
+        Args:
+           name (str): The name of the session.
+            snapshot_name (str): the name of the snapshot to get clone details for
+
+        Returns:
+            JSON String representing the result of the command.
+        """
+        resp = sessions.get_snapshot_clone_details_by_name(self.base_url, self.tk,
+                                        name, snapshot_name, self.verify, self.cert)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password,
+                                     self.verify, self.cert)
+            return sessions.get_snapshot_clone_details_by_name(self.base_url, self.tk,
+                                            name, snapshot_name, self.verify, self.cert)
         return resp
 
     def get_rolepair_info(self, name, rolepair):

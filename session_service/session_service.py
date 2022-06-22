@@ -312,6 +312,7 @@ def get_backup_details(url, tk, name, role, backup_id):
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
+
 def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
     """
     Gets detailed information for a given snapshot in a session.
@@ -509,6 +510,35 @@ def get_snapshot_clones(url, tk, name):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+
+
+def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
+    """
+    Create a copy services manager session and automatically creates a session name
+    and populates the session based on the passed in volume group
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        volgroup (str): The name of the specv volume group that will be created.
+        type (str): type The type of session to create. Only Spec V Snapshot supports this today.
+        Type is the "shortname" for the copy type returned in the /system/sessiontypes query.
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    put_url = f"{url}/sessions/byvolgroup"
+    headers = {
+        "Accept-Language": language,
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    params = {
+        "volgroup": volgroup,
+        "type": type,
+        "description": desc
+    }
+    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
 def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):

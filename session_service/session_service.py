@@ -523,6 +523,7 @@ def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
         volgroup (str): The name of the specv volume group that will be created.
         type (str): type The type of session to create. Only Spec V Snapshot supports this today.
         Type is the "shortname" for the copy type returned in the /system/sessiontypes query.
+        desc (str): description Optional description for the session
 
     Returns:
         JSON String representing the result of the command.

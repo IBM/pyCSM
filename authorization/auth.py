@@ -1,9 +1,10 @@
 import json
 import warnings
 import requests
+from properties import verify, cert, language
 
 
-def get_token(url, username, password, verify=False, cert=None):
+def get_token(url, username, password):
     """
 
     Retrieves a REST token from the server to be used for future REST commands.
@@ -20,7 +21,7 @@ def get_token(url, username, password, verify=False, cert=None):
     """
     tk_url = f"{url}/system/v1/tokens"
     auth_headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {

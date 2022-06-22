@@ -1,7 +1,7 @@
 import requests
+from properties import cert, verify, language
 
-
-def create_log_pkg(url, tk, verify=False, cert=None):
+def create_log_pkg(url, tk):
     """
     This method will package all log files on the server into a .jar file
 
@@ -15,14 +15,14 @@ def create_log_pkg(url, tk, verify=False, cert=None):
     """
     make_url = f"{url}/system/logpackages"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(make_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_log_pkgs(url, tk, verify=False, cert=None):
+def get_log_pkgs(url, tk):
     """
     Gets a list of log packages and their location on the server
 
@@ -36,14 +36,14 @@ def get_log_pkgs(url, tk, verify=False, cert=None):
         """
     get_url = f"{url}/system/logpackages"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def backup_server(url, tk, verify=False, cert=None):
+def backup_server(url, tk):
     """
     Creates a zip backup of the CSM server data
     that can be used for restoring the server at a later date
@@ -58,14 +58,14 @@ def backup_server(url, tk, verify=False, cert=None):
     """
     backup_url = f"{url}/system/backupserver"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(backup_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_server_backups(url, tk, verify=False, cert=None):
+def get_server_backups(url, tk):
     """
     Retrieves a list of all server backups.
 
@@ -79,14 +79,14 @@ def get_server_backups(url, tk, verify=False, cert=None):
     """
     backup_url = f"{url}/system/backupserver"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
 
 
-def backup_server_and_download(url, tk, file_name, verify=False, cert=None):
+def backup_server_and_download(url, tk, file_name):
     """
     Create and downloads a server backup.
 
@@ -100,7 +100,7 @@ def backup_server_and_download(url, tk, file_name, verify=False, cert=None):
     """
     backup_url = f"{url}/system/backupserver/download"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -111,7 +111,7 @@ def backup_server_and_download(url, tk, file_name, verify=False, cert=None):
     return resp
 
 
-def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
+def set_server_as_standby(url, tk, active_server):
     """
     Issue this command to the server that you want to be the standby server.
     Sets the server passed in to be the active server. All data on
@@ -129,14 +129,14 @@ def set_server_as_standby(url, tk, active_server, verify=False, cert=None):
     """
     set_url = f"{url}/system/ha/setServerAsStandby/{active_server}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(set_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_dual_control_state(url, tk, verify=False, cert=None):
+def get_dual_control_state(url, tk):
     """
     Use this method to determine if dual control is currently enabled of disabled on the server.
 
@@ -150,14 +150,14 @@ def get_dual_control_state(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/dualcontrol"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def change_dual_control_state(url, tk, enable, verify=False, cert=None):
+def change_dual_control_state(url, tk, enable):
     """
     Use this method to enable or disable dual control on the CSM server.
 
@@ -173,14 +173,14 @@ def change_dual_control_state(url, tk, enable, verify=False, cert=None):
     """
     post_url = f"{url}/system/dualcontrol/{enable}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_dual_control_requests(url, tk, verify=False, cert=None):
+def get_dual_control_requests(url, tk):
     """
     Returns a list of dual control events waiting for approval or rejection
 
@@ -194,14 +194,14 @@ def get_dual_control_requests(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/dualcontrol/requests"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def approve_dual_control_request(url, tk, id, verify=False, cert=None):
+def approve_dual_control_request(url, tk, id):
     """
     Approve a dual control request
 
@@ -217,14 +217,14 @@ def approve_dual_control_request(url, tk, id, verify=False, cert=None):
     """
     post_url = f"{url}/system/dualcontrol/approve/{id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
 
-def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
+def reject_dual_control_request(url, tk, id, comment):
     """
     Reject a dual control request
 
@@ -241,14 +241,14 @@ def reject_dual_control_request(url, tk, id, comment, verify=False, cert=None):
     """
     post_url = f"{url}/system/dualcontrol/reject/{id}/{comment}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_active_standby_status(url, tk, verify=False, cert=None):
+def get_active_standby_status(url, tk):
     """
     Get the current state of the active standby server connection
 
@@ -262,14 +262,14 @@ def get_active_standby_status(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/ha"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def reconnect_active_standby_server(url, tk, verify=False, cert=None):
+def reconnect_active_standby_server(url, tk):
     """
     Reconnect the active standby connection
 
@@ -283,14 +283,14 @@ def reconnect_active_standby_server(url, tk, verify=False, cert=None):
     """
     put_url = f"{url}/system/ha/reconnect"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
 
-def remove_active_or_standby_server(url, tk, haServer, verify=False, cert=None):
+def remove_active_or_standby_server(url, tk, haServer):
     """
     Remove the alternate server
 
@@ -305,14 +305,14 @@ def remove_active_or_standby_server(url, tk, haServer, verify=False, cert=None):
     """
     put_url = f"{url}/system/ha/removeHaServer/{haServer}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
 
-def set_standby_server(url, tk, standby_server, standby_username, standby_password, verify=False, cert=None):
+def set_standby_server(url, tk, standby_server, standby_username, standby_password):
     """
     Sets the server passed in to be the standby server. All data on the passed
     in server will be replaced with the data from the called server
@@ -330,14 +330,14 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
     """
     put_url = f"{url}/system/ha/setStandbyServer/{standby_server}/{standby_username}/{standby_password}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
 
-def takeover_standby_server(url, tk, verify=False, cert=None):
+def takeover_standby_server(url, tk):
     """
     Issues a takeover on the standby server making the standby server an active server
 
@@ -351,14 +351,14 @@ def takeover_standby_server(url, tk, verify=False, cert=None):
     """
     put_url = f"{url}/system/ha/takeover"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_log_events(url, tk, count, session=None, verify=False, cert=None):
+def get_log_events(url, tk, count, session=None):
     """
     get a list of the most recent log events
 
@@ -374,7 +374,7 @@ def get_log_events(url, tk, count, session=None, verify=False, cert=None):
     """
     get_url = f"{url}/system/logevents"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -386,7 +386,7 @@ def get_log_events(url, tk, count, session=None, verify=False, cert=None):
                         verify=verify, cert=cert)
 
 
-def create_and_download_log_pkg(url, tk, file_name, verify=False, cert=None):
+def create_and_download_log_pkg(url, tk, file_name):
     """
     This method will package all log files on the server into a .jar file
     that can be used for support - this call is a synchronous call and
@@ -403,7 +403,7 @@ def create_and_download_log_pkg(url, tk, file_name, verify=False, cert=None):
     """
     put_url = f"{url}/system/logpackages/synchronous/download"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -413,7 +413,7 @@ def create_and_download_log_pkg(url, tk, file_name, verify=False, cert=None):
     return resp
 
 
-def get_session_types(url, tk, verify=False, cert=None):
+def get_session_types(url, tk):
     """
     Get supported session types
 
@@ -427,14 +427,14 @@ def get_session_types(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/sessiontypes"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_server_version(url, tk, verify=False, cert=None):
+def get_server_version(url, tk):
     """
     Get the version of the server being called
 
@@ -448,14 +448,14 @@ def get_server_version(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/version"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_volume_counts(url, tk, verify=False, cert=None):
+def get_volume_counts(url, tk):
     """
     Get a summary of the volume usage on the server
 
@@ -469,7 +469,7 @@ def get_volume_counts(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/system/volcounts"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

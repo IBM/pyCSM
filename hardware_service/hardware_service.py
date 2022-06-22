@@ -1,4 +1,5 @@
 import requests
+from properties import cert, verify, language
 
 '''
 
@@ -7,7 +8,7 @@ import requests
 '''
 
 
-def get_devices(url, tk, device_type, verify=False, cert=None):
+def get_devices(url, tk, device_type):
     """
     Uses a get request to get info of all the storagedevices of a given type.
 
@@ -21,7 +22,7 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
     """
     getd_url = f"{url}/storagedevices/connectioninfo"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -34,8 +35,7 @@ def get_devices(url, tk, device_type, verify=False, cert=None):
 
 def add_device(url, tk, device_type, device_ip, device_username,
                device_password, device_port=None, second_ip=None, second_port=None,
-               second_username=None, second_password=None,
-               verify=False, cert=None):
+               second_username=None, second_password=None):
     """
     Use this method to create a connection from the CSM server to a specified storage system
 
@@ -59,7 +59,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
 
     addd_url = f"{url}/storagedevices"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -78,7 +78,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
                         verify=verify, cert=cert)
 
 
-def remove_device(url, tk, system_id, verify=False, cert=None):
+def remove_device(url, tk, system_id):
     """
     Use this method to remove the connection to the specified storage system
 
@@ -93,7 +93,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
     """
     remove_url = f"{url}/storagedevices/{system_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -101,7 +101,7 @@ def remove_device(url, tk, system_id, verify=False, cert=None):
                            verify=verify, cert=cert)
 
 
-def update_device_site_location(url, tk, system_id, location, verify=False, cert=None):
+def update_device_site_location(url, tk, system_id, location):
     """
     Set a user defined site location for a given storage system
 
@@ -117,7 +117,7 @@ def update_device_site_location(url, tk, system_id, location, verify=False, cert
     """
     update_url = f"{url}/storagedevices/{system_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -128,7 +128,7 @@ def update_device_site_location(url, tk, system_id, location, verify=False, cert
                          verify=verify, cert=cert)
 
 
-def get_volumes(url, tk, system_name, verify=False, cert=None):
+def get_volumes(url, tk, system_name):
     """
     Use this method to retrieve all volumes for a given storage system
 
@@ -142,15 +142,14 @@ def get_volumes(url, tk, system_name, verify=False, cert=None):
     """
     get_url = f"{url}/storagedevices/volumes/{system_name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
-                               verify=False, cert=None):
+def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
     """
     Exports a summary of the write i/o history for all volumes in a session to a csv file between the given times.
 
@@ -167,7 +166,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
     """
     export_url = f"{url}/sessions/{session_name}/exportesevolumehistory"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -179,7 +178,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time,
                         verify=verify, cert=cert)
 
 
-def get_paths(url, tk, verify=False, cert=None):
+def get_paths(url, tk):
     """
    Queries all the logical paths for all DS8000 storage systems connected to the CSM server.
 
@@ -192,14 +191,14 @@ def get_paths(url, tk, verify=False, cert=None):
     """
     get_url = f"{url}/storagedevices/paths"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
+def get_path_on_storage_system(url, tk, system_id):
     """
     Query for all logical paths on the given DS8000 storage system.
 
@@ -213,14 +212,14 @@ def get_path_on_storage_system(url, tk, system_id, verify=False, cert=None):
     """
     get_url = f"{url}/storagedevices/paths/{system_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def refresh_config(url, tk, system_id, verify=False, cert=None):
+def refresh_config(url, tk, system_id):
     """
     Refreshes the configuration for the given storage system.  Issuing this command will force the CSM server
         to requery the hardware for any new or deleted volumes.
@@ -236,7 +235,7 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
     """
     refresh_url = f"{url}/storagedevices/{system_id}/refreshconfig"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -245,7 +244,7 @@ def refresh_config(url, tk, system_id, verify=False, cert=None):
 
 def map_volumes_to_host(url, tk, device_id, force,
                         hostname, is_host_cluster,
-                        volumes, scsi="", verify=False, cert=None):
+                        volumes, scsi=""):
     """
     Map volumes to a host
 
@@ -265,7 +264,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     """
     put_url = f"{url}/storagedevices/mapvolstohost"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -290,7 +289,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
-def get_svchosts(url, tk, device_id, verify=False, cert=None):
+def get_svchosts(url, tk, device_id):
     """
     Get the hosts defined on the SVC based storage system
 
@@ -305,7 +304,7 @@ def get_svchosts(url, tk, device_id, verify=False, cert=None):
     """
     get_url = f"{url}/storagedevices/svchost/{device_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -314,7 +313,7 @@ def get_svchosts(url, tk, device_id, verify=False, cert=None):
 
 def unmap_volumes_to_host(url, tk, device_id, force,
                           hostname, is_host_cluster,
-                          volumes, verify=False, cert=None):
+                          volumes):
     """
     UnMap volumes from a host
 
@@ -333,7 +332,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
     """
     put_url = f"{url}/storagedevices/unmapvolstohost"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -348,7 +347,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
 
 
 def update_connection_info(url, tk, device_ip, device_password, device_username,
-                           connection_name, verify=False, cert=None):
+                           connection_name):
     """
     Update the userid/pw for a given storage system
 
@@ -366,7 +365,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     """
     put_url = f"{url}/storagedevices/updatehmc"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -381,7 +380,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
-def get_volumes_by_wwn(url, tk, wwn_name, verify=False, cert=None):
+def get_volumes_by_wwn(url, tk, wwn_name):
     """
     Return the information for all volumes based on the list of WWNs passed in.
 
@@ -396,7 +395,7 @@ def get_volumes_by_wwn(url, tk, wwn_name, verify=False, cert=None):
     """
     get_url = f"{url}/storagedevices/volumes/volwwn/{wwn_name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

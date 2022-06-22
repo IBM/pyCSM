@@ -1,7 +1,8 @@
 import requests
+from properties import cert, verify, language
 
 
-def get_scheduled_tasks(url, tk, verify=False, cert=None):
+def get_scheduled_tasks(url, tk):
     """
     Returns a list of scheduled tasks defined on the server
 
@@ -15,14 +16,14 @@ def get_scheduled_tasks(url, tk, verify=False, cert=None):
     """
     getst_url = f"{url}/sessions/scheduledtasks"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getst_url, headers=headers, verify=verify, cert=cert)
 
 
-def enable_scheduled_task(url, tk, taskid, verify=False, cert=None):
+def enable_scheduled_task(url, tk, taskid):
     """
     Enable a scheduled task to run based off the schedule defined on the task.
 
@@ -37,14 +38,14 @@ def enable_scheduled_task(url, tk, taskid, verify=False, cert=None):
     """
     enable_url = f"{url}/sessions/scheduledtasks/enable/{taskid}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(enable_url, headers=headers, verify=verify, cert=cert)
 
 
-def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
+def disable_scheduled_task(url, tk, taskid):
     """
     Disable a scheduled task from running automatically.
 
@@ -60,7 +61,7 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
     disable_url = f"{url}/sessions/scheduledtasks/disable/{taskid}"
 
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -68,7 +69,7 @@ def disable_scheduled_task(url, tk, taskid, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def run_scheduled_task(url, tk, taskid, synchronous=False, verify=False, cert=None):
+def run_scheduled_task(url, tk, taskid, synchronous=False):
     """
     Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
     is complete.  False if you want it to run in the asynchronous after the call completes.
@@ -84,7 +85,7 @@ def run_scheduled_task(url, tk, taskid, synchronous=False, verify=False, cert=No
     """
     run_url = f"{url}/sessions/scheduledtasks/{taskid}/{synchronous}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

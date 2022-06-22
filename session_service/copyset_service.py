@@ -1,4 +1,5 @@
 import requests
+from properties import cert, verify, language
 
 """
 
@@ -7,7 +8,7 @@ import requests
 """
 
 
-def get_copysets(url, tk, name, verify=False, cert=None):
+def get_copysets(url, tk, name):
     """
     Gets all copy sets and their info for a given session.
 
@@ -22,13 +23,13 @@ def get_copysets(url, tk, name, verify=False, cert=None):
     """
     getcs_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
     }
     return requests.get(getcs_url, headers=headers, verify=verify, cert=cert)
 
 
-def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=None):
+def add_copysets(url, tk, name, copysets, roleorder=None):
     """
     Add copy sets to a given session
 
@@ -51,7 +52,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=Non
     """
     add_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
 
@@ -64,7 +65,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None, verify=False, cert=Non
                          verify=verify, cert=cert)
 
 
-def remove_copysets(url, tk, name, copysets, force=False, soft=False, verify=False, cert=None):
+def remove_copysets(url, tk, name, copysets, force=False, soft=False):
     """
     Removes Copy Sets from the given session.
 
@@ -85,7 +86,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False, verify=Fal
     """
     remove_url = f"{url}/sessions/{name}/{force}/{soft}/copysets"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -96,7 +97,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False, verify=Fal
                            data=params, verify=verify, cert=cert)
 
 
-def export_copysets(url, tk, name, file_name, verify=False, cert=None):
+def export_copysets(url, tk, name, file_name):
     """
     Exports copysets as a csv file and downloads it to the calling system.
 
@@ -111,7 +112,7 @@ def export_copysets(url, tk, name, file_name, verify=False, cert=None):
     """
     export_url = f"{url}/sessions/{name}/copysets/download"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -121,7 +122,7 @@ def export_copysets(url, tk, name, file_name, verify=False, cert=None):
     return resp
 
 
-def get_pair_info(url, tk, name, rolepair, verify=False, cert=None):
+def get_pair_info(url, tk, name, rolepair):
     """
     Get all the pairs for the session in a given role pair.
 
@@ -137,14 +138,14 @@ def get_pair_info(url, tk, name, rolepair, verify=False, cert=None):
     """
     get_url = f"{url}/sessions/{name}/pairs/{rolepair}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def enable_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, cert=None):
+def enable_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     Enable the task at the given time
 
@@ -161,14 +162,14 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, ce
     """
     post_url = f"{url}/sessions/scheduledtasks/enable/{task_id}/{start_time}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(post_url, headers=headers, verify=verify, cert=cert)
 
 
-def run_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, cert=None):
+def run_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     Run a scheduled task immediately.
 
@@ -185,7 +186,7 @@ def run_scheduled_task_at_time(url, tk, task_id, start_time, verify=False, cert=
     """
     post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

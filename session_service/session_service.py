@@ -2,10 +2,10 @@ import json
 import time
 from datetime import datetime
 import requests
+from properties import cert, verify, language
 
 
-def create_session(url, tk, name, sess_type, desc=None,
-                   verify=False, cert=None):
+def create_session(url, tk, name, sess_type, desc=None):
     """
     Create a copy services manager session. A session must be created before
     copy sets can be placed into the session and managed by the server.
@@ -22,7 +22,7 @@ def create_session(url, tk, name, sess_type, desc=None,
     """
     create_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -34,7 +34,7 @@ def create_session(url, tk, name, sess_type, desc=None,
                         verify=verify, cert=cert)
 
 
-def delete_session(url, tk, name, verify=False, cert=None):
+def delete_session(url, tk, name):
     """
     Deletes a copy services manager session.
     Only inactive sessions can be deleted.
@@ -50,7 +50,7 @@ def delete_session(url, tk, name, verify=False, cert=None):
     """
     delete_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -58,7 +58,7 @@ def delete_session(url, tk, name, verify=False, cert=None):
                            verify=verify, cert=cert)
 
 
-def get_session_info(url, tk, name, verify=False, cert=None):
+def get_session_info(url, tk, name):
     """
     This method returns the detailed information for a given session.
 
@@ -73,14 +73,14 @@ def get_session_info(url, tk, name, verify=False, cert=None):
     """
     getsi_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getsi_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_session_overviews(url, tk, verify=False, cert=None):
+def get_session_overviews(url, tk):
     """
     This method returns the overview summary information
     for all sessions managed by the server
@@ -95,14 +95,14 @@ def get_session_overviews(url, tk, verify=False, cert=None):
     """
     gets_url = f"{url}/sessions"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_session_overviews_short(url, tk, verify=False, cert=None):
+def get_session_overviews_short(url, tk):
     """
     This method returns minimal overview summary information
     for all sessions managed by the server.
@@ -117,14 +117,14 @@ def get_session_overviews_short(url, tk, verify=False, cert=None):
     """
     gets_url = f"{url}/sessions/short"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_available_commands(url, tk, name, verify=False, cert=None):
+def get_available_commands(url, tk, name):
     """
     Returns the list of available commands
     for a session based on the session's current state
@@ -140,14 +140,14 @@ def get_available_commands(url, tk, name, verify=False, cert=None):
     """
     getc_url = f"{url}/sessions/{name}/availablecommands"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(getc_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_session_options(url, tk, name, verify=False, cert=None):
+def get_session_options(url, tk, name):
     """
     Gets the options for the given session. The results returned
     from this method will vary depending on the session type.
@@ -162,14 +162,14 @@ def get_session_options(url, tk, name, verify=False, cert=None):
     """
     geto_url = f"{url}/sessions/{name}/options"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(geto_url, headers=headers, verify=verify, cert=cert)
 
 
-def modify_session_description(url, tk, name, desc, verify=False, cert=None):
+def modify_session_description(url, tk, name, desc):
     """
     Changes the description field for a given session.
 
@@ -184,7 +184,7 @@ def modify_session_description(url, tk, name, desc, verify=False, cert=None):
     """
     desc_url = f"{url}/sessions/{name}/description"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -195,7 +195,7 @@ def modify_session_description(url, tk, name, desc, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
+def run_session_command(url, tk, ses_name, com_name):
     """
     Run a command against a session.
 
@@ -210,7 +210,7 @@ def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
     """
     runc_url = f"{url}/sessions/{ses_name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -221,8 +221,7 @@ def run_session_command(url, tk, ses_name, com_name, verify=False, cert=None):
                          verify=verify, cert=cert)
 
 
-def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
-                   verify=False, cert=None):
+def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
     """
     Runs until the session is in a given state
     or until it times out and returns the results.
@@ -263,8 +262,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False,
         return {"state_reached": False, "session_info": resp}
 
 
-def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
-                verify=False, cert=None):
+def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
     """
    Run a Recover command to the specified Safeguarded Copy backup ID.
 
@@ -281,7 +279,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
     """
     rec_url = f"{url}/sessions/{ses_name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -292,8 +290,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id,
                          verify=verify, cert=cert)
 
 
-def get_backup_details(url, tk, name, role, backup_id,
-                       verify=False, cert=None):
+def get_backup_details(url, tk, name, role, backup_id):
     """
     Gets detailed information for a given backup in a session.
 
@@ -309,14 +306,13 @@ def get_backup_details(url, tk, name, role, backup_id,
     """
     get_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
-def get_snapshot_details_by_name(url, tk, name, role, snapshot_name,
-                       verify=False, cert=None):
+def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
     """
     Gets detailed information for a given snapshot in a session.
 
@@ -332,15 +328,14 @@ def get_snapshot_details_by_name(url, tk, name, role, snapshot_name,
     """
     get_url = f"{url}/sessions/{name}/snapshotsByName/{role}/{snapshot_name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def run_backup_command(url, tk, name, role, backup_id,
-                       cmd, verify=False, cert=None):
+def run_backup_command(url, tk, name, role, backup_id, cmd):
     """
     Used to perform a recover or expire for the specified backup.
 
@@ -357,7 +352,7 @@ def run_backup_command(url, tk, name, role, backup_id,
     """
     post_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -368,7 +363,7 @@ def run_backup_command(url, tk, name, role, backup_id,
 
 
 def export_lss_oos_history(url, tk, name, rolepair, start_time,
-                           end_time, verify=False, cert=None):
+                           end_time):
     """
     Export LSS OOS History for a session in csv format to a file
 
@@ -385,7 +380,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
     """
     put_url = f"{url}/sessions/{name}/exportlssooshistory/{rolepair}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -397,7 +392,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
 
 
 def export_device_writeio_history(url, tk, name, start_time,
-                                  end_time, verify=False, cert=None):
+                                  end_time):
     """
     Export ESE Box History for a session in csv format to a file
 
@@ -413,7 +408,7 @@ def export_device_writeio_history(url, tk, name, start_time,
     """
     put_url = f"{url}/sessions/{name}/exporteseboxhistory"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -425,7 +420,7 @@ def export_device_writeio_history(url, tk, name, start_time,
 
 
 def get_rpo_history(url, tk, name, rolepair, start_time,
-                    end_time, verify=False, cert=None):
+                    end_time):
     """
     Export ESE Box History for a session in csv format to a file
 
@@ -441,7 +436,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
     """
     put_url = f"{url}/sessions/{name}/getrpohistory/{rolepair}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -452,7 +447,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
     return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
 
 
-def get_recovered_backups(url, tk, name, verify=False, cert=None):
+def get_recovered_backups(url, tk, name):
     """
     Gets all recovered backups for Spec V Safeguarded Copy session.
 
@@ -466,14 +461,14 @@ def get_recovered_backups(url, tk, name, verify=False, cert=None):
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=None):
+def get_recovered_backup_details(url, tk, name, backup_id):
     """
     Gets the pair information for a specific recovered backup on a specific session
 
@@ -488,14 +483,14 @@ def get_recovered_backup_details(url, tk, name, backup_id, verify=False, cert=No
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups/{backup_id}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_snapshot_clones(url, tk, name, verify=False, cert=None):
+def get_snapshot_clones(url, tk, name):
     """
     Gets all clones for snapshots in for Spec V Safeguarded Copy session.
 
@@ -509,14 +504,14 @@ def get_snapshot_clones(url, tk, name, verify=False, cert=None):
     """
     get_url = f"{url}/sessions/{name}/clones"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name, verify=False, cert=None):
+def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):
     """
     Gets the pair details for the thin clone of the specified snapshot in the session
 
@@ -531,14 +526,14 @@ def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name, verify=Fals
     """
     get_url = f"{url}/sessions/{name}/clonesBySnapshotName/{snapshot_name}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=verify, cert=cert)
 
 
-def get_rolepair_info(url, tk, name, rolepair, verify=False, cert=None):
+def get_rolepair_info(url, tk, name, rolepair):
     """
     Gets a summary for a given role pair in a session.
 
@@ -553,7 +548,7 @@ def get_rolepair_info(url, tk, name, rolepair, verify=False, cert=None):
     """
     get_url = f"{url}/sessions/{name}/sequences/{rolepair}"
     headers = {
-        "Accept-Language": "en-US",
+        "Accept-Language": language,
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

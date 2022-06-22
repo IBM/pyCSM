@@ -1,5 +1,6 @@
 from authorization import auth
 from system_service import system_service
+from properties import cert, verify
 
 
 class systemClient:
@@ -16,8 +17,7 @@ class systemClient:
 |
     """
 
-    def __init__(self, server_address, server_port, username, password,
-                 verify=False, cert=None):
+    def __init__(self, server_address, server_port, username, password):
         """
         Creates a system client to store the server_address, port,
         username, password and token once created.
@@ -31,8 +31,6 @@ class systemClient:
         """
         self.username = username
         self.password = password
-        self.cert = cert
-        self.verify = verify
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
         self.tk = auth.get_token(self.base_url, username, password)
 
@@ -45,12 +43,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.create_log_pkg(self.base_url, self.tk,
-                                             self.verify, self.cert)
+                                             verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.create_log_pkg(self.base_url, self.tk,
-                                                 self.verify, self.cert)
+                                                 verify, cert)
         return resp
 
     def get_log_pkgs(self):
@@ -62,10 +60,10 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
             """
         resp = system_service.get_log_pkgs(self.base_url, self.tk,
-                                           self.verify, self.cert)
+                                           verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_log_pkgs(self.base_url, self.tk, self.verify,
                                                self.cert)
         return resp
@@ -80,12 +78,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.backup_server(self.base_url, self.tk,
-                                            self.verify, self.cert)
+                                            verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.backup_server(self.base_url, self.tk,
-                                                self.verify, self.cert)
+                                                verify, cert)
         return resp
 
     def get_server_backups(self):
@@ -97,12 +95,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_server_backups(self.base_url, self.tk,
-                                                 self.verify, self.cert)
+                                                 verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_server_backups(self.base_url, self.tk,
-                                                     self.verify, self.cert)
+                                                     verify, cert)
         return resp
 
     def backup_server_and_download(self, file_name):
@@ -116,12 +114,12 @@ class systemClient:
             Server backup data that is written to the specified file.
         """
         resp = system_service.backup_server_and_download(self.base_url, self.tk, file_name,
-                                                     self.verify, self.cert)
+                                                     verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.backup_server_and_download(self.base_url, self.tk, file_name,
-                                                         self.verify, self.cert)
+                                                         verify, cert)
         return resp
 
     def set_server_as_standby(self, active_server):
@@ -145,9 +143,9 @@ class systemClient:
                                                     self.cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.set_server_as_standby(self.base_url, self.tk,
-                                                        active_server, self.verify, self.cert)
+                                                        active_server, verify, cert)
         return resp
 
     def get_dual_control_state(self):
@@ -159,12 +157,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_dual_control_state(self.base_url, self.tk,
-                                                     self.verify, self.cert)
+                                                     verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_dual_control_state(self.base_url, self.tk,
-                                                         self.verify, self.cert)
+                                                         verify, cert)
         return resp
 
     def change_dual_control_state(self, enable):
@@ -180,12 +178,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.change_dual_control_state(self.base_url, self.tk, enable,
-                                                        self.verify, self.cert)
+                                                        verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.change_dual_control_state(self.base_url, self.tk, enable,
-                                                            self.verify, self.cert)
+                                                            verify, cert)
         return resp
 
     def get_dual_control_requests(self):
@@ -197,12 +195,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_dual_control_requests(self.base_url, self.tk,
-                                                        self.verify, self.cert)
+                                                        verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_dual_control_requests(self.base_url, self.tk,
-                                                            self.verify, self.cert)
+                                                            verify, cert)
         return resp
 
     def approve_dual_control_request(self, id):
@@ -218,12 +216,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.approve_dual_control_request(self.base_url, self.tk, id,
-                                                           self.verify, self.cert)
+                                                           verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.approve_dual_control_request(self.base_url, self.tk, id,
-                                                               self.verify, self.cert)
+                                                               verify, cert)
         return resp
 
     def reject_dual_control_request(self, id, comment):
@@ -241,12 +239,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.reject_dual_control_request(self.base_url, self.tk, id, comment,
-                                                          self.verify, self.cert)
+                                                          verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.reject_dual_control_request(self.base_url, self.tk, id, comment,
-                                                              self.verify, self.cert)
+                                                              verify, cert)
         return resp
 
     def get_active_standby_status(self):
@@ -258,12 +256,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_active_standby_status(self.base_url, self.tk,
-                                                        self.verify, self.cert)
+                                                        verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_active_standby_status(self.base_url, self.tk,
-                                                            self.verify, self.cert)
+                                                            verify, cert)
         return resp
 
     def reconnect_active_standby_server(self):
@@ -275,12 +273,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.reconnect_active_standby_server(self.base_url, self.tk,
-                                                              self.verify, self.cert)
+                                                              verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.reconnect_active_standby_server(self.base_url, self.tk,
-                                                                  self.verify, self.cert)
+                                                                  verify, cert)
         return resp
 
     def remove_active_or_standby_server(self, ha_server):
@@ -296,12 +294,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server,
-                                                              self.verify, self.cert)
+                                                              verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server,
-                                                                  self.verify, self.cert)
+                                                                  verify, cert)
         return resp
 
     def set_standby_server(self, standby_server, standby_username, standby_password):
@@ -319,13 +317,13 @@ class systemClient:
         """
         resp = system_service.set_standby_server(self.base_url, self.tk, standby_server,
                                                  standby_username, standby_password,
-                                                 self.verify, self.cert)
+                                                 verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.set_standby_server(self.base_url, self.tk, standby_server,
                                                      standby_username, standby_password,
-                                                     self.verify, self.cert)
+                                                     verify, cert)
         return resp
 
     def takeover_standby_server(self):
@@ -337,12 +335,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.takeover_standby_server(self.base_url, self.tk,
-                                                      self.verify, self.cert)
+                                                      verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.takeover_standby_server(self.base_url, self.tk,
-                                                          self.verify, self.cert)
+                                                          verify, cert)
         return resp
 
     def get_log_events(self, count, session=None):
@@ -359,13 +357,13 @@ class systemClient:
         """
         resp = system_service.get_log_events(self.base_url, self.tk,
                                              count, session,
-                                             self.verify, self.cert)
+                                             verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_log_events(self.base_url, self.tk,
                                                  count, session,
-                                                 self.verify, self.cert)
+                                                 verify, cert)
         return resp
 
     def create_and_download_log_pkg(self, file_name):
@@ -382,12 +380,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name,
-                                                          self.verify, self.cert)
+                                                          verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name,
-                                                              self.verify, self.cert)
+                                                              verify, cert)
         return resp
 
     def get_session_types(self):
@@ -399,12 +397,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_session_types(self.base_url, self.tk,
-                                                self.verify, self.cert)
+                                                verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_session_types(self.base_url, self.tk,
-                                                    self.verify, self.cert)
+                                                    verify, cert)
         return resp
 
     def get_server_version(self):
@@ -416,12 +414,12 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_server_version(self.base_url, self.tk,
-                                                 self.verify, self.cert)
+                                                 verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_server_version(self.base_url, self.tk,
-                                                     self.verify, self.cert)
+                                                     verify, cert)
         return resp
 
     def get_volume_counts(self):
@@ -433,10 +431,10 @@ class systemClient:
             'I' = successful, 'W' = warning, 'E' = error.
         """
         resp = system_service.get_volume_counts(self.base_url, self.tk,
-                                                self.verify, self.cert)
+                                                verify, cert)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password,
-                                     self.verify, self.cert)
+                                     verify, cert)
             return system_service.get_volume_counts(self.base_url, self.tk,
-                                                    self.verify, self.cert)
+                                                    verify, cert)
         return resp

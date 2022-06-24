@@ -32,8 +32,8 @@ Welcome to pyCSM's documentation!
 
    Example:
 
-   ``sessionClient = session_client.sessionClient("localhost", "9559", "csmadmin", "csm")``
-   ``print(sessionClient.get_session_overviews().json())``
+   ``sessClient = session_client.sessionClient("localhost", "9559", "csmadmin", "csm")``
+   ``print(sessClient.get_session_overviews().json())``
 
 **Authorization + Services**
 ----------------------------
@@ -47,7 +47,7 @@ Welcome to pyCSM's documentation!
    Example:
 
    ``token = auth.get_token("https://localhost:9559/CSM/web", "csmadmin", "csm")``
-   ``print(sessions.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
+   ``print(session_service.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
 
 **Services only**
 -----------------
@@ -58,7 +58,7 @@ Welcome to pyCSM's documentation!
 
    Example:
 
-   ``print(sessions.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
+   ``print(session_service.get_session_overviews("https://localhost:9559/CSM/web", token).json())``
 
 **Specifying Properties**
 -------------------------
@@ -67,26 +67,27 @@ Welcome to pyCSM's documentation!
 
    Available properties are defined in a Python dictionary.  The current options are the following:
 
-   properties = {
-       "language": "en-US",  # Defines the language any translated results should be returned
-       "verify": False,      # Set to True to verify the server side certificate
-       "cert": None          # The client certificate
-   }
+   * "language" - Defines the language any translated results should be returned.  Default is "en-US".
+   * "verify"   - Set to True to verify the server side certificate.  Default is False.
+   * "cert"     - The client certificate.  Default is None.
 
    You can query for the current property values from either the client or the service.
    A dictionary is returned from both.
 
    Example Using Client:
+
    ``sessClient = session_client.sessionClient(server_address, server_port, username, password)``
    ``properties = sessClient.get_properties()``
 
    Example Using Service:
+
    ``session_service.get_properties()``
 
-   To modify the properties call the change_properties method on either the client or service depending
+   To modify the properties call the change_properties() method on either the client or service depending
    on what interface you're using.  Pass in a dictionary containing the values you wish to change.
 
    Example Changing the language to French:
+
    ``my_properties = {"language": "de"}``
    ``sessClient.change_properties(my_properties)``
 
@@ -97,6 +98,7 @@ Welcome to pyCSM's documentation!
    **It is highly recommended that you set verify to True and specify a CA cert to use for a secure connection**
 
    Example:
+
    ``my_properties = {"verify": "True", "cert": "cert": ('/home/certs/localhost.crt', '/home/certs/private.key')}``
    ``sessClient.change_properties(my_properties)``
 

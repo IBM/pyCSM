@@ -67,7 +67,7 @@ Welcome to pyCSM's documentation!
 
    Available properties are defined in a Python dictionary.  The current options are the following:
 
-   * "language" - Defines the language any translated results should be returned.  Default is "en-US".
+   * "language" - Defines the language for returned translated results.  Default is "en-US".
    * "verify"   - Set to True to verify the server side certificate.  Default is False.
    * "cert"     - The client certificate.  Default is None.
 
@@ -99,7 +99,7 @@ Welcome to pyCSM's documentation!
 
    Example:
 
-   ``my_properties = {"verify": "True", "cert": "cert": ('/home/certs/localhost.crt', '/home/certs/private.key')}``
+   ``my_properties = {"verify": "True", "cert": ('/certs/localhost.crt', '/certs/private.key')}``
    ``sessClient.change_properties(my_properties)``
 
 

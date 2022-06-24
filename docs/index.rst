@@ -32,7 +32,7 @@ Welcome to pyCSM's documentation!
 
    Example:
 
-   ``sessionClient = client_session.sessionClient("localhost", "9559", "csmadmin", "csm")``
+   ``sessionClient = session_client.sessionClient("localhost", "9559", "csmadmin", "csm")``
    ``print(sessionClient.get_session_overviews().json())``
 
 **Authorization + Services**

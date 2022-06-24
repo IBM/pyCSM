@@ -1,5 +1,5 @@
 Hardware
 ===============
 
-.. automodule:: hardware_service.hardware
+.. automodule:: hardware_service.hardware_service
     :members:

@@ -1,5 +1,5 @@
 Hardware Client
 ===============
 
-.. automodule:: clients.client_hardware
+.. automodule:: clients.hardware_client
     :members:

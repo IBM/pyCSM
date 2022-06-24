@@ -6,8 +6,8 @@
 This repository contains the IBM Python client for RESTful communication to an IBM Copy Services Manager server.  The Python client enables full management and monitoring of the replication and the components necessary for replication in a Copy Services Manager environment. 
 
 The repository provides two options for implementations.  
-- **Clients**      - The client classes are [client_ses.py](clients/session_client.py), [client_hardware.py](clients/hardware_client.py), and [client_system.py](clients/system_client.py).  These classes are designed to automatically obtain and manage a token to CSM for communication.  A client class can be instantiated and then used to call the methods that perform the desired actions.   
-- **Services**     - The service classes are located under [Session_service](session_service), [hardware_service](hardware_service), and [system_service](system_service) and can be used if the caller wishes to manage the connection and token themselves.  These are the same classes that are called from the client classes. 
+- **Clients**      - The client classes are [session_client.py](clients/session_client.py), [hardware_client.py](clients/hardware_client.py), and [system_client.py](clients/system_client.py).  These classes are designed to automatically obtain and manage a token to CSM for communication.  A client class can be instantiated and then used to call the methods that perform the desired actions.   
+- **Services**     - The service classes are located under [session_service](session_service), [hardware_service](hardware_service), and [system_service](system_service) and can be used if the caller wishes to manage the connection and token themselves.  These are the same classes that are called from the client classes. 
 
 ## Python Compatibility
 The content in this collection supports Python 3.6 and higher 
@@ -17,11 +17,16 @@ The content in this collection supports Python 3.6 and higher
 Communication to the Copy Services Manager server uses the RESTful interface and thus does not require an installation of client code.  
 Clone the repository, and then add it to your PYTHONPATH directory. The Python client is then ready for import and use.
 
+The pyCSM library can also be installed using pip.  
+```text
+pip install pyCSM
+```
+
 ## Command Documentation
 All commands, their usage and their parameters are documented on [read the docs](https://pycsm.readthedocs.io/en/latest/).
 
 ## Usage examples
-**Coming Soon**
+See documentation for examples on [read the docs](https://pycsm.readthedocs.io/en/latest/).
 
 ## The CSM RESTful API
 Details on the CSM RESTful API used by this python library can be found in the [Knowledgecenter](https://www.ibm.com/docs/en/csm/6.3.2?topic=reference-csm-rest-api-documentation) for the product. 

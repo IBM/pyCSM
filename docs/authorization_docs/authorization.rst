@@ -1,6 +1,6 @@
 Authorization
 =============
-This page holds the documentation for the differnt methods contained in the Authorization folder
+This page holds the documentation for the different methods contained in the Authorization folder
 
 Code documentation
 -------------------

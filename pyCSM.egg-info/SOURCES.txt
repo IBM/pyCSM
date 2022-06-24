@@ -1,8 +1,0 @@
-LICENSE
-README.md
-setup.py
-pyCSM.egg-info/PKG-INFO
-pyCSM.egg-info/SOURCES.txt
-pyCSM.egg-info/dependency_links.txt
-pyCSM.egg-info/requires.txt
-pyCSM.egg-info/top_level.txt

@@ -10,10 +10,8 @@ class hardwareClient:
     username and password only when you instantiate the class which will obtain a token to the server that will be
     used on all calls using the class.  In the event that the token expires, the client will automatically handle the
     error and retrieve a new token prior to retrying the call.
-|
     The client makes RESTAPI calls to the server and returns the results.  For more details on what is returned from a call,
     see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
-|
     """
 
     def __init__(self, server_address, server_port, username, password):
@@ -32,6 +30,30 @@ class hardwareClient:
         self.password = password
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
         self.tk = auth.get_token(self.base_url, username, password)
+
+    @staticmethod
+    def get_properties():
+        """
+        Returns a dictionary of the current properties and
+        their values set for the file.
+        """
+        return hardware_service.get_properties()
+
+    @staticmethod
+    def change_properties(property_dictionary):
+        """
+        Takes a dictionary of properties and the values that
+        user wants to change and changes them in the file.
+
+        Args:
+            property_dictionary (dict): Dictionary of the keys and values that need
+            to be changed in the file.
+            ex. {"language":"en-UK", "verify":True}
+
+        Returns:
+            Returns the new properties dictionary.
+        """
+        return hardware_service.change_properties(property_dictionary)
 
     def get_devices(self, device_type):
         """

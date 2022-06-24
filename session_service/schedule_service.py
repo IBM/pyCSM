@@ -1,5 +1,36 @@
 import requests
-from properties import cert, verify, language
+
+properties = {
+    "language": "en-US",
+    "verify": False,
+    "cert": None
+}
+
+
+def get_properties():
+    """
+    Returns a dictionary of the current properties and
+    their values set for the file.
+    """
+    return properties
+
+
+def change_properties(property_dictionary):
+    """
+    Takes a dictionary of properties and the values that
+    user wants to change and changes them in the file.
+
+    Args:
+        property_dictionary (dict): Dictionary of the keys and values that need
+        to be changed in the file.
+        ex. {"language":"en-UK", "verify":True}
+
+    Return:
+        Returns the new properties dictionary.
+    """
+    for key in property_dictionary:
+        properties[key] = property_dictionary[key]
+    return properties
 
 
 def get_scheduled_tasks(url, tk):
@@ -16,11 +47,11 @@ def get_scheduled_tasks(url, tk):
     """
     getst_url = f"{url}/sessions/scheduledtasks"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(getst_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(getst_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def enable_scheduled_task(url, tk, taskid):
@@ -38,11 +69,11 @@ def enable_scheduled_task(url, tk, taskid):
     """
     enable_url = f"{url}/sessions/scheduledtasks/enable/{taskid}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(enable_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(enable_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def disable_scheduled_task(url, tk, taskid):
@@ -61,12 +92,12 @@ def disable_scheduled_task(url, tk, taskid):
     disable_url = f"{url}/sessions/scheduledtasks/disable/{taskid}"
 
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(disable_url, headers=headers,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def run_scheduled_task(url, tk, taskid, synchronous=False):
@@ -85,8 +116,8 @@ def run_scheduled_task(url, tk, taskid, synchronous=False):
     """
     run_url = f"{url}/sessions/scheduledtasks/{taskid}/{synchronous}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(run_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(run_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

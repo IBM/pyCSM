@@ -1,11 +1,36 @@
 import requests
-from properties import cert, verify, language
 
-'''
+properties = {
+    "language": "en-US",
+    "verify": False,
+    "cert": None
+}
 
-    Description: Methods that make REST calls for hardware type services.
 
-'''
+def get_properties():
+    """
+    Returns a dictionary of the current properties and
+    their values set for the file.
+    """
+    return properties
+
+
+def change_properties(property_dictionary):
+    """
+    Takes a dictionary of properties and the values that
+    user wants to change and changes them in the file.
+
+    Args:
+        property_dictionary (dict): Dictionary of the keys and values that need
+        to be changed in the file.
+        ex. {"language":"en-UK", "verify":True}
+
+    Return:
+        Returns the new properties dictionary.
+    """
+    for key in property_dictionary:
+        properties[key] = property_dictionary[key]
+    return properties
 
 
 def get_devices(url, tk, device_type):
@@ -22,7 +47,7 @@ def get_devices(url, tk, device_type):
     """
     getd_url = f"{url}/storagedevices/connectioninfo"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -30,7 +55,7 @@ def get_devices(url, tk, device_type):
         "type": {device_type}
     }
     return requests.get(getd_url, headers=headers, data=params,
-                        verify=verify, cert=cert)
+                        verify=properties["verify"], cert=properties["cert"])
 
 
 def add_device(url, tk, device_type, device_ip, device_username,
@@ -59,7 +84,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
 
     addd_url = f"{url}/storagedevices"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -75,7 +100,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
         "seconddevicepassword": second_password
     }
     return requests.put(addd_url, headers=headers, data=params,
-                        verify=verify, cert=cert)
+                        verify=properties["verify"], cert=properties["cert"])
 
 
 def remove_device(url, tk, system_id):
@@ -93,12 +118,12 @@ def remove_device(url, tk, system_id):
     """
     remove_url = f"{url}/storagedevices/{system_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.delete(remove_url, headers=headers,
-                           verify=verify, cert=cert)
+                           verify=properties["verify"], cert=properties["cert"])
 
 
 def update_device_site_location(url, tk, system_id, location):
@@ -117,7 +142,7 @@ def update_device_site_location(url, tk, system_id, location):
     """
     update_url = f"{url}/storagedevices/{system_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -125,7 +150,7 @@ def update_device_site_location(url, tk, system_id, location):
         "location": location
     }
     return requests.post(update_url, headers=headers, data=params,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def get_volumes(url, tk, system_name):
@@ -142,11 +167,11 @@ def get_volumes(url, tk, system_name):
     """
     get_url = f"{url}/storagedevices/volumes/{system_name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
@@ -166,7 +191,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
     """
     export_url = f"{url}/sessions/{session_name}/exportesevolumehistory"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -175,7 +200,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
         "endtime": end_time
     }
     return requests.put(export_url, headers=headers, data=params,
-                        verify=verify, cert=cert)
+                        verify=properties["verify"], cert=properties["cert"])
 
 
 def get_paths(url, tk):
@@ -191,11 +216,11 @@ def get_paths(url, tk):
     """
     get_url = f"{url}/storagedevices/paths"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_path_on_storage_system(url, tk, system_id):
@@ -212,11 +237,11 @@ def get_path_on_storage_system(url, tk, system_id):
     """
     get_url = f"{url}/storagedevices/paths/{system_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def refresh_config(url, tk, system_id):
@@ -235,11 +260,11 @@ def refresh_config(url, tk, system_id):
     """
     refresh_url = f"{url}/storagedevices/{system_id}/refreshconfig"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(refresh_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(refresh_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def map_volumes_to_host(url, tk, device_id, force,
@@ -264,7 +289,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     """
     put_url = f"{url}/storagedevices/mapvolstohost"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -276,7 +301,7 @@ def map_volumes_to_host(url, tk, device_id, force,
             "isHostCluster": is_host_cluster,
             "volumes": str(volumes)
         }
-    else :
+    else:
         params = {
             "deviceId": device_id,
             "force": force,
@@ -286,7 +311,7 @@ def map_volumes_to_host(url, tk, device_id, force,
             "volumes": str(volumes)
         }
 
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_svchosts(url, tk, device_id):
@@ -304,11 +329,11 @@ def get_svchosts(url, tk, device_id):
     """
     get_url = f"{url}/storagedevices/svchost/{device_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def unmap_volumes_to_host(url, tk, device_id, force,
@@ -332,7 +357,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
     """
     put_url = f"{url}/storagedevices/unmapvolstohost"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -343,7 +368,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
         "isHostCluster": is_host_cluster,
         "volumes": str(volumes)
     }
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def update_connection_info(url, tk, device_ip, device_password, device_username,
@@ -365,7 +390,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     """
     put_url = f"{url}/storagedevices/updatehmc"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -377,7 +402,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
         "name": connection_name
     }
 
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_volumes_by_wwn(url, tk, wwn_name):
@@ -395,7 +420,7 @@ def get_volumes_by_wwn(url, tk, wwn_name):
     """
     get_url = f"{url}/storagedevices/volumes/volwwn/{wwn_name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -404,4 +429,4 @@ def get_volumes_by_wwn(url, tk, wwn_name):
         "name": wwn_name
     }
 
-    return requests.get(get_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])

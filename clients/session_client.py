@@ -314,6 +314,30 @@ class sessionClient:
             return schedule_service.get_scheduled_tasks(self.base_url, self.tk)
         return resp
 
+    @staticmethod
+    def get_properties():
+        """
+        Returns a dictionary of the current properties and
+        their values set for the file.
+        """
+        return session_service.get_properties()
+
+    @staticmethod
+    def change_properties(property_dictionary):
+        """
+        Takes a dictionary of properties and the values that
+        user wants to change and changes them in the file.
+
+        Args:
+            property_dictionary (dict): Dictionary of the keys and values that need
+            to be changed in the file.
+            ex. {"language":"en-UK", "verify":True}
+
+        Returns:
+            Returns the new properties dictionary.
+        """
+        return session_service.change_properties(property_dictionary)
+
     def enable_scheduled_task(self, taskid):
         """
         Enable a scheduled task to run based off the

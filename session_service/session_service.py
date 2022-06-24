@@ -2,7 +2,38 @@ import json
 import time
 from datetime import datetime
 import requests
-from properties import cert, verify, language
+
+properties = {
+    "language": "en-US",
+    "verify": False,
+    "cert": None
+}
+
+
+def get_properties():
+    """
+    Returns a dictionary of the current properties and
+    their values set for the file.
+    """
+    return properties
+
+
+def change_properties(property_dictionary):
+    """
+    Takes a dictionary of properties and the values that
+    user wants to change and changes them in the file.
+
+    Args:
+        property_dictionary (dict): Dictionary of the keys and values that need
+        to be changed in the file.
+        ex. {"language":"en-UK", "verify":True}
+
+    Return:
+        Returns the new properties dictionary.
+    """
+    for key in property_dictionary:
+        properties[key] = property_dictionary[key]
+    return properties
 
 
 def create_session(url, tk, name, sess_type, desc=None):
@@ -22,7 +53,7 @@ def create_session(url, tk, name, sess_type, desc=None):
     """
     create_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -31,7 +62,7 @@ def create_session(url, tk, name, sess_type, desc=None):
         "description": desc
     }
     return requests.put(create_url, headers=headers, data=params,
-                        verify=verify, cert=cert)
+                        verify=properties["verify"], cert=properties["cert"])
 
 
 def delete_session(url, tk, name):
@@ -50,12 +81,12 @@ def delete_session(url, tk, name):
     """
     delete_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.delete(delete_url, headers=headers,
-                           verify=verify, cert=cert)
+                           verify=properties["verify"], cert=properties["cert"])
 
 
 def get_session_info(url, tk, name):
@@ -73,11 +104,11 @@ def get_session_info(url, tk, name):
     """
     getsi_url = f"{url}/sessions/{name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(getsi_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(getsi_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_session_overviews(url, tk):
@@ -95,11 +126,11 @@ def get_session_overviews(url, tk):
     """
     gets_url = f"{url}/sessions"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(gets_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_session_overviews_short(url, tk):
@@ -117,11 +148,11 @@ def get_session_overviews_short(url, tk):
     """
     gets_url = f"{url}/sessions/short"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(gets_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(gets_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_available_commands(url, tk, name):
@@ -140,11 +171,11 @@ def get_available_commands(url, tk, name):
     """
     getc_url = f"{url}/sessions/{name}/availablecommands"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(getc_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(getc_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_session_options(url, tk, name):
@@ -162,11 +193,11 @@ def get_session_options(url, tk, name):
     """
     geto_url = f"{url}/sessions/{name}/options"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(geto_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(geto_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def modify_session_description(url, tk, name, desc):
@@ -184,7 +215,7 @@ def modify_session_description(url, tk, name, desc):
     """
     desc_url = f"{url}/sessions/{name}/description"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -192,7 +223,7 @@ def modify_session_description(url, tk, name, desc):
         "description": desc
     }
     return requests.post(desc_url, headers=headers, data=params,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def run_session_command(url, tk, ses_name, com_name):
@@ -210,7 +241,7 @@ def run_session_command(url, tk, ses_name, com_name):
     """
     runc_url = f"{url}/sessions/{ses_name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -218,7 +249,7 @@ def run_session_command(url, tk, ses_name, com_name):
         "cmd": com_name
     }
     return requests.post(runc_url, headers=headers, data=params,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
@@ -239,7 +270,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
         and "session_info": JSON string representing the response of the command
     """
     start_time = datetime.utcnow()
-    resp = get_session_info(url, tk, ses_name, verify=verify, cert=cert)
+    resp = get_session_info(url, tk, ses_name, verify=properties["verify"], cert=properties["cert"])
     time_passed = (datetime.utcnow() - start_time).total_seconds()
     while str(json.loads(resp.text)['state']) != state \
             and time_passed < minutes * 60:
@@ -279,7 +310,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
     """
     rec_url = f"{url}/sessions/{ses_name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -287,7 +318,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
         "cmd": com_name
     }
     return requests.post(rec_url, headers=headers, data=params,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def get_backup_details(url, tk, name, role, backup_id):
@@ -306,11 +337,11 @@ def get_backup_details(url, tk, name, role, backup_id):
     """
     get_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
@@ -329,11 +360,11 @@ def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
     """
     get_url = f"{url}/sessions/{name}/snapshotsByName/{role}/{snapshot_name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def run_backup_command(url, tk, name, role, backup_id, cmd):
@@ -353,14 +384,14 @@ def run_backup_command(url, tk, name, role, backup_id, cmd):
     """
     post_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
     params = {
         "cmd": cmd
     }
-    return requests.post(post_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def export_lss_oos_history(url, tk, name, rolepair, start_time,
@@ -381,7 +412,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
     """
     put_url = f"{url}/sessions/{name}/exportlssooshistory/{rolepair}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -389,7 +420,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
         "starttime": start_time,
         "endtime": end_time
     }
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def export_device_writeio_history(url, tk, name, start_time,
@@ -409,7 +440,7 @@ def export_device_writeio_history(url, tk, name, start_time,
     """
     put_url = f"{url}/sessions/{name}/exporteseboxhistory"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -417,7 +448,7 @@ def export_device_writeio_history(url, tk, name, start_time,
         "starttime": start_time,
         "endtime": end_time
     }
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_rpo_history(url, tk, name, rolepair, start_time,
@@ -437,7 +468,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
     """
     put_url = f"{url}/sessions/{name}/getrpohistory/{rolepair}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -445,7 +476,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
         "starttime": start_time,
         "endtime": end_time
     }
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_recovered_backups(url, tk, name):
@@ -462,11 +493,11 @@ def get_recovered_backups(url, tk, name):
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_recovered_backup_details(url, tk, name, backup_id):
@@ -484,11 +515,11 @@ def get_recovered_backup_details(url, tk, name, backup_id):
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups/{backup_id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_snapshot_clones(url, tk, name):
@@ -505,11 +536,11 @@ def get_snapshot_clones(url, tk, name):
     """
     get_url = f"{url}/sessions/{name}/clones"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
@@ -530,7 +561,7 @@ def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
     """
     put_url = f"{url}/sessions/byvolgroup"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -539,7 +570,7 @@ def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
         "type": type,
         "description": desc
     }
-    return requests.put(put_url, headers=headers, data=params, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):
@@ -557,11 +588,11 @@ def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):
     """
     get_url = f"{url}/sessions/{name}/clonesBySnapshotName/{snapshot_name}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_rolepair_info(url, tk, name, rolepair):
@@ -579,8 +610,8 @@ def get_rolepair_info(url, tk, name, rolepair):
     """
     get_url = f"{url}/sessions/{name}/sequences/{rolepair}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

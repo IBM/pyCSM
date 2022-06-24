@@ -1,5 +1,37 @@
 import requests
-from properties import cert, verify, language
+
+properties = {
+    "language": "en-US",
+    "verify": False,
+    "cert": None
+}
+
+
+def get_properties():
+    """
+    Returns a dictionary of the current properties and
+    their values set for the file.
+    """
+    return properties
+
+
+def change_properties(property_dictionary):
+    """
+    Takes a dictionary of properties and the values that
+    user wants to change and changes them in the file.
+
+    Args:
+        property_dictionary (dict): Dictionary of the keys and values that need
+        to be changed in the file.
+        ex. {"language":"en-UK", "verify":True}
+
+    Return:
+        Returns the new properties dictionary.
+    """
+    for key in property_dictionary:
+        properties[key] = property_dictionary[key]
+    return properties
+
 
 def create_log_pkg(url, tk):
     """
@@ -15,11 +47,11 @@ def create_log_pkg(url, tk):
     """
     make_url = f"{url}/system/logpackages"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(make_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(make_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_log_pkgs(url, tk):
@@ -36,11 +68,11 @@ def get_log_pkgs(url, tk):
         """
     get_url = f"{url}/system/logpackages"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def backup_server(url, tk):
@@ -58,11 +90,11 @@ def backup_server(url, tk):
     """
     backup_url = f"{url}/system/backupserver"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(backup_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_server_backups(url, tk):
@@ -79,11 +111,11 @@ def get_server_backups(url, tk):
     """
     backup_url = f"{url}/system/backupserver"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(backup_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def backup_server_and_download(url, tk, file_name):
@@ -100,12 +132,12 @@ def backup_server_and_download(url, tk, file_name):
     """
     backup_url = f"{url}/system/backupserver/download"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
-    resp = requests.get(backup_url, headers=headers, verify=verify, cert=cert)
+    resp = requests.get(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
@@ -129,11 +161,11 @@ def set_server_as_standby(url, tk, active_server):
     """
     set_url = f"{url}/system/ha/setServerAsStandby/{active_server}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(set_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(set_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_dual_control_state(url, tk):
@@ -150,11 +182,11 @@ def get_dual_control_state(url, tk):
     """
     get_url = f"{url}/system/dualcontrol"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def change_dual_control_state(url, tk, enable):
@@ -173,11 +205,11 @@ def change_dual_control_state(url, tk, enable):
     """
     post_url = f"{url}/system/dualcontrol/{enable}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_dual_control_requests(url, tk):
@@ -194,11 +226,11 @@ def get_dual_control_requests(url, tk):
     """
     get_url = f"{url}/system/dualcontrol/requests"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def approve_dual_control_request(url, tk, id):
@@ -217,11 +249,11 @@ def approve_dual_control_request(url, tk, id):
     """
     post_url = f"{url}/system/dualcontrol/approve/{id}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def reject_dual_control_request(url, tk, id, comment):
@@ -241,11 +273,11 @@ def reject_dual_control_request(url, tk, id, comment):
     """
     post_url = f"{url}/system/dualcontrol/reject/{id}/{comment}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_active_standby_status(url, tk):
@@ -262,11 +294,11 @@ def get_active_standby_status(url, tk):
     """
     get_url = f"{url}/system/ha"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def reconnect_active_standby_server(url, tk):
@@ -283,11 +315,11 @@ def reconnect_active_standby_server(url, tk):
     """
     put_url = f"{url}/system/ha/reconnect"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def remove_active_or_standby_server(url, tk, haServer):
@@ -305,11 +337,11 @@ def remove_active_or_standby_server(url, tk, haServer):
     """
     put_url = f"{url}/system/ha/removeHaServer/{haServer}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def set_standby_server(url, tk, standby_server, standby_username, standby_password):
@@ -330,11 +362,11 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
     """
     put_url = f"{url}/system/ha/setStandbyServer/{standby_server}/{standby_username}/{standby_password}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def takeover_standby_server(url, tk):
@@ -351,11 +383,11 @@ def takeover_standby_server(url, tk):
     """
     put_url = f"{url}/system/ha/takeover"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.put(put_url, headers=headers, verify=verify, cert=cert)
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_log_events(url, tk, count, session=None):
@@ -374,7 +406,7 @@ def get_log_events(url, tk, count, session=None):
     """
     get_url = f"{url}/system/logevents"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -383,7 +415,7 @@ def get_log_events(url, tk, count, session=None):
         "session": session
     }
     return requests.get(get_url, headers=headers, data=params,
-                        verify=verify, cert=cert)
+                        verify=properties["verify"], cert=properties["cert"])
 
 
 def create_and_download_log_pkg(url, tk, file_name):
@@ -403,11 +435,11 @@ def create_and_download_log_pkg(url, tk, file_name):
     """
     put_url = f"{url}/system/logpackages/synchronous/download"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    resp = requests.get(put_url, headers=headers, verify=verify, cert=cert)
+    resp = requests.get(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
@@ -427,11 +459,11 @@ def get_session_types(url, tk):
     """
     get_url = f"{url}/system/sessiontypes"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_server_version(url, tk):
@@ -448,11 +480,11 @@ def get_server_version(url, tk):
     """
     get_url = f"{url}/system/version"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_volume_counts(url, tk):
@@ -469,8 +501,8 @@ def get_volume_counts(url, tk):
     """
     get_url = f"{url}/system/volcounts"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

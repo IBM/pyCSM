@@ -33,6 +33,30 @@ class systemClient:
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
         self.tk = auth.get_token(self.base_url, username, password)
 
+    @staticmethod
+    def get_properties():
+        """
+        Returns a dictionary of the current properties and
+        their values set for the file.
+        """
+        return system_service.get_properties()
+
+    @staticmethod
+    def change_properties(property_dictionary):
+        """
+        Takes a dictionary of properties and the values that
+        user wants to change and changes them in the file.
+
+        Args:
+            property_dictionary (dict): Dictionary of the keys and values that need
+            to be changed in the file.
+            ex. {"language":"en-UK", "verify":True}
+
+        Returns:
+            Returns the new properties dictionary.
+        """
+        return system_service.change_properties(property_dictionary)
+
     def create_log_pkg(self):
         """
         This method will package all log files on the server into a .jar file

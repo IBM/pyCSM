@@ -1,11 +1,36 @@
 import requests
-from properties import cert, verify, language
 
-"""
+properties = {
+    "language": "en-US",
+    "verify": False,
+    "cert": None
+}
 
-    Description: Methods that make REST calls for copyset type services
 
-"""
+def get_properties():
+    """
+    Returns a dictionary of the current properties and
+    their values set for the file.
+    """
+    return properties
+
+
+def change_properties(property_dictionary):
+    """
+    Takes a dictionary of properties and the values that
+    user wants to change and changes them in the file.
+
+    Args:
+        property_dictionary (dict): Dictionary of the keys and values that need
+        to be changed in the file.
+        ex. {"language":"en-UK", "verify":True}
+
+    Return:
+        Returns the new properties dictionary.
+    """
+    for key in property_dictionary:
+        properties[key] = property_dictionary[key]
+    return properties
 
 
 def get_copysets(url, tk, name):
@@ -23,10 +48,10 @@ def get_copysets(url, tk, name):
     """
     getcs_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
     }
-    return requests.get(getcs_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(getcs_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def add_copysets(url, tk, name, copysets, roleorder=None):
@@ -52,7 +77,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None):
     """
     add_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
 
@@ -62,7 +87,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None):
         "roleOrder": str(roleorder)
     }
     return requests.post(add_url, headers=headers, data=params,
-                         verify=verify, cert=cert)
+                         verify=properties["verify"], cert=properties["cert"])
 
 
 def remove_copysets(url, tk, name, copysets, force=False, soft=False):
@@ -86,7 +111,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False):
     """
     remove_url = f"{url}/sessions/{name}/{force}/{soft}/copysets"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -94,7 +119,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False):
         "copysets": str(copysets)
     }
     return requests.delete(remove_url, headers=headers,
-                           data=params, verify=verify, cert=cert)
+                           data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def export_copysets(url, tk, name, file_name):
@@ -112,11 +137,11 @@ def export_copysets(url, tk, name, file_name):
     """
     export_url = f"{url}/sessions/{name}/copysets/download"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    resp = requests.get(export_url, headers=headers, verify=verify, cert=cert)
+    resp = requests.get(export_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
@@ -138,11 +163,11 @@ def get_pair_info(url, tk, name, rolepair):
     """
     get_url = f"{url}/sessions/{name}/pairs/{rolepair}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.get(get_url, headers=headers, verify=verify, cert=cert)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def enable_scheduled_task_at_time(url, tk, task_id, start_time):
@@ -162,11 +187,11 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     post_url = f"{url}/sessions/scheduledtasks/enable/{task_id}/{start_time}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def run_scheduled_task_at_time(url, tk, task_id, start_time):
@@ -186,8 +211,8 @@ def run_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
     headers = {
-        "Accept-Language": language,
+        "Accept-Language": properties["langauge"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    return requests.post(post_url, headers=headers, verify=verify, cert=cert)
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

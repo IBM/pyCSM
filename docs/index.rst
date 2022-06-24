@@ -26,7 +26,7 @@ Welcome to pyCSM's documentation!
    for all subsequent calls to the server.
 
    The caller can pass in the authentication information once during the init and then calls to methods withing that
-   class will ensure a token is obtained or automatically renewed.
+   class will ensure a token is obtained or **automatically renewed**.
 
    **It is recommended that you use the client classes so that you do not have to manage the authorization in your code.**
 

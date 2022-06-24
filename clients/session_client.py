@@ -692,7 +692,7 @@ class sessionClient:
         Args:
            name (str): The name of the session.
            snapshot_name (str): the name of the snapshot to get clone details for
-
+           
         Returns:
             JSON String representing the result of the command.
         """

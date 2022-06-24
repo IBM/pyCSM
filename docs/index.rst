@@ -34,6 +34,7 @@ Welcome to pyCSM's documentation!
 
    ``sessClient = session_client.sessionClient("localhost", "9559", "csmadmin", "csm")``
    ``print(sessClient.get_session_overviews().json())``
+   
 
 **Authorization + Services**
 ----------------------------

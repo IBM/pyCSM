@@ -48,7 +48,7 @@ def get_copysets(url, tk, name):
     """
     getcs_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
     }
     return requests.get(getcs_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
@@ -77,7 +77,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None):
     """
     add_url = f"{url}/sessions/{name}/copysets"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
 
@@ -111,7 +111,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False):
     """
     remove_url = f"{url}/sessions/{name}/{force}/{soft}/copysets"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -137,7 +137,7 @@ def export_copysets(url, tk, name, file_name):
     """
     export_url = f"{url}/sessions/{name}/copysets/download"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -163,7 +163,7 @@ def get_pair_info(url, tk, name, rolepair):
     """
     get_url = f"{url}/sessions/{name}/pairs/{rolepair}"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -187,7 +187,7 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     post_url = f"{url}/sessions/scheduledtasks/enable/{task_id}/{start_time}"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -211,7 +211,7 @@ def run_scheduled_task_at_time(url, tk, task_id, start_time):
     """
     post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

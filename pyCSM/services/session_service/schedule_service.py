@@ -47,7 +47,7 @@ def get_scheduled_tasks(url, tk):
     """
     getst_url = f"{url}/sessions/scheduledtasks"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["langage"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -69,7 +69,7 @@ def enable_scheduled_task(url, tk, taskid):
     """
     enable_url = f"{url}/sessions/scheduledtasks/enable/{taskid}"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -92,7 +92,7 @@ def disable_scheduled_task(url, tk, taskid):
     disable_url = f"{url}/sessions/scheduledtasks/disable/{taskid}"
 
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -116,7 +116,7 @@ def run_scheduled_task(url, tk, taskid, synchronous=False):
     """
     run_url = f"{url}/sessions/scheduledtasks/{taskid}/{synchronous}"
     headers = {
-        "Accept-Language": properties["langauge"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

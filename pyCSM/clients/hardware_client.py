@@ -1,5 +1,5 @@
 import pyCSM.authorization.auth as auth
-import pyCSM.services.hardware_service.hardware_service as hardware_service
+import pyCSM.services.hardware_service.hardwareservice as hardware_service
 
 
 class hardwareClient:

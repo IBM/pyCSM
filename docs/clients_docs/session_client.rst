@@ -1,5 +1,5 @@
 Session Client
 ===============
 
-.. automodule:: clients.session_client
+.. automodule:: pyCSM.clients.session_client
     :members:

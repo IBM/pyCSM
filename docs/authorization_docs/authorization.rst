@@ -4,5 +4,5 @@ This page holds the documentation for the different methods contained in the Aut
 
 Code documentation
 -------------------
-.. automodule:: authorization.auth
+.. automodule:: pyCSM.authorization.auth
     :members:

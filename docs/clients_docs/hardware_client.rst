@@ -1,5 +1,5 @@
 Hardware Client
 ===============
 
-.. automodule:: clients.hardware_client
+.. automodule:: pyCSM.clients.hardware_client
     :members:

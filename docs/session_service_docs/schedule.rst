@@ -1,5 +1,5 @@
 Schedule
 ===============
 
-.. automodule:: session_service.schedule_service
+.. automodule:: pyCSM.services.session_service.schedule_service
     :members:

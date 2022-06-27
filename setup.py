@@ -6,7 +6,7 @@ install_requires = ['requests', 'urllib3', 'certifi',
                     'Sphinx', 'flake8', 'pytest']
 
 setup(
-    name='pyCSM',
+    name='pyCSM_test',
     description="CSM Python Client",
     long_description="CSM RESTful API Python Client.",
     author="Dominic Blea",

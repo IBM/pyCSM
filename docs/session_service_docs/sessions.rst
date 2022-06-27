@@ -1,5 +1,5 @@
 Sessions
 ===============
 
-.. automodule:: session_service.session_service
+.. automodule:: pyCSM.services.session_service.session_service
     :members:

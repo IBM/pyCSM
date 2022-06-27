@@ -1,5 +1,5 @@
 System Client
 ===============
 
-.. automodule:: clients.system_client
+.. automodule:: pyCSM.clients.system_client
     :members:

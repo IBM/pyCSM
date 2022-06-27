@@ -1,5 +1,5 @@
 System
 ===============
 
-.. automodule:: system_service.system_service
+.. automodule:: pyCSM.services.system_service.system_service
     :members:

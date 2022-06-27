@@ -47,7 +47,7 @@ def get_scheduled_tasks(url, tk):
     """
     getst_url = f"{url}/sessions/scheduledtasks"
     headers = {
-        "Accept-Language": properties["langage"],
+        "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }

@@ -1,5 +1,5 @@
 Hardware
 ===============
 
-.. automodule:: hardware_service.hardware_service
+.. automodule:: pyCSM.services.hardware_service.hardware_service
     :members:

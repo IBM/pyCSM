@@ -1,19 +1,18 @@
-
 from setuptools import find_packages, setup
 
-
-install_requires = ['requests', 'urllib3', 'certifi',
-                    'Sphinx', 'flake8', 'pytest']
+install_requires = ''
+with open("requirements.txt", "r") as f:
+    install_requires = f.read().splitlines()
 
 setup(
-    name='pyCSM_test',
+    name='pyCSM',
     description="CSM Python Client",
     long_description="CSM RESTful API Python Client.",
     author="Dominic Blea",
+    version='0.1.2',
     author_email="dblea00@ibm.com",
     maintainer="Dominic Blea",
     keywords=["IBM", "CSM Storage"],
-    requires=install_requires,
     install_requires=install_requires,
     license="Apache License, Version 2.0",
     include_package_data=True,

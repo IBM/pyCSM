@@ -5,7 +5,7 @@ with open("requirements.txt", "r") as f:
     install_requires = f.read().splitlines()
 
 setup(
-    name='pyCSM',
+    name='pyCSM_test',
     description="CSM Python Client",
     long_description="CSM RESTful API Python Client.",
     author="Dominic Blea",

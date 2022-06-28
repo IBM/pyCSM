@@ -1,6 +1,8 @@
 from datetime import datetime
-from authorization import auth
-from session_service import session_service, schedule_service, copyset_service
+import pyCSM.authorization.auth as auth
+import pyCSM.services.session_service.session_service as session_service
+import pyCSM.services.session_service.schedule_service as schedule_service
+import pyCSM.services.session_service.copyset_service as copyset_service
 
 
 class sessionClient:
@@ -74,7 +76,7 @@ class sessionClient:
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
             return session_service.create_session_by_volgroup_name(self.base_url, self.tk,
-                                                                   volgroup, type, desc,)
+                                                                   volgroup, type, desc, )
         return resp
 
     def delete_session(self, name):

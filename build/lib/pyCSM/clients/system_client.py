@@ -1,5 +1,5 @@
-from authorization import auth
-from system_service import system_service
+import pyCSM.authorization.auth as auth
+import pyCSM.services.system_service.system_service as system_service
 
 
 class systemClient:

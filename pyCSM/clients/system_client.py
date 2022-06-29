@@ -71,9 +71,16 @@ class systemClient:
                         "Content-Type": "application/x-www-form-urlencoded"}
         """
         headers["X-Auth-Token"] = self.tk
-        return requests.delete(url, headers=headers, data=data,
+        resp = requests.delete(url, headers=headers, data=data,
                                verify=system_service.properties["verify"],
                                cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.delete(url, headers=headers, data=data,
+                                   verify=system_service.properties["verify"],
+                                   cert=system_service.properties["cert"])
+        return resp
 
     def rest_put(self, url, data, headers):
         """
@@ -87,9 +94,16 @@ class systemClient:
                         "Content-Type": "application/x-www-form-urlencoded"}
         """
         headers["X-Auth-Token"] = self.tk
-        return requests.put(url, headers=headers, data=data,
+        resp = requests.put(url, headers=headers, data=data,
                             verify=system_service.properties["verify"],
                             cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.put(url, headers=headers, data=data,
+                                verify=system_service.properties["verify"],
+                                cert=system_service.properties["cert"])
+        return resp
 
     def rest_post(self, url, data, headers):
         """
@@ -103,9 +117,16 @@ class systemClient:
                         "Content-Type": "application/x-www-form-urlencoded"}
         """
         headers["X-Auth-Token"] = self.tk
-        return requests.post(url, headers=headers, data=data,
+        resp = requests.post(url, headers=headers, data=data,
                              verify=system_service.properties["verify"],
                              cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.post(url, headers=headers, data=data,
+                                 verify=system_service.properties["verify"],
+                                 cert=system_service.properties["cert"])
+        return resp
 
     def rest_get(self, url, data, headers):
         """
@@ -119,9 +140,16 @@ class systemClient:
                         "Content-Type": "application/x-www-form-urlencoded"}
         """
         headers["X-Auth-Token"] = self.tk
-        return requests.get(url, headers=headers, data=data,
+        resp = requests.get(url, headers=headers, data=data,
                             verify=system_service.properties["verify"],
                             cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.get(url, headers=headers, data=data,
+                                verify=system_service.properties["verify"],
+                                cert=system_service.properties["cert"])
+        return resp
 
     def create_log_pkg(self):
         """

@@ -59,7 +59,7 @@ class systemClient:
         """
         return system_service.change_properties(property_dictionary)
 
-    def delete(self, url, data, headers):
+    def rest_delete(self, url, data, headers):
         """
         Method to call a REST delete call if one is needed but missing from the package.
 
@@ -75,7 +75,7 @@ class systemClient:
                                verify=system_service.properties["verify"],
                                cert=system_service.properties["cert"])
 
-    def put(self, url, data, headers):
+    def rest_put(self, url, data, headers):
         """
         Method to call a REST put call if one is needed but missing from the package.
 
@@ -91,7 +91,7 @@ class systemClient:
                             verify=system_service.properties["verify"],
                             cert=system_service.properties["cert"])
 
-    def post(self, url, data, headers):
+    def rest_post(self, url, data, headers):
         """
         Method to call a REST post call if one is needed but missing from the package.
 
@@ -107,7 +107,7 @@ class systemClient:
                              verify=system_service.properties["verify"],
                              cert=system_service.properties["cert"])
 
-    def get(self, url, data, headers):
+    def rest_get(self, url, data, headers):
         """
         Method to call a REST get call if one is needed but missing from the package.
 

@@ -1,3 +1,5 @@
+import requests
+
 import pyCSM.authorization.auth as auth
 import pyCSM.services.system_service.system_service as system_service
 
@@ -56,6 +58,98 @@ class systemClient:
             Returns the new properties dictionary.
         """
         return system_service.change_properties(property_dictionary)
+
+    def rest_delete(self, url, data, headers):
+        """
+        Method to call a REST delete call if one is needed but missing from the package.
+
+        url (str):  url for the csm server and the rest call the user wants to run
+        data (dict):  Dictionary of variables used in the body of a REST call.
+            ex. params = {"type": device_type, "deviceip": device_ip, "deviceport": device_port,}
+        headers (dict):  Dictionary of variables used in the headers of a REST call except for the token
+            ex. headers = {"Accept-Language": properties["language"],
+                        "Content-Type": "application/x-www-form-urlencoded"}
+        """
+        headers["X-Auth-Token"] = self.tk
+        resp = requests.delete(url, headers=headers, data=data,
+                               verify=system_service.properties["verify"],
+                               cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.delete(url, headers=headers, data=data,
+                                   verify=system_service.properties["verify"],
+                                   cert=system_service.properties["cert"])
+        return resp
+
+    def rest_put(self, url, data, headers):
+        """
+        Method to call a REST put call if one is needed but missing from the package.
+
+        url (str):  url for the csm server and the rest call the user wants to run
+        data (dict):  Dictionary of variables used in the body of a REST call.
+            ex. params = {"type": device_type, "deviceip": device_ip, "deviceport": device_port,}
+        headers (dict):  Dictionary of variables used in the headers of a REST call except for the token
+            ex. headers = {"Accept-Language": properties["language"],
+                        "Content-Type": "application/x-www-form-urlencoded"}
+        """
+        headers["X-Auth-Token"] = self.tk
+        resp = requests.put(url, headers=headers, data=data,
+                            verify=system_service.properties["verify"],
+                            cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.put(url, headers=headers, data=data,
+                                verify=system_service.properties["verify"],
+                                cert=system_service.properties["cert"])
+        return resp
+
+    def rest_post(self, url, data, headers):
+        """
+        Method to call a REST post call if one is needed but missing from the package.
+
+        url (str):  url for the csm server and the rest call the user wants to run
+        data (dict):  Dictionary of variables used in the body of a REST call.
+            ex. params = {"type": device_type, "deviceip": device_ip, "deviceport": device_port,}
+        headers (dict):  Dictionary of variables used in the headers of a REST call except for the token
+            ex. headers = {"Accept-Language": properties["language"],
+                        "Content-Type": "application/x-www-form-urlencoded"}
+        """
+        headers["X-Auth-Token"] = self.tk
+        resp = requests.post(url, headers=headers, data=data,
+                             verify=system_service.properties["verify"],
+                             cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.post(url, headers=headers, data=data,
+                                 verify=system_service.properties["verify"],
+                                 cert=system_service.properties["cert"])
+        return resp
+
+    def rest_get(self, url, data, headers):
+        """
+        Method to call a REST get call if one is needed but missing from the package.
+
+        url (str):  url for the csm server and the rest call the user wants to run
+        data (dict):  Dictionary of variables used in the body of a REST call.
+            ex. params = {"type": device_type, "deviceip": device_ip, "deviceport": device_port,}
+        headers (dict):  Dictionary of variables used in the headers of a REST call except for the token
+            ex. headers = {"Accept-Language": properties["language"],
+                        "Content-Type": "application/x-www-form-urlencoded"}
+        """
+        headers["X-Auth-Token"] = self.tk
+        resp = requests.get(url, headers=headers, data=data,
+                            verify=system_service.properties["verify"],
+                            cert=system_service.properties["cert"])
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            headers["X-Auth-Token"] = self.tk
+            return requests.get(url, headers=headers, data=data,
+                                verify=system_service.properties["verify"],
+                                cert=system_service.properties["cert"])
+        return resp
 
     def create_log_pkg(self):
         """

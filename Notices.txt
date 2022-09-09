@@ -4,7 +4,7 @@ Additional Third Party Software License Agreements and Notices
 This file details additional Third Party notices and information that 
 are required to be reproduced for the following programs:
    
-IBM Copy Services Manager Python Client version 1.0.0
+IBM Copy Services Manager Python Client version 1.0.x
 
 =========================================================================
 NOTICES and INFORMATION

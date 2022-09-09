@@ -1,3 +1,6 @@
+# Copyright (C) 2022 IBM CORPORATION
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
 from datetime import datetime
 import pyCSM.authorization.auth as auth
 import pyCSM.services.session_service.session_service as session_service

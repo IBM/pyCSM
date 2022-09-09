@@ -1,6 +1,3 @@
-# Copyright (C) 2022 IBM CORPORATION
-# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
-
 import json
 import warnings
 import requests

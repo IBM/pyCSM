@@ -1,4 +1,9 @@
+# Copyright (C) 2022 IBM CORPORATION
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
 import requests
+
+from pyCSM.util import utility
 
 properties = {
     "language": "en-US",
@@ -410,12 +415,13 @@ def get_log_events(url, tk, count, session=None):
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    params = {
-        "count": count,
-        "session": session
-    }
-    return requests.get(get_url, headers=headers, data=params,
-                        verify=properties["verify"], cert=properties["cert"])
+
+    queryparams = [dict(name="count", value=f'{count}'),
+                   dict(name="session", value=session)]
+
+    get_url = utility.add_query_params(get_url, queryparams)
+
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def create_and_download_log_pkg(url, tk, file_name):

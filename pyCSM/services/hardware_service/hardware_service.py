@@ -1,4 +1,9 @@
+# Copyright (C) 2022 IBM CORPORATION
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
 import requests
+
+from pyCSM.util import utility
 
 properties = {
     "language": "en-US",
@@ -45,17 +50,16 @@ def get_devices(url, tk, device_type):
     Returns:
         Returns JSON String representing the result of the command.
     """
-    getd_url = f"{url}/storagedevices/connectioninfo"
+    get_url = f"{url}/storagedevices/connectioninfo"
     headers = {
         "Accept-Language": properties["language"],
         "X-Auth-Token": str(tk),
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    params = {
-        "type": {device_type}
-    }
-    return requests.get(getd_url, headers=headers, data=params,
-                        verify=properties["verify"], cert=properties["cert"])
+    queryparams = [dict(name="type", value=device_type)]
+
+    get_url = utility.add_query_params(get_url, queryparams)
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def add_device(url, tk, device_type, device_ip, device_username,
@@ -425,8 +429,4 @@ def get_volumes_by_wwn(url, tk, wwn_name):
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
-    params = {
-        "name": wwn_name
-    }
-
-    return requests.get(get_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

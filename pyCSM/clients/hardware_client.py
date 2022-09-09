@@ -1,3 +1,6 @@
+# Copyright (C) 2022 IBM CORPORATION
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
 import pyCSM.authorization.auth as auth
 import pyCSM.services.hardware_service.hardware_service as hardware_service
 

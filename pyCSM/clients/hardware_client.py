@@ -341,7 +341,7 @@ class hardwareClient:
                                                            device_password, device_username, connection_name)
         return resp
 
-    def zos_host(self, host_ip, password, username, host_port):
+    def add_zos_host(self, host_ip, password, username, host_port):
         """
         This method will create a zos connection to the current IP
 
@@ -355,12 +355,32 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.zos_host(self.base_url, self.tk, host_ip,
-                                         password, username, host_port)
+        resp = hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
+                                             password, username, host_port)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.zos_host(self.base_url, self.tk, host_ip,
-                                             password, username, host_port)
+            return hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
+                                                 password, username, host_port)
+        return resp
+
+    def remove_zos_host(self, host_ip, host_port):
+        """
+        This method will create a zos connection to the current IP
+
+        Args:
+            host_ip (str): Primary IP address for the zos system.
+            host_port (str): Port for the zos system
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
+                                                host_port)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
+                                                    host_port)
         return resp
 
     def get_volumes_by_wwn(self, wwn_name):

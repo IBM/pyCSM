@@ -512,3 +512,26 @@ def get_volume_counts(url, tk):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def set_property(url, tk, file, property_name, value):
+    """
+    This call will set the property provided to the value provide in the selected file
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        file (str): One of the following files can be specified. "server", "bootstrap", "essniclient" or "zosclient"
+        property_name (str): name of the property to set ex. csm.server.extra_driver_debug
+        value (str): value to set the property to
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/properties/{file}/{property_name}/{value}"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])

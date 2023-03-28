@@ -9,7 +9,7 @@ setup(
     description="CSM Python Client",
     long_description="CSM RESTful API Python Client.",
     author="Dominic Blea",
-    version='1.0.1',
+    version='1.0.2',
     author_email="dblea00@ibm.com",
     maintainer="Dominic Blea",
     keywords=["IBM", "CSM Storage"],

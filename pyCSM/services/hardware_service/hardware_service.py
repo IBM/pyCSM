@@ -409,6 +409,69 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
+def add_zos_host(url, tk, host_ip, password, username, host_port):
+    """
+    This method will create a zos connection to the current IP
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        host_ip (str): Primary IP address for the zos system.
+        password (str): Password for the zos system connection
+        username (str): Username for the zos system connection
+        host_port (str): Port for the zos system
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/storagedevices/zoshost"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    params = {
+        "hostip": host_ip,
+        "password": password,
+        "username": username,
+        "hostport": host_port
+    }
+
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
+def remove_zos_host(url, tk, host_ip, host_port):
+    """
+    This method will create a zos connection to the current IP
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        host_ip (str): Primary IP address for the zos system.
+        host_port (str): Port for the zos system
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    delete_url = f"{url}/storagedevices/zoshost"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    params = {
+        "hostip": host_ip,
+        "hostport": host_port
+    }
+
+    return requests.delete(delete_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
+
 def get_volumes_by_wwn(url, tk, wwn_name):
     """
     Return the information for all volumes based on the list of WWNs passed in.

@@ -409,6 +409,31 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
+def get_zos_candidate(url, tk):
+    """
+    This method will query for the devices in REST that are attached to the zos system.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/zoscandidate"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    params = {
+    }
+
+    return requests.get(get_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
 def add_zos_host(url, tk, host_ip, password, username, host_port):
     """
     This method will create a zos connection to the current IP
@@ -470,6 +495,32 @@ def remove_zos_host(url, tk, host_ip, host_port):
 
     return requests.delete(delete_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
+
+def add_zos_device(url, tk, device_id, connection_type):
+    """
+    This method will add a storage system through the zoshost connection.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_id (str): Storage system name in the format "DS8000:BOX:2107.KXZ91".
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/storagedevices/zosdevice"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    params = {
+        "deviceid": device_id,
+    }
+
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
 def get_volumes_by_wwn(url, tk, wwn_name):

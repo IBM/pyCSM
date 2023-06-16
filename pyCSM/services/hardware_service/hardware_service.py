@@ -496,7 +496,7 @@ def remove_zos_host(url, tk, host_ip, host_port):
     return requests.delete(delete_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def add_zos_device(url, tk, device_id, connection_type):
+def add_zos_device(url, tk, device_id):
     """
     This method will add a storage system through the zoshost connection.
 
@@ -517,10 +517,31 @@ def add_zos_device(url, tk, device_id, connection_type):
     }
 
     params = {
-        "deviceid": device_id,
+        "deviceid": device_id
     }
 
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
+def get_zos_host(url, tk):
+    """
+    This method will get the information for all zos host connections.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/zoshost"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers,  verify=properties["verify"], cert=properties["cert"])
 
 
 def get_volumes_by_wwn(url, tk, wwn_name):

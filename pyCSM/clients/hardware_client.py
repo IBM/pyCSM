@@ -377,6 +377,20 @@ class hardwareClient:
             return hardware_service.get_zos_candidate(self.base_url, self.tk)
         return resp
 
+    def get_zos_host(self):
+        """
+        This method will get the information for all zos host connections.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = hardware_service.get_zos_host(self.base_url, self.tk)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return hardware_service.get_zos_host(self.base_url, self.tk)
+        return resp
+
     def remove_zos_host(self, host_ip, host_port):
         """
         This method will create a zos connection to the current IP

@@ -409,6 +409,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
+
 def get_zos_candidate(url, tk):
     """
     This method will query for the devices in REST that are attached to the zos system.
@@ -432,6 +433,7 @@ def get_zos_candidate(url, tk):
     }
 
     return requests.get(get_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
 
 
 
@@ -498,6 +500,7 @@ def remove_zos_host(url, tk, host_ip, host_port):
 
 
 
+
 def add_zos_device(url, tk, device_id):
     """
     This method will add a storage system through the zoshost connection.
@@ -544,6 +547,7 @@ def get_zos_host(url, tk):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers,  verify=properties["verify"], cert=properties["cert"])
+
 
 
 

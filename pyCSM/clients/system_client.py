@@ -493,3 +493,22 @@ class systemClient:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
             return system_service.get_volume_counts(self.base_url, self.tk)
         return resp
+
+    def set_property(self, file, property_name, value):
+        """
+        This call will set the property provided to the value provide in the selected file
+
+        Args:
+            file (str): One of the following files can be specified. "server", "bootstrap", "essniclient" or "zosclient"
+            property_name (str): name of the property to set ex. csm.server.extra_driver_debug
+            value (str): value to set the property to
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system_service.set_property(self.base_url, self.tk, file, property_name, value)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return system_service.remove_active_or_standby_server(self.base_url, self.tk, file, property_name, value)
+        return resp

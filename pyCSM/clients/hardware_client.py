@@ -363,6 +363,7 @@ class hardwareClient:
                                                  password, username, host_port)
         return resp
 
+
     def get_zos_candidate(self):
         """
         This method will query for the devices in REST that are attached to the zos system
@@ -391,6 +392,7 @@ class hardwareClient:
             return hardware_service.get_zos_host(self.base_url, self.tk)
         return resp
 
+
     def remove_zos_host(self, host_ip, host_port):
         """
         This method will create a zos connection to the current IP
@@ -411,6 +413,7 @@ class hardwareClient:
                                                     host_port)
         return resp
 
+
     def add_zos_device(self, device_id):
         """
         This method will add a storage system through the zoshost connection.
@@ -428,6 +431,7 @@ class hardwareClient:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
             return hardware_service.add_zos_device(self.base_url, self.tk, device_id)
         return resp
+
 
     def get_volumes_by_wwn(self, wwn_name):
         """

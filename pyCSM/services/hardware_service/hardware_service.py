@@ -434,6 +434,7 @@ def get_zos_candidate(url, tk):
     return requests.get(get_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
+
 def add_zos_host(url, tk, host_ip, password, username, host_port):
     """
     This method will create a zos connection to the current IP
@@ -496,6 +497,7 @@ def remove_zos_host(url, tk, host_ip, host_port):
     return requests.delete(delete_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
+
 def add_zos_device(url, tk, device_id):
     """
     This method will add a storage system through the zoshost connection.
@@ -542,6 +544,7 @@ def get_zos_host(url, tk):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers,  verify=properties["verify"], cert=properties["cert"])
+
 
 
 def get_volumes_by_wwn(url, tk, wwn_name):

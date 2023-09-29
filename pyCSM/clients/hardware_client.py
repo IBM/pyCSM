@@ -341,6 +341,23 @@ class hardwareClient:
                                                            device_password, device_username, connection_name)
         return resp
 
+    def add_zos_cert(self, file_path):
+        """
+        This method will add a given cert to zos connection.
+
+        Args:
+            file_path (str): path for given certificate file.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
+        return resp
+
     def add_zos_host(self, host_ip, password, username, host_port):
         """
         This method will create a zos connection to the current IP

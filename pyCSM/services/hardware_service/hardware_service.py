@@ -575,6 +575,57 @@ def get_zos_host(url, tk):
 
 
 
+
+def add_zos_device(url, tk, device_id):
+    """
+    This method will add a storage system through the zoshost connection.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        device_id (str): Storage system name in the format "DS8000:BOX:2107.KXZ91".
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/storagedevices/zosdevice"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    params = {
+        "deviceid": device_id
+    }
+
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
+def get_zos_host(url, tk):
+    """
+    This method will get the information for all zos host connections.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/storagedevices/zoshost"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers,  verify=properties["verify"], cert=properties["cert"])
+
+
+
+
 def get_volumes_by_wwn(url, tk, wwn_name):
     """
     Return the information for all volumes based on the list of WWNs passed in.

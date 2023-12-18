@@ -57,6 +57,75 @@ def get_scheduled_tasks(url, tk):
     return requests.get(getst_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
+def get_scheduled_task(url, tk, taskid):
+    """
+    Returns the scheduled task info of a given task id
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    getst_url = f"{url}/sessions/scheduledtasks/{taskid}"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(getst_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+
+def create_scheduled_task(url, tk, json):
+    """
+    Creates a new task with given task info
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        json (str): json string of scheduled task info used to create new scheduled task
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/sessions/scheduledtasks"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    params = {
+        "json": json
+    }
+
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"], data=params)
+
+
+def duplicate_scheduled_task(url, tk, taskid):
+    """
+    Duplicates scheduled task of a given id
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/sessions/scheduledtasks/duplicate/{taskid}"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+
 def enable_scheduled_task(url, tk, taskid):
     """
     Enable a scheduled task to run based off the schedule defined on the task.

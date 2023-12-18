@@ -318,6 +318,48 @@ class sessionClient:
             return schedule_service.get_scheduled_tasks(self.base_url, self.tk)
         return resp
 
+    def get_scheduled_task(self, taskid):
+        """
+        Returns the scheduled task info of a given task id
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.get_scheduled_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.get_scheduled_task(self.base_url, self.tk, taskid)
+        return resp
+
+    def create_scheduled_task(self, json):
+        """
+        Creates a new task with given task info
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.create_scheduled_task(self.base_url, self.tk, json)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.create_scheduled_task(self.base_url, self.tk, json)
+        return resp
+
+    def duplicate_scheduled_task(self, taskid):
+        """
+        Duplicates scheduled task of a given id
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.duplicate_scheduled_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.duplicate_scheduled_task(self.base_url, self.tk, taskid)
+        return resp
+
     @staticmethod
     def get_properties():
         """

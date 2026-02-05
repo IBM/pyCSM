@@ -769,3 +769,57 @@ class sessionClient:
             return session_service.get_rolepair_info(self.base_url, self.tk,
                                                      name, rolepair)
         return resp
+
+    def delete_task(self, taskid):
+        """
+        Delete a scheduled task. 
+        Args:
+            taskid (str): ID of the schedule task to enable.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.delete_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.delete_task(self.base_url, self.tk, taskid)
+        
+        return resp
+    
+    def cancel_task(self, taskid):
+        """
+        Cancel a running scheduled task. 
+        Args:
+            taskid (str): ID of the schedule task to cancel.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        
+        return resp
+    
+    def run_task_now(self, taskid, synchronous=False, step=0):
+        """
+        Run a scheduled task immediately at a specific step.
+
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+
+        resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+
+        run_resp = schedule_service.run_task_now(url=self.base_url, tk=self.tk, taskid=taskid, step=step, synchronous=synchronous)
+
+        return run_resp
+    

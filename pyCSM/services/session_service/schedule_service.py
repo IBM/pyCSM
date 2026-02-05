@@ -193,3 +193,75 @@ def run_scheduled_task(url, tk, taskid, synchronous=False):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.post(run_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def delete_task(url, tk, taskid):
+    """
+    This method is used to delete a schedualed task. 
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        taskid (str): ID of the schedule task to enable.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    delete_task_url = f"{url}/sessions/scheduledtasks/delete/{taskid}"
+
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.post(delete_task_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def cancel_task(url, tk, taskid):
+    """
+    Cancel a running schedualed task. 
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        taskid (str): ID of the schedule task to cancel.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    cancel_task_url = f"{url}/sessions/scheduledtasks/cancel/{taskid}"
+
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.post(cancel_task_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+
+def run_task_now(url, tk, taskid, synchronous=False, step=0):
+    """
+    Run a scheduled task immediately at a specific step.
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        taskid (int/str): ID of the schedule task to run.
+        synchronous (bool): Whether to wait for the task to complete.
+        step (int): The specific step number to start from.
+
+    Returns:
+        Response object representing the result of the command.
+    """
+    
+    # Updated to match @Path("/scheduledtasks/{taskid}/{synchronous}/step/{step}")
+    run_task_now_url = f"{url}/scheduledtasks/{taskid}/{str(synchronous).lower()}/step/{step}"
+
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/json"
+    }
+    
+    return requests.post(run_task_now_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+

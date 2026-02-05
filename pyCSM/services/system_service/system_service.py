@@ -535,3 +535,106 @@ def set_property(url, tk, file, property_name, value):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def get_email_notifications_enabled(url, tk):
+    """
+    Shows whether or not the email alert notifications are enabled 
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/notification/email/alert"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def put_email_notifications_enabled(url, tk, enabled):
+    """
+    Issues a Put request to enable or disable email notifications
+    on the specified server.
+   
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        active_server (str): IP or hostname of the active server.
+        This method will use the default port.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    set_url = f"{url}/system/notification/email/alert"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    params = {
+        "enabled" : enabled 
+    }
+    return requests.put(set_url, headers=headers, data = params, verify=properties["verify"], cert=properties["cert"])
+
+def get_Email_Recipients(url, tk):
+    """
+    Get the list of e-mail reicpients for e-mail alerts. 
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    get_url = f"{url}/system/notification/email/alert"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def add_Email_Recipients(url, tk, addresses, alert_type, session_names):
+    """
+    Add an e-mail address to he list of reciepients for e-mail alerts. 
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        addresses (str): Collection of email addresses for the users you want to start receiving notifications
+        alert_type (str): Type of email alert for the users('session', 'session_rpo', 'config', 'comm', 'server_status',
+            'active_standby_connected', 'active_standby_disconnected', 'pathing',
+            'task_success', 'task_failed', 'all')
+        session_names (str): Collection of sessions for which the users should start receiving notifications
+
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful, 'W' = warning, 'E' = error.
+    """
+    put_url = f"{url}/system/notification/email/recipients"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    params = {
+        "addresses": str(addresses), 
+        "alert_type" : alert_type, 
+        "session_names" : str(session_names)
+    }
+    return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
+
+
+
+
+

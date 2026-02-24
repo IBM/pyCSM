@@ -617,3 +617,72 @@ def get_rolepair_info(url, tk, name, rolepair):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def get_session_options(url, tk, name):
+    """
+    Gets the options for the given session. The results returned from this method will vary depending on the session type.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+
+    Returns:
+        JSON String representing the result of the command.
+    """
+    get_url = f"{url}/sessions/{name}/options"
+    
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/json" 
+    }
+    
+    return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties.get("cert"))    
+
+def set_session_options(url, tk, name, options_str):
+    """
+    Sets Options for a given session.Call getOptions to get a list of the valid options for a session. The "type" field returned by getOptions is the name of the option to use in this restcall.
+
+    Args:
+        url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        name (str): The name of the session.
+        options (dict): JSON-serializable dictionary of options to set for the session.
+
+    Returns:
+        JSON String representing the result of the command.
+    
+    """
+    set_url = f"{url}/sessions/{name}/options"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    payload = options_str
+    if not isinstance(payload, str):
+        if isinstance(payload, dict):
+            if isinstance(payload.get("properties"), dict):
+                payload["properties"] = [payload["properties"]]
+            payload = [payload]
+        elif isinstance(payload, list):
+            fixed = []
+            for opt in payload:
+                if isinstance(opt, dict):
+                    props = opt.get("properties")
+                    if isinstance(props, dict):
+                        opt["properties"] = [props]
+                fixed.append(opt)
+            payload = fixed
+        else:
+            raise TypeError("options must be str|list|dict")
+
+        payload = json.dumps(payload)
+
+    params = {"options": payload}
+    return requests.put( set_url, headers=headers,data=params, verify=properties["verify"],cert=properties["cert"])
+
+
+

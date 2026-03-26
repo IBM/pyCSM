@@ -583,7 +583,7 @@ def put_email_notifications_enabled(url, tk, enabled):
     }
     return requests.put(set_url, headers=headers, data = params, verify=properties["verify"], cert=properties["cert"])
 
-def get_Email_Recipients(url, tk):
+def get_email_recipients(url, tk):
     """
     Get the list of e-mail reicpients for e-mail alerts. 
 
@@ -603,7 +603,7 @@ def get_Email_Recipients(url, tk):
     }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def add_Email_Recipients(url, tk, addresses, alert_type, session_names):
+def add_email_recipients(url, tk, addresses, alert_type, session_names):
     """
     Add an e-mail address to he list of reciepients for e-mail alerts. 
 

@@ -194,6 +194,54 @@ def run_scheduled_task(url, tk, taskid, synchronous=False):
     }
     return requests.post(run_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
+def enable_scheduled_task_at_time(url, tk, task_id, start_time):
+    """
+    Enable the task at the given time
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        task_id (int): ID of the schedule task to enable
+        start_time (str): Time to enable the task.
+        Format of yyyy-MM-dd'T'HH-mm.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful,'W' = warning, 'E' = error.
+    """
+    post_url = f"{url}/sessions/scheduledtasks/enable/{task_id}/{start_time}"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+
+def run_scheduled_task_at_time(url, tk, task_id, start_time):
+    """
+    Run a scheduled task immediately.
+
+    Args:
+        url (str): Base url of csm server. ex. https://servername:port/CSM/web.
+        tk (str): Rest token for the CSM server.
+        task_id (int): ID of the schedule task to enable
+        start_time (str): Time to enable the task.
+        Format of yyyy-MM-dd'T'HH-mm.
+
+    Returns:
+        JSON String representing the result of the command.
+        'I' = successful,'W' = warning, 'E' = error.
+    """
+    post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
+    headers = {
+        "Accept-Language": properties["language"],
+        "X-Auth-Token": str(tk),
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+
 def delete_task(url, tk, taskid):
     """
     This method is used to delete a schedualed task. 
@@ -264,4 +312,3 @@ def run_task_now(url, tk, taskid, synchronous=False, step=0):
     }
     
     return requests.post(run_task_now_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
-

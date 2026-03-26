@@ -482,7 +482,7 @@ class sessionClient:
                                                 roleorder)
         return resp
 
-    def remove_copysets(self, name, copysets, force=None, soft=None):
+    def remove_copysets(self, name, copysets, force=False, soft=False):
         """
         Removes Copy Sets from the given session.
 
@@ -497,10 +497,10 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = copyset_service.remove_copysets(self.base_url, self.tk, name, copysets)
+        resp = copyset_service.remove_copysets(self.base_url, self.tk, name, copysets, force, soft)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return copyset_service.remove_copysets(self.base_url, self.tk, name, copysets)
+            return copyset_service.remove_copysets(self.base_url, self.tk, name, copysets, force, soft)
         return resp
 
     def export_copysets(self, name, file_name):

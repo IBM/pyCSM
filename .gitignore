@@ -6,4 +6,17 @@ __pycache__
 .idea
 docs/html
 docs/index.html
-pyCSM.egg-info
+
+# Build artifacts
+*.egg-info
+build/
+dist/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.dylib
+*.egg
+*.whl
+setup.py.bak

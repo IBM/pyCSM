@@ -510,5 +510,48 @@ class systemClient:
         resp = system_service.set_property(self.base_url, self.tk, file, property_name, value)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.remove_active_or_standby_server(self.base_url, self.tk, file, property_name, value)
+            return system_service.remove_active_or_standby_server(self.base_url, self.tk, file)
         return resp
+    
+    def put_email_notifications_enabled(self, enabled):
+        """
+        Enables or disables email alert notifications on the server.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
+        return resp
+    
+    def get_email_recipients(self):
+        """
+        Get a summary of the volume usage on the server
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system_service.get_email_recipients(self.base_url, self.tk)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return system_service.get_email_recipients(self.base_url, self.tk)
+        return resp
+    
+    def add_email_recipients(self, addresses, alert_type, session_names):
+        """
+        Enables or disables email alert notifications on the server.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names )
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names)
+        return resp
+

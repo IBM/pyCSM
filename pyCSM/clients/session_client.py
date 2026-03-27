@@ -237,10 +237,10 @@ class sessionClient:
                                                      ses_name, state, minutes, debug)
         resp = result_dict["state_reached"]
         if resp.status_code == 401:
-            minutes = (datetime.utcnow() - start_time).total_seconds()
+            elapsed_minutes = int((datetime.utcnow() - start_time).total_seconds() / 60)
             self.tk = auth.get_token(self.base_url, self.username, self.password)
             return session_service.wait_for_state(self.base_url, self.tk, ses_name,
-                                                  state, minutes, debug)
+                                                  state, elapsed_minutes, debug)
         return result_dict
 
     def sgc_recover(self, ses_name, com_name, role, backup_id):
@@ -482,7 +482,7 @@ class sessionClient:
                                                 roleorder)
         return resp
 
-    def remove_copysets(self, name, copysets, force=None, soft=None):
+    def remove_copysets(self, name, copysets, force=False, soft=False):
         """
         Removes Copy Sets from the given session.
 
@@ -517,7 +517,7 @@ class sessionClient:
         resp = copyset_service.export_copysets(self.base_url, self.tk, name, file_name)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return copyset_service.export_copysets.export_cpyst(self.base_url, self.tk, name, file_name)
+            return copyset_service.export_copysets(self.base_url, self.tk, name, file_name)
         return resp
 
     def get_pair_info(self, name, rolepair):
@@ -538,7 +538,7 @@ class sessionClient:
                                              rolepair)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return copyset_service.get_pair_info.export_cpyst(self.base_url, self.tk, name,
+            return copyset_service.get_pair_info(self.base_url, self.tk, name,
                                                               rolepair)
         return resp
 
@@ -554,11 +554,11 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful,'W' = warning, 'E' = error.
         """
-        resp = copyset_service.enable_scheduled_task_at_time(self.base_url, self.tk, task_id,
+        resp = schedule_service.enable_scheduled_task_at_time(self.base_url, self.tk, task_id,
                                                              start_time)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return copyset_service.enable_scheduled_task_at_time(self.base_url, self.tk, task_id,
+            return schedule_service.enable_scheduled_task_at_time(self.base_url, self.tk, task_id,
                                                                  start_time)
         return resp
 
@@ -574,11 +574,11 @@ class sessionClient:
             JSON String representing the result of the command.
             'I' = successful,'W' = warning, 'E' = error.
         """
-        resp = copyset_service.run_scheduled_task_at_time(self.base_url, self.tk, task_id,
+        resp = schedule_service.run_scheduled_task_at_time(self.base_url, self.tk, task_id,
                                                           start_time)
         if resp.status_code == 401:
             self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return copyset_service.run_scheduled_task_at_time(self.base_url, self.tk, task_id,
+            return schedule_service.run_scheduled_task_at_time(self.base_url, self.tk, task_id,
                                                               start_time)
         return resp
 
@@ -769,3 +769,57 @@ class sessionClient:
             return session_service.get_rolepair_info(self.base_url, self.tk,
                                                      name, rolepair)
         return resp
+
+    def delete_task(self, taskid):
+        """
+        Delete a scheduled task. 
+        Args:
+            taskid (str): ID of the schedule task to enable.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.delete_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.delete_task(self.base_url, self.tk, taskid)
+        
+        return resp
+    
+    def cancel_task(self, taskid):
+        """
+        Cancel a running scheduled task. 
+        Args:
+            taskid (str): ID of the schedule task to cancel.
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+        resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            return schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        
+        return resp
+    
+    def run_task_now(self, taskid, synchronous=False, step=0):
+        """
+        Run a scheduled task immediately at a specific step.
+
+
+        Returns:
+            JSON String representing the result of the command.
+            'I' = successful, 'W' = warning, 'E' = error.
+        """
+
+        resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+        if resp.status_code == 401:
+            self.tk = auth.get_token(self.base_url, self.username, self.password)
+            resp = schedule_service.cancel_task(self.base_url, self.tk, taskid)
+
+        run_resp = schedule_service.run_task_now(url=self.base_url, tk=self.tk, taskid=taskid, step=step, synchronous=synchronous)
+
+        return run_resp
+    

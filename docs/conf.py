@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'pyCSM'
-copyright = '2022, dblea00'
+copyright = '2026, dblea00'
 author = 'dblea00'
 
 

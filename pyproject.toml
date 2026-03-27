@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyCSM"
+version = "1.0.8"
+description = "CSM Python Client"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [
+    {name = "Dominic Blea", email = "dblea00@ibm.com"}
+]
+maintainers = [
+    {name = "Dominic Blea", email = "dblea00@ibm.com"}
+]
+keywords = ["IBM", "CSM Storage"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Environment :: Console",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "certifi>=2022.6.15",
+    "requests>=2.28.0",
+    "urllib3>=1.26.9",
+]
+
+[tool.setuptools]
+packages = {find = {}}
+include-package-data = true

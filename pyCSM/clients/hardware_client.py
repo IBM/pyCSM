@@ -1,6 +1,7 @@
 # Copyright (C) 2022 IBM CORPORATION
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
+from tkinter import N
 import pyCSM.authorization.auth as auth
 import pyCSM.services.hardware_service.hardware_service as hardware_service
 
@@ -17,7 +18,7 @@ class hardwareClient:
     see the `CSM Documentation <https://www.ibm.com/docs/en/csm>`_ for the specific release.
     """
 
-    def __init__(self, server_address, server_port, username, password):
+    def __init__(self, server_address, server_port, username=None, password=None, tk=None, mtls_header=None):
         """
         Creates a hardware client to store the server_address,
         port, username, password and token once created.
@@ -25,14 +26,41 @@ class hardwareClient:
         Args:
             server_address(str): IP address or hostname of the CSM server
             server_port (str): The port of the CSM server.
-            username (str): username for server login.
-            password (str): password for server login.
+            username (str) (optional): username for server login. Required if tk or mtls_header is not provided.
+            password (str) (optional): password for server login. Required if tk or mtls_header is not provided.
+            tk (str) (optional): authentication token. If provided, username and password are not required.
+            mtls_header (str) (optional): location of the cert file to be uploaded. Required if username, password and tk are not provided.
+        ""
+
+        Raises:
+            ValueError: If neither (username and password) nor tk is provided.
 
         """
-        self.username = username
-        self.password = password
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_token(self.base_url, username, password)
+        
+        if username is not None and password is not None:
+            # Get token using username and password
+            self.username = username
+            self.password = password
+            self.tk = auth.get_token(self.base_url, username, password)
+            self.basicAuth = True
+        
+        elif tk is not None:
+            # Use provided token
+            self.tk = tk
+            self.username = None
+            self.password = None
+            self.basicAuth = False
+
+        elif mtls_header is not None:
+            self.tk = tk
+            self.username = None
+            self.password = None
+            self.mtls_header = mtls_header
+            self.basicAuth = False
+
+        else:
+            raise ValueError("Either (username and password), tk or cert file location must be provided")
 
     @staticmethod
     def get_properties():
@@ -69,10 +97,14 @@ class hardwareClient:
              Returns JSON String representing the result of the command.
 
         """
-        resp = hardware_service.get_devices(self.base_url, self.tk, device_type)
+        if self.tk is not None:
+            resp = hardware_service.get_devices(self.base_url, self.tk, device_type)
+        else:
+            resp = hardware_service.get_devices(self.base_url, None, device_type, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_devices(self.base_url, self.tk, device_type)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_devices(self.base_url, self.tk, device_type)
         return resp
 
     def add_device(self, device_type, device_ip,
@@ -100,17 +132,24 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware_service.add_device(self.base_url, self.tk, device_type,
-                                           device_ip, device_username,
-                                           device_password, device_port, second_ip, second_port,
-                                           second_username, second_password)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.add_device(self.base_url, self.tk, device_type,
+        if self.tk is not None:
+            resp = hardware_service.add_device(self.base_url, self.tk, device_type,
                                                device_ip, device_username,
-                                               device_password, device_port,
-                                               second_ip, second_port,
+                                               device_password, device_port, second_ip, second_port,
                                                second_username, second_password)
+        else:
+            resp = hardware_service.add_device(self.base_url, None, device_type,
+                                               device_ip, device_username,
+                                               device_password, device_port, second_ip, second_port,
+                                               second_username, second_password, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.add_device(self.base_url, self.tk, device_type,
+                                                   device_ip, device_username,
+                                                   device_password, device_port,
+                                                   second_ip, second_port,
+                                                   second_username, second_password)
         return resp
 
     def remove_device(self, system_id):
@@ -126,10 +165,14 @@ class hardwareClient:
              'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware_service.remove_device(self.base_url, self.tk, system_id)
+        if self.tk is not None:
+            resp = hardware_service.remove_device(self.base_url, self.tk, system_id)
+        else:
+            resp = hardware_service.remove_device(self.base_url, None, system_id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.remove_device(self.base_url, self.tk, system_id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.remove_device(self.base_url, self.tk, system_id)
         return resp
 
     def update_device_site_location(self, system_id, location):
@@ -145,12 +188,17 @@ class hardwareClient:
              'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware_service.update_device_site_location(self.base_url, self.tk,
-                                                            system_id, location)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.update_device_site_location(self.base_url, self.tk,
+        if self.tk is not None:
+            resp = hardware_service.update_device_site_location(self.base_url, self.tk,
                                                                 system_id, location)
+        else:
+            resp = hardware_service.update_device_site_location(self.base_url, None,
+                                                                system_id, location, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.update_device_site_location(self.base_url, self.tk,
+                                                                    system_id, location)
         return resp
 
     def get_volumes(self, system_name):
@@ -165,10 +213,14 @@ class hardwareClient:
             JSON String representing all the volumes for that storage system.
 
         """
-        resp = hardware_service.get_volumes(self.base_url, self.tk, system_name)
+        if self.tk is not None:
+            resp = hardware_service.get_volumes(self.base_url, self.tk, system_name)
+        else:
+            resp = hardware_service.get_volumes(self.base_url, None, system_name, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_volumes(self.base_url, self.tk, system_name)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_volumes(self.base_url, self.tk, system_name)
         return resp
 
     def export_vol_writeio_history(self, session_name, start_time, end_time):
@@ -186,13 +238,18 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware_service.export_vol_writeio_history(self.base_url, self.tk,
-                                                           session_name, start_time, end_time)
+        if self.tk is not None:
+            resp = hardware_service.export_vol_writeio_history(self.base_url, self.tk,
+                                                               session_name, start_time, end_time)
+        else:
+            resp = hardware_service.export_vol_writeio_history(self.base_url, None,
+                                                               session_name, start_time, end_time, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.export_vol_writeio_history(self.base_url, self.tk,
-                                                               session_name, start_time,
-                                                               end_time)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.export_vol_writeio_history(self.base_url, self.tk,
+                                                                   session_name, start_time,
+                                                                   end_time)
         return resp
 
     def get_paths(self):
@@ -204,10 +261,14 @@ class hardwareClient:
             JSON String representing the result of the command.
 
         """
-        resp = hardware_service.get_paths(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = hardware_service.get_paths(self.base_url, self.tk)
+        else:
+            resp = hardware_service.get_paths(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_paths(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_paths(self.base_url, self.tk)
         return resp
 
     def get_path_on_storage_system(self, system_id):
@@ -222,10 +283,14 @@ class hardwareClient:
             JSON String representing the result of the command.
 
         """
-        resp = hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id)
+        if self.tk is not None:
+            resp = hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id)
+        else:
+            resp = hardware_service.get_path_on_storage_system(self.base_url, None, system_id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_path_on_storage_system(self.base_url, self.tk, system_id)
         return resp
 
     def refresh_config(self, system_id):
@@ -242,10 +307,14 @@ class hardwareClient:
             'I' = successful, 'W' = warning, 'E' = error.
 
         """
-        resp = hardware_service.refresh_config(self.base_url, self.tk, system_id)
+        if self.tk is not None:
+            resp = hardware_service.refresh_config(self.base_url, self.tk, system_id)
+        else:
+            resp = hardware_service.refresh_config(self.base_url, None, system_id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.refresh_config(self.base_url, self.tk, system_id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.refresh_config(self.base_url, self.tk, system_id)
         return resp
 
     def map_volumes_to_host(self, device_id, force,
@@ -265,14 +334,20 @@ class hardwareClient:
         Returns:
             JSON String representing all the volumes for that storage system.
         """
-        resp = hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                    hostname, is_host_cluster,
-                                                    volumes, scsi)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+        if self.tk is not None:
+            resp = hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
                                                         hostname, is_host_cluster,
                                                         volumes, scsi)
+        else:
+            resp = hardware_service.map_volumes_to_host(self.base_url, None, device_id, force,
+                                                        hostname, is_host_cluster,
+                                                        volumes, scsi, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.map_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                            hostname, is_host_cluster,
+                                                            volumes, scsi)
         return resp
 
     def get_svchosts(self, device_id):
@@ -286,10 +361,14 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.get_svchosts(self.base_url, self.tk, device_id)
+        if self.tk is not None:
+            resp = hardware_service.get_svchosts(self.base_url, self.tk, device_id)
+        else:
+            resp = hardware_service.get_svchosts(self.base_url, None, device_id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_svchosts(self.base_url, self.tk, device_id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_svchosts(self.base_url, self.tk, device_id)
         return resp
 
     def unmap_volumes_to_host(self, device_id, force,
@@ -308,14 +387,20 @@ class hardwareClient:
         Returns:
             JSON String representing all the volumes for that storage system.
         """
-        resp = hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
-                                                      hostname, is_host_cluster,
-                                                      volumes)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+        if self.tk is not None:
+            resp = hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
                                                           hostname, is_host_cluster,
                                                           volumes)
+        else:
+            resp = hardware_service.unmap_volumes_to_host(self.base_url, None, device_id, force,
+                                                          hostname, is_host_cluster,
+                                                          volumes, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.unmap_volumes_to_host(self.base_url, self.tk, device_id, force,
+                                                              hostname, is_host_cluster,
+                                                              volumes)
         return resp
 
     def update_connection_info(self, device_ip, device_password, device_username,
@@ -333,12 +418,17 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
-                                                       device_password, device_username, connection_name)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
+        if self.tk is not None:
+            resp = hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
                                                            device_password, device_username, connection_name)
+        else:
+            resp = hardware_service.update_connection_info(self.base_url, None, device_ip,
+                                                           device_password, device_username, connection_name, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.update_connection_info(self.base_url, self.tk, device_ip,
+                                                               device_password, device_username, connection_name)
         return resp
 
     def add_zos_cert(self, file_path):
@@ -352,10 +442,14 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
+        if self.tk is not None:
+            resp = hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
+        else:
+            resp = hardware_service.add_zos_cert(self.base_url, None, file_path, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.add_zos_cert(self.base_url, self.tk, file_path)
         return resp
 
     def add_zos_host(self, host_ip, password, username, host_port):
@@ -372,12 +466,17 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
-                                             password, username, host_port)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
+        if self.tk is not None:
+            resp = hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
                                                  password, username, host_port)
+        else:
+            resp = hardware_service.add_zos_host(self.base_url, None, host_ip,
+                                                 password, username, host_port, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.add_zos_host(self.base_url, self.tk, host_ip,
+                                                     password, username, host_port)
         return resp
 
 
@@ -389,10 +488,14 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.get_zos_candidate(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = hardware_service.get_zos_candidate(self.base_url, self.tk)
+        else:
+            resp = hardware_service.get_zos_candidate(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_zos_candidate(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_zos_candidate(self.base_url, self.tk)
         return resp
 
     def get_zos_host(self):
@@ -403,10 +506,14 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.get_zos_host(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = hardware_service.get_zos_host(self.base_url, self.tk)
+        else:
+            resp = hardware_service.get_zos_host(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_zos_host(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_zos_host(self.base_url, self.tk)
         return resp
 
 
@@ -422,12 +529,17 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
-                                                host_port)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
+        if self.tk is not None:
+            resp = hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
                                                     host_port)
+        else:
+            resp = hardware_service.remove_zos_host(self.base_url, None, host_ip,
+                                                    host_port, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.remove_zos_host(self.base_url, self.tk, host_ip,
+                                                        host_port)
         return resp
 
 
@@ -443,10 +555,14 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.add_zos_device(self.base_url, self.tk, device_id)
+        if self.tk is not None:
+            resp = hardware_service.add_zos_device(self.base_url, self.tk, device_id)
+        else:
+            resp = hardware_service.add_zos_device(self.base_url, None, device_id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.add_zos_device(self.base_url, self.tk, device_id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.add_zos_device(self.base_url, self.tk, device_id)
         return resp
 
 
@@ -462,8 +578,12 @@ class hardwareClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name)
+        if self.tk is not None:
+            resp = hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name)
+        else:
+            resp = hardware_service.get_volumes_by_wwn(self.base_url, None, wwn_name, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return hardware_service.get_volumes_by_wwn(self.base_url, self.tk, wwn_name)
         return resp

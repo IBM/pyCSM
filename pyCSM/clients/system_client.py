@@ -18,7 +18,7 @@ class systemClient:
 |
     """
 
-    def __init__(self, server_address, server_port, username, password):
+    def __init__(self, server_address, server_port, username=None, password=None, tk=None, mtls_header=None):
         """
         Creates a system client to store the server_address, port,
         username, password and token once created.
@@ -30,10 +30,31 @@ class systemClient:
             username (str): username for server login.
             password (str): password for server login.
         """
-        self.username = username
-        self.password = password
+
         self.base_url = f"https://{server_address}:{server_port}/CSM/web"
-        self.tk = auth.get_token(self.base_url, username, password)
+        if username is not None and password is not None:
+            # Get token using username and password
+            self.username = username
+            self.password = password
+            self.tk = auth.get_token(self.base_url, username, password)
+            self.basicAuth = True
+        
+        elif tk is not None:
+            # Use provided token
+            self.tk = tk
+            self.username = None
+            self.password = None
+            self.basicAuth = False
+
+        elif mtls_header is not None:
+            self.tk = tk
+            self.username = None
+            self.password = None
+            self.mtls_header = mtls_header
+            self.basicAuth = False
+
+        else:
+            raise ValueError("Either (username and password), tk or cert file location must be provided")
 
     @staticmethod
     def get_properties():
@@ -75,11 +96,12 @@ class systemClient:
                                verify=system_service.properties["verify"],
                                cert=system_service.properties["cert"])
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            headers["X-Auth-Token"] = self.tk
-            return requests.delete(url, headers=headers, data=data,
-                                   verify=system_service.properties["verify"],
-                                   cert=system_service.properties["cert"])
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                headers["X-Auth-Token"] = self.tk
+                return requests.delete(url, headers=headers, data=data,
+                                       verify=system_service.properties["verify"],
+                                       cert=system_service.properties["cert"])
         return resp
 
     def rest_put(self, url, data, headers):
@@ -98,11 +120,12 @@ class systemClient:
                             verify=system_service.properties["verify"],
                             cert=system_service.properties["cert"])
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            headers["X-Auth-Token"] = self.tk
-            return requests.put(url, headers=headers, data=data,
-                                verify=system_service.properties["verify"],
-                                cert=system_service.properties["cert"])
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                headers["X-Auth-Token"] = self.tk
+                return requests.put(url, headers=headers, data=data,
+                                    verify=system_service.properties["verify"],
+                                    cert=system_service.properties["cert"])
         return resp
 
     def rest_post(self, url, data, headers):
@@ -121,11 +144,12 @@ class systemClient:
                              verify=system_service.properties["verify"],
                              cert=system_service.properties["cert"])
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            headers["X-Auth-Token"] = self.tk
-            return requests.post(url, headers=headers, data=data,
-                                 verify=system_service.properties["verify"],
-                                 cert=system_service.properties["cert"])
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                headers["X-Auth-Token"] = self.tk
+                return requests.post(url, headers=headers, data=data,
+                                     verify=system_service.properties["verify"],
+                                     cert=system_service.properties["cert"])
         return resp
 
     def rest_get(self, url, data, headers):
@@ -144,11 +168,12 @@ class systemClient:
                             verify=system_service.properties["verify"],
                             cert=system_service.properties["cert"])
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            headers["X-Auth-Token"] = self.tk
-            return requests.get(url, headers=headers, data=data,
-                                verify=system_service.properties["verify"],
-                                cert=system_service.properties["cert"])
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                headers["X-Auth-Token"] = self.tk
+                return requests.get(url, headers=headers, data=data,
+                                    verify=system_service.properties["verify"],
+                                    cert=system_service.properties["cert"])
         return resp
 
     def create_log_pkg(self):
@@ -159,10 +184,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.create_log_pkg(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.create_log_pkg(self.base_url, self.tk)
+        else:
+            resp = system_service.create_log_pkg(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.create_log_pkg(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.create_log_pkg(self.base_url, self.tk)
         return resp
 
     def get_log_pkgs(self):
@@ -173,10 +202,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
             """
-        resp = system_service.get_log_pkgs(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_log_pkgs(self.base_url, self.tk)
+        else:
+            resp = system_service.get_log_pkgs(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_log_pkgs(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_log_pkgs(self.base_url, self.tk)
         return resp
 
     def backup_server(self):
@@ -188,10 +221,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.backup_server(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.backup_server(self.base_url, self.tk)
+        else:
+            resp = system_service.backup_server(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.backup_server(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.backup_server(self.base_url, self.tk)
         return resp
 
     def get_server_backups(self):
@@ -202,10 +239,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_server_backups(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_server_backups(self.base_url, self.tk)
+        else:
+            resp = system_service.get_server_backups(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_server_backups(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_server_backups(self.base_url, self.tk)
         return resp
 
     def backup_server_and_download(self, file_name):
@@ -218,10 +259,14 @@ class systemClient:
         Returns:
             Server backup data that is written to the specified file.
         """
-        resp = system_service.backup_server_and_download(self.base_url, self.tk, file_name)
+        if self.tk is not None:
+            resp = system_service.backup_server_and_download(self.base_url, self.tk, file_name)
+        else:
+            resp = system_service.backup_server_and_download(self.base_url, None, file_name, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.backup_server_and_download(self.base_url, self.tk, file_name)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.backup_server_and_download(self.base_url, self.tk, file_name)
         return resp
 
     def set_server_as_standby(self, active_server):
@@ -240,12 +285,17 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.set_server_as_standby(self.base_url, self.tk,
-                                                    active_server)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.set_server_as_standby(self.base_url, self.tk,
+        if self.tk is not None:
+            resp = system_service.set_server_as_standby(self.base_url, self.tk,
                                                         active_server)
+        else:
+            resp = system_service.set_server_as_standby(self.base_url, None,
+                                                        active_server, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.set_server_as_standby(self.base_url, self.tk,
+                                                            active_server)
         return resp
 
     def get_dual_control_state(self):
@@ -256,10 +306,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_dual_control_state(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_dual_control_state(self.base_url, self.tk)
+        else:
+            resp = system_service.get_dual_control_state(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_dual_control_state(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_dual_control_state(self.base_url, self.tk)
         return resp
 
     def change_dual_control_state(self, enable):
@@ -274,10 +328,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.change_dual_control_state(self.base_url, self.tk, enable)
+        if self.tk is not None:
+            resp = system_service.change_dual_control_state(self.base_url, self.tk, enable)
+        else:
+            resp = system_service.change_dual_control_state(self.base_url, None, enable, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.change_dual_control_state(self.base_url, self.tk, enable)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.change_dual_control_state(self.base_url, self.tk, enable)
         return resp
 
     def get_dual_control_requests(self):
@@ -288,10 +346,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_dual_control_requests(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_dual_control_requests(self.base_url, self.tk)
+        else:
+            resp = system_service.get_dual_control_requests(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_dual_control_requests(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_dual_control_requests(self.base_url, self.tk)
         return resp
 
     def approve_dual_control_request(self, id):
@@ -306,10 +368,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.approve_dual_control_request(self.base_url, self.tk, id)
+        if self.tk is not None:
+            resp = system_service.approve_dual_control_request(self.base_url, self.tk, id)
+        else:
+            resp = system_service.approve_dual_control_request(self.base_url, None, id, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.approve_dual_control_request(self.base_url, self.tk, id)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.approve_dual_control_request(self.base_url, self.tk, id)
         return resp
 
     def reject_dual_control_request(self, id, comment):
@@ -326,10 +392,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.reject_dual_control_request(self.base_url, self.tk, id, comment)
+        if self.tk is not None:
+            resp = system_service.reject_dual_control_request(self.base_url, self.tk, id, comment)
+        else:
+            resp = system_service.reject_dual_control_request(self.base_url, None, id, comment, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.reject_dual_control_request(self.base_url, self.tk, id, comment)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.reject_dual_control_request(self.base_url, self.tk, id, comment)
         return resp
 
     def get_active_standby_status(self):
@@ -340,10 +410,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_active_standby_status(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_active_standby_status(self.base_url, self.tk)
+        else:
+            resp = system_service.get_active_standby_status(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_active_standby_status(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_active_standby_status(self.base_url, self.tk)
         return resp
 
     def reconnect_active_standby_server(self):
@@ -354,10 +428,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.reconnect_active_standby_server(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.reconnect_active_standby_server(self.base_url, self.tk)
+        else:
+            resp = system_service.reconnect_active_standby_server(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.reconnect_active_standby_server(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.reconnect_active_standby_server(self.base_url, self.tk)
         return resp
 
     def remove_active_or_standby_server(self, ha_server):
@@ -372,10 +450,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server)
+        if self.tk is not None:
+            resp = system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server)
+        else:
+            resp = system_service.remove_active_or_standby_server(self.base_url, None, ha_server, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.remove_active_or_standby_server(self.base_url, self.tk, ha_server)
         return resp
 
     def set_standby_server(self, standby_server, standby_username, standby_password):
@@ -391,12 +473,17 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.set_standby_server(self.base_url, self.tk, standby_server,
-                                                 standby_username, standby_password)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.set_standby_server(self.base_url, self.tk, standby_server,
+        if self.tk is not None:
+            resp = system_service.set_standby_server(self.base_url, self.tk, standby_server,
                                                      standby_username, standby_password)
+        else:
+            resp = system_service.set_standby_server(self.base_url, None, standby_server,
+                                                     standby_username, standby_password, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.set_standby_server(self.base_url, self.tk, standby_server,
+                                                         standby_username, standby_password)
         return resp
 
     def takeover_standby_server(self):
@@ -407,10 +494,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.takeover_standby_server(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.takeover_standby_server(self.base_url, self.tk)
+        else:
+            resp = system_service.takeover_standby_server(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.takeover_standby_server(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.takeover_standby_server(self.base_url, self.tk)
         return resp
 
     def get_log_events(self, count, session=None):
@@ -425,12 +516,17 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_log_events(self.base_url, self.tk,
-                                             count, session)
-        if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_log_events(self.base_url, self.tk,
+        if self.tk is not None:
+            resp = system_service.get_log_events(self.base_url, self.tk,
                                                  count, session)
+        else:
+            resp = system_service.get_log_events(self.base_url, None,
+                                                 count, session, self.mtls_header)
+        if resp.status_code == 401:
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_log_events(self.base_url, self.tk,
+                                                     count, session)
         return resp
 
     def create_and_download_log_pkg(self, file_name):
@@ -446,10 +542,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name)
+        if self.tk is not None:
+            resp = system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name)
+        else:
+            resp = system_service.create_and_download_log_pkg(self.base_url, None, file_name, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.create_and_download_log_pkg(self.base_url, self.tk, file_name)
         return resp
 
     def get_session_types(self):
@@ -460,10 +560,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_session_types(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_session_types(self.base_url, self.tk)
+        else:
+            resp = system_service.get_session_types(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_session_types(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_session_types(self.base_url, self.tk)
         return resp
 
     def get_server_version(self):
@@ -474,10 +578,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_server_version(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_server_version(self.base_url, self.tk)
+        else:
+            resp = system_service.get_server_version(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_server_version(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_server_version(self.base_url, self.tk)
         return resp
 
     def get_volume_counts(self):
@@ -488,10 +596,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_volume_counts(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_volume_counts(self.base_url, self.tk)
+        else:
+            resp = system_service.get_volume_counts(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_volume_counts(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_volume_counts(self.base_url, self.tk)
         return resp
 
     def set_property(self, file, property_name, value):
@@ -507,10 +619,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.set_property(self.base_url, self.tk, file, property_name, value)
+        if self.tk is not None:
+            resp = system_service.set_property(self.base_url, self.tk, file, property_name, value)
+        else:
+            resp = system_service.set_property(self.base_url, None, file, property_name, value, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.remove_active_or_standby_server(self.base_url, self.tk, file)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.remove_active_or_standby_server(self.base_url, self.tk, file)
         return resp
     
     def put_email_notifications_enabled(self, enabled):
@@ -521,10 +637,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
+        if self.tk is not None:
+            resp = system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
+        else:
+            resp = system_service.put_email_notifications_enabled(self.base_url, None, enabled, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.put_email_notifications_enabled(self.base_url, self.tk, enabled)
         return resp
     
     def get_email_recipients(self):
@@ -535,10 +655,14 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.get_email_recipients(self.base_url, self.tk)
+        if self.tk is not None:
+            resp = system_service.get_email_recipients(self.base_url, self.tk)
+        else:
+            resp = system_service.get_email_recipients(self.base_url, None, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.get_email_recipients(self.base_url, self.tk)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.get_email_recipients(self.base_url, self.tk)
         return resp
     
     def add_email_recipients(self, addresses, alert_type, session_names):
@@ -549,9 +673,13 @@ class systemClient:
             JSON String representing the result of the command.
             'I' = successful, 'W' = warning, 'E' = error.
         """
-        resp = system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names )
+        if self.tk is not None:
+            resp = system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names)
+        else:
+            resp = system_service.add_email_recipients(self.base_url, None, addresses, alert_type, session_names, self.mtls_header)
         if resp.status_code == 401:
-            self.tk = auth.get_token(self.base_url, self.username, self.password)
-            return system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names)
+            if self.basicAuth == True:
+                self.tk = auth.get_token(self.base_url, self.username, self.password)
+                return system_service.add_email_recipients(self.base_url, self.tk, addresses, alert_type, session_names)
         return resp
 

@@ -38,7 +38,7 @@ def change_properties(property_dictionary):
     return properties
 
 
-def get_devices(url, tk, device_type):
+def get_devices(url, tk, device_type, mtls_header=None):
     """
     Uses a get request to get info of all the storagedevices of a given type.
 
@@ -51,11 +51,18 @@ def get_devices(url, tk, device_type):
         Returns JSON String representing the result of the command.
     """
     get_url = f"{url}/storagedevices/connectioninfo"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     queryparams = [dict(name="type", value=device_type)]
 
     get_url = utility.add_query_params(get_url, queryparams)
@@ -64,7 +71,7 @@ def get_devices(url, tk, device_type):
 
 def add_device(url, tk, device_type, device_ip, device_username,
                device_password, device_port=None, second_ip=None, second_port=None,
-               second_username=None, second_password=None):
+               second_username=None, second_password=None, mtls_header=None):
     """
     Use this method to create a connection from the CSM server to a specified storage system
 
@@ -87,11 +94,18 @@ def add_device(url, tk, device_type, device_ip, device_username,
     """
 
     addd_url = f"{url}/storagedevices"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "type": device_type,
         "deviceip": device_ip,
@@ -107,7 +121,7 @@ def add_device(url, tk, device_type, device_ip, device_username,
                         verify=properties["verify"], cert=properties["cert"])
 
 
-def remove_device(url, tk, system_id):
+def remove_device(url, tk, system_id, mtls_header=None):
     """
     Use this method to remove the connection to the specified storage system
 
@@ -121,16 +135,23 @@ def remove_device(url, tk, system_id):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     remove_url = f"{url}/storagedevices/{system_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.delete(remove_url, headers=headers,
                            verify=properties["verify"], cert=properties["cert"])
 
 
-def update_device_site_location(url, tk, system_id, location):
+def update_device_site_location(url, tk, system_id, location, mtls_header=None):
     """
     Set a user defined site location for a given storage system
 
@@ -145,11 +166,18 @@ def update_device_site_location(url, tk, system_id, location):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     update_url = f"{url}/storagedevices/{system_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "location": location
     }
@@ -157,7 +185,7 @@ def update_device_site_location(url, tk, system_id, location):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def get_volumes(url, tk, system_name):
+def get_volumes(url, tk, system_name, mtls_header=None):
     """
     Use this method to retrieve all volumes for a given storage system
 
@@ -170,15 +198,22 @@ def get_volumes(url, tk, system_name):
         JSON String representing all the volumes for that storage system.
     """
     get_url = f"{url}/storagedevices/volumes/{system_name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
+def export_vol_writeio_history(url, tk, session_name, start_time, end_time, mtls_header=None):
     """
     Exports a summary of the write i/o history for all volumes in a session to a csv file between the given times.
 
@@ -194,11 +229,18 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     export_url = f"{url}/sessions/{session_name}/exportesevolumehistory"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "starttime": start_time,
         "endtime": end_time
@@ -207,7 +249,7 @@ def export_vol_writeio_history(url, tk, session_name, start_time, end_time):
                         verify=properties["verify"], cert=properties["cert"])
 
 
-def get_paths(url, tk):
+def get_paths(url, tk, mtls_header=None):
     """
    Queries all the logical paths for all DS8000 storage systems connected to the CSM server.
 
@@ -219,15 +261,22 @@ def get_paths(url, tk):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/storagedevices/paths"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_path_on_storage_system(url, tk, system_id):
+def get_path_on_storage_system(url, tk, system_id, mtls_header=None):
     """
     Query for all logical paths on the given DS8000 storage system.
 
@@ -240,15 +289,22 @@ def get_path_on_storage_system(url, tk, system_id):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/storagedevices/paths/{system_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def refresh_config(url, tk, system_id):
+def refresh_config(url, tk, system_id, mtls_header=None):
     """
     Refreshes the configuration for the given storage system.  Issuing this command will force the CSM server
         to requery the hardware for any new or deleted volumes.
@@ -263,17 +319,24 @@ def refresh_config(url, tk, system_id):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     refresh_url = f"{url}/storagedevices/{system_id}/refreshconfig"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(refresh_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def map_volumes_to_host(url, tk, device_id, force,
                         hostname, is_host_cluster,
-                        volumes, scsi=""):
+                        volumes, scsi="", mtls_header=None):
     """
     Map volumes to a host
 
@@ -292,11 +355,18 @@ def map_volumes_to_host(url, tk, device_id, force,
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/storagedevices/mapvolstohost"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     if scsi == "":
         params = {
             "deviceId": device_id,
@@ -318,7 +388,7 @@ def map_volumes_to_host(url, tk, device_id, force,
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_svchosts(url, tk, device_id):
+def get_svchosts(url, tk, device_id, mtls_header=None):
     """
     Get the hosts defined on the SVC based storage system
 
@@ -332,17 +402,24 @@ def get_svchosts(url, tk, device_id):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/storagedevices/svchost/{device_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
 def unmap_volumes_to_host(url, tk, device_id, force,
                           hostname, is_host_cluster,
-                          volumes):
+                          volumes, mtls_header=None):
     """
     UnMap volumes from a host
 
@@ -360,11 +437,18 @@ def unmap_volumes_to_host(url, tk, device_id, force,
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/storagedevices/unmapvolstohost"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "deviceId": device_id,
         "force": force,
@@ -376,7 +460,7 @@ def unmap_volumes_to_host(url, tk, device_id, force,
 
 
 def update_connection_info(url, tk, device_ip, device_password, device_username,
-                           connection_name):
+                           connection_name, mtls_header=None):
     """
     Update the userid/pw for a given storage system
 
@@ -393,11 +477,18 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/storagedevices/updatehmc"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     params = {
         "deviceip": device_ip,
@@ -410,7 +501,7 @@ def update_connection_info(url, tk, device_ip, device_password, device_username,
 
 
 
-def get_zos_candidate(url, tk):
+def get_zos_candidate(url, tk, mtls_header=None):
     """
     This method will query for the devices in REST that are attached to the zos system.
 
@@ -423,11 +514,18 @@ def get_zos_candidate(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/storagedevices/zoscandidate"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     params = {
     }
@@ -437,7 +535,7 @@ def get_zos_candidate(url, tk):
 
 
 
-def add_zos_host(url, tk, host_ip, password, username, host_port):
+def add_zos_host(url, tk, host_ip, password, username, host_port, mtls_header=None):
     """
     This method will create a zos connection to the current IP
 
@@ -454,11 +552,18 @@ def add_zos_host(url, tk, host_ip, password, username, host_port):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/storagedevices/zoshost"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     params = {
         "hostip": host_ip,
@@ -470,7 +575,7 @@ def add_zos_host(url, tk, host_ip, password, username, host_port):
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def remove_zos_host(url, tk, host_ip, host_port):
+def remove_zos_host(url, tk, host_ip, host_port, mtls_header=None):
     """
     This method will create a zos connection to the current IP
 
@@ -485,11 +590,18 @@ def remove_zos_host(url, tk, host_ip, host_port):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     delete_url = f"{url}/storagedevices/zoshost"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     params = {
         "hostip": host_ip,
@@ -499,7 +611,7 @@ def remove_zos_host(url, tk, host_ip, host_port):
     return requests.delete(delete_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def add_zos_cert(url, tk, file_path):
+def add_zos_cert(url, tk, file_path, mtls_header=None):
     """
     This method will add a given cert to zos connection.
 
@@ -513,10 +625,16 @@ def add_zos_cert(url, tk, file_path):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     post_url = f"{url}/storagedevices/zoscert"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+        }
 
     files = {
         "file": open(file_path, 'rb')
@@ -524,7 +642,7 @@ def add_zos_cert(url, tk, file_path):
 
     return requests.post(post_url, headers=headers, files=files, verify=properties["verify"], cert=properties["cert"])
 
-def add_zos_device(url, tk, device_id):
+def add_zos_device(url, tk, device_id, mtls_header=None):
     """
     This method will add a storage system through the zoshost connection.
 
@@ -538,11 +656,18 @@ def add_zos_device(url, tk, device_id):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/storagedevices/zosdevice"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     params = {
         "deviceid": device_id
@@ -551,7 +676,7 @@ def add_zos_device(url, tk, device_id):
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_zos_host(url, tk):
+def get_zos_host(url, tk, mtls_header=None):
     """
     This method will get the information for all zos host connections.
 
@@ -564,17 +689,24 @@ def get_zos_host(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/storagedevices/zoshost"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers,  verify=properties["verify"], cert=properties["cert"])
 
 
 
 
-def get_volumes_by_wwn(url, tk, wwn_name):
+def get_volumes_by_wwn(url, tk, wwn_name, mtls_header=None):
     """
     Return the information for all volumes based on the list of WWNs passed in.
 
@@ -588,10 +720,28 @@ def get_volumes_by_wwn(url, tk, wwn_name):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/storagedevices/volumes/volwwn/{wwn_name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def open_cert_file(file_location):
+    """
+    Opens the certificate file and returns the contents
+    Args:
+        file_location (str): The location of the certificate file
+    Returns:
+        str: The contents of the certificate file
+        """
+    with open(file_location, 'rb') as f:
+        return f.read().decode('utf-8').replace('\r', '').replace('\n', '')

@@ -38,7 +38,7 @@ def change_properties(property_dictionary):
     return properties
 
 
-def create_log_pkg(url, tk):
+def create_log_pkg(url, tk, mtls_header=None):
     """
     This method will package all log files on the server into a .jar file
 
@@ -51,15 +51,22 @@ def create_log_pkg(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     make_url = f"{url}/system/logpackages"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(make_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_log_pkgs(url, tk):
+def get_log_pkgs(url, tk, mtls_header=None):
     """
     Gets a list of log packages and their location on the server
 
@@ -72,15 +79,22 @@ def get_log_pkgs(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
         """
     get_url = f"{url}/system/logpackages"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def backup_server(url, tk):
+def backup_server(url, tk, mtls_header=None):
     """
     Creates a zip backup of the CSM server data
     that can be used for restoring the server at a later date
@@ -94,15 +108,22 @@ def backup_server(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     backup_url = f"{url}/system/backupserver"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_server_backups(url, tk):
+def get_server_backups(url, tk, mtls_header=None):
     """
     Retrieves a list of all server backups.
 
@@ -115,15 +136,22 @@ def get_server_backups(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     backup_url = f"{url}/system/backupserver"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def backup_server_and_download(url, tk, file_name):
+def backup_server_and_download(url, tk, file_name, mtls_header=None):
     """
     Create and downloads a server backup.
 
@@ -136,11 +164,18 @@ def backup_server_and_download(url, tk, file_name):
         A file downloaded into the client with the specified filename
     """
     backup_url = f"{url}/system/backupserver/download"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     resp = requests.get(backup_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
@@ -148,7 +183,7 @@ def backup_server_and_download(url, tk, file_name):
     return resp
 
 
-def set_server_as_standby(url, tk, active_server):
+def set_server_as_standby(url, tk, active_server, mtls_header=None):
     """
     Issue this command to the server that you want to be the standby server.
     Sets the server passed in to be the active server. All data on
@@ -165,15 +200,22 @@ def set_server_as_standby(url, tk, active_server):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     set_url = f"{url}/system/ha/setServerAsStandby/{active_server}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(set_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_dual_control_state(url, tk):
+def get_dual_control_state(url, tk, mtls_header=None):
     """
     Use this method to determine if dual control is currently enabled of disabled on the server.
 
@@ -186,15 +228,22 @@ def get_dual_control_state(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/dualcontrol"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def change_dual_control_state(url, tk, enable):
+def change_dual_control_state(url, tk, enable, mtls_header=None):
     """
     Use this method to enable or disable dual control on the CSM server.
 
@@ -209,15 +258,22 @@ def change_dual_control_state(url, tk, enable):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     post_url = f"{url}/system/dualcontrol/{enable}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_dual_control_requests(url, tk):
+def get_dual_control_requests(url, tk, mtls_header=None):
     """
     Returns a list of dual control events waiting for approval or rejection
 
@@ -230,15 +286,22 @@ def get_dual_control_requests(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/dualcontrol/requests"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def approve_dual_control_request(url, tk, id):
+def approve_dual_control_request(url, tk, id, mtls_header=None):
     """
     Approve a dual control request
 
@@ -253,15 +316,22 @@ def approve_dual_control_request(url, tk, id):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     post_url = f"{url}/system/dualcontrol/approve/{id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def reject_dual_control_request(url, tk, id, comment):
+def reject_dual_control_request(url, tk, id, comment, mtls_header=None):
     """
     Reject a dual control request
 
@@ -277,15 +347,22 @@ def reject_dual_control_request(url, tk, id, comment):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     post_url = f"{url}/system/dualcontrol/reject/{id}/{comment}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_active_standby_status(url, tk):
+def get_active_standby_status(url, tk, mtls_header=None):
     """
     Get the current state of the active standby server connection
 
@@ -298,15 +375,22 @@ def get_active_standby_status(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/ha"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def reconnect_active_standby_server(url, tk):
+def reconnect_active_standby_server(url, tk, mtls_header=None):
     """
     Reconnect the active standby connection
 
@@ -319,15 +403,22 @@ def reconnect_active_standby_server(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/ha/reconnect"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def remove_active_or_standby_server(url, tk, haServer):
+def remove_active_or_standby_server(url, tk, haServer, mtls_header=None):
     """
     Remove the alternate server
 
@@ -341,15 +432,22 @@ def remove_active_or_standby_server(url, tk, haServer):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/ha/removeHaServer/{haServer}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def set_standby_server(url, tk, standby_server, standby_username, standby_password):
+def set_standby_server(url, tk, standby_server, standby_username, standby_password, mtls_header=None):
     """
     Sets the server passed in to be the standby server. All data on the passed
     in server will be replaced with the data from the called server
@@ -366,15 +464,22 @@ def set_standby_server(url, tk, standby_server, standby_username, standby_passwo
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/ha/setStandbyServer/{standby_server}/{standby_username}/{standby_password}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def takeover_standby_server(url, tk):
+def takeover_standby_server(url, tk, mtls_header=None):
     """
     Issues a takeover on the standby server making the standby server an active server
 
@@ -387,15 +492,22 @@ def takeover_standby_server(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/ha/takeover"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_log_events(url, tk, count, session=None):
+def get_log_events(url, tk, count, session=None, mtls_header=None):
     """
     get a list of the most recent log events
 
@@ -410,11 +522,18 @@ def get_log_events(url, tk, count, session=None):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/logevents"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     queryparams = [dict(name="count", value=f'{count}'),
                    dict(name="session", value=session)]
@@ -424,7 +543,7 @@ def get_log_events(url, tk, count, session=None):
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def create_and_download_log_pkg(url, tk, file_name):
+def create_and_download_log_pkg(url, tk, file_name, mtls_header=None):
     """
     This method will package all log files on the server into a .jar file
     that can be used for support - this call is a synchronous call and
@@ -440,18 +559,25 @@ def create_and_download_log_pkg(url, tk, file_name):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/logpackages/synchronous/download"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     resp = requests.get(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
 
 
-def get_session_types(url, tk):
+def get_session_types(url, tk, mtls_header=None):
     """
     Get supported session types
 
@@ -464,15 +590,24 @@ def get_session_types(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/sessiontypes"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        if mtls_header is None:
+            mtls_header = ""
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_server_version(url, tk):
+def get_server_version(url, tk, mtls_header=None):
     """
     Get the version of the server being called
 
@@ -485,15 +620,22 @@ def get_server_version(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/version"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_volume_counts(url, tk):
+def get_volume_counts(url, tk, mtls_header=None):
     """
     Get a summary of the volume usage on the server
 
@@ -506,14 +648,21 @@ def get_volume_counts(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/volcounts"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def set_property(url, tk, file, property_name, value):
+def set_property(url, tk, file, property_name, value, mtls_header=None):
     """
     This call will set the property provided to the value provide in the selected file
 
@@ -529,16 +678,23 @@ def set_property(url, tk, file, property_name, value):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/properties/{file}/{property_name}/{value}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def get_email_notifications_enabled(url, tk):
+def get_email_notifications_enabled(url, tk, mtls_header=None):
     """
-    Shows whether or not the email alert notifications are enabled 
+    Shows whether or not the email alert notifications are enabled
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -549,14 +705,21 @@ def get_email_notifications_enabled(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/notification/email/alert"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def put_email_notifications_enabled(url, tk, enabled):
+def put_email_notifications_enabled(url, tk, enabled, mtls_header=None):
     """
     Issues a Put request to enable or disable email notifications
     on the specified server.
@@ -573,19 +736,26 @@ def put_email_notifications_enabled(url, tk, enabled):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     set_url = f"{url}/system/notification/email/alert"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "enabled" : enabled 
     }
     return requests.put(set_url, headers=headers, data = params, verify=properties["verify"], cert=properties["cert"])
 
-def get_email_recipients(url, tk):
+def get_email_recipients(url, tk, mtls_header=None):
     """
-    Get the list of e-mail reicpients for e-mail alerts. 
+    Get the list of e-mail reicpients for e-mail alerts.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -596,16 +766,23 @@ def get_email_recipients(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     get_url = f"{url}/system/notification/email/alert"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def add_email_recipients(url, tk, addresses, alert_type, session_names):
+def add_email_recipients(url, tk, addresses, alert_type, session_names, mtls_header=None):
     """
-    Add an e-mail address to he list of reciepients for e-mail alerts. 
+    Add an e-mail address to he list of reciepients for e-mail alerts.
 
     Args:
         url (str): Base url of CSM server. ex. https://servername:port/CSM/web.
@@ -622,11 +799,18 @@ def add_email_recipients(url, tk, addresses, alert_type, session_names):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/system/notification/email/recipients"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "addresses": str(addresses), 
         "alert_type" : alert_type, 
@@ -634,7 +818,13 @@ def add_email_recipients(url, tk, addresses, alert_type, session_names):
     }
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
-
-
-
-
+def open_cert_file(file_location):
+    """
+    Opens the certificate file and returns the contents
+    Args:
+        file_location (str): The location of the certificate file
+    Returns:
+        str: The contents of the certificate file
+        """
+    with open(file_location, 'rb') as f:
+        return f.read().decode('utf-8').replace('\r', '').replace('\n', '')

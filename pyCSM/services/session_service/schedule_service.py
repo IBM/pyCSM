@@ -36,7 +36,7 @@ def change_properties(property_dictionary):
     return properties
 
 
-def get_scheduled_tasks(url, tk):
+def get_scheduled_tasks(url, tk, mtls_header=None):
     """
     Returns a list of scheduled tasks defined on the server
 
@@ -49,15 +49,22 @@ def get_scheduled_tasks(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     getst_url = f"{url}/sessions/scheduledtasks"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(getst_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_scheduled_task(url, tk, taskid):
+def get_scheduled_task(url, tk, taskid, mtls_header=None):
     """
     Returns the scheduled task info of a given task id
 
@@ -70,15 +77,22 @@ def get_scheduled_task(url, tk, taskid):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     getst_url = f"{url}/sessions/scheduledtasks/{taskid}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(getst_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def create_scheduled_task(url, tk, json):
+def create_scheduled_task(url, tk, json, mtls_header=None):
     """
     Creates a new task with given task info
 
@@ -92,11 +106,18 @@ def create_scheduled_task(url, tk, json):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/sessions/scheduledtasks"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "json": json
     }
@@ -104,7 +125,7 @@ def create_scheduled_task(url, tk, json):
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"], data=params)
 
 
-def duplicate_scheduled_task(url, tk, taskid):
+def duplicate_scheduled_task(url, tk, taskid, mtls_header=None):
     """
     Duplicates scheduled task of a given id
 
@@ -117,16 +138,23 @@ def duplicate_scheduled_task(url, tk, taskid):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     put_url = f"{url}/sessions/scheduledtasks/duplicate/{taskid}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     return requests.put(put_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def enable_scheduled_task(url, tk, taskid):
+def enable_scheduled_task(url, tk, taskid, mtls_header=None):
     """
     Enable a scheduled task to run based off the schedule defined on the task.
 
@@ -140,15 +168,22 @@ def enable_scheduled_task(url, tk, taskid):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     enable_url = f"{url}/sessions/scheduledtasks/enable/{taskid}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(enable_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def disable_scheduled_task(url, tk, taskid):
+def disable_scheduled_task(url, tk, taskid, mtls_header=None):
     """
     Disable a scheduled task from running automatically.
 
@@ -163,16 +198,23 @@ def disable_scheduled_task(url, tk, taskid):
     """
     disable_url = f"{url}/sessions/scheduledtasks/disable/{taskid}"
 
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(disable_url, headers=headers,
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def run_scheduled_task(url, tk, taskid, synchronous=False):
+def run_scheduled_task(url, tk, taskid, synchronous=False, mtls_header=None):
     """
     Run a scheduled task immediately.  Synchronous value set to true if call should not return until task
     is complete.  False if you want it to run in the asynchronous after the call completes.
@@ -187,14 +229,21 @@ def run_scheduled_task(url, tk, taskid, synchronous=False):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     run_url = f"{url}/sessions/scheduledtasks/{taskid}/{synchronous}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(run_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def enable_scheduled_task_at_time(url, tk, task_id, start_time):
+def enable_scheduled_task_at_time(url, tk, task_id, start_time, mtls_header=None):
     """
     Enable the task at the given time
 
@@ -210,15 +259,22 @@ def enable_scheduled_task_at_time(url, tk, task_id, start_time):
         'I' = successful,'W' = warning, 'E' = error.
     """
     post_url = f"{url}/sessions/scheduledtasks/enable/{task_id}/{start_time}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def run_scheduled_task_at_time(url, tk, task_id, start_time):
+def run_scheduled_task_at_time(url, tk, task_id, start_time, mtls_header=None):
     """
     Run a scheduled task immediately.
 
@@ -234,17 +290,24 @@ def run_scheduled_task_at_time(url, tk, task_id, start_time):
         'I' = successful,'W' = warning, 'E' = error.
     """
     post_url = f"{url}/sessions/scheduledtasks/{task_id}/runat/{start_time}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(post_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def delete_task(url, tk, taskid):
+def delete_task(url, tk, taskid, mtls_header=None):
     """
-    This method is used to delete a schedualed task. 
+    This method is used to delete a schedualed task.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
@@ -257,16 +320,23 @@ def delete_task(url, tk, taskid):
     """
     delete_task_url = f"{url}/sessions/scheduledtasks/delete/{taskid}"
 
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(delete_task_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def cancel_task(url, tk, taskid):
+def cancel_task(url, tk, taskid, mtls_header=None):
     """
-    Cancel a running schedualed task. 
+    Cancel a running schedualed task.
 
     Args:
         url (str): Base url of csm server. ex. https://servername:port/CSM/web.
@@ -279,15 +349,22 @@ def cancel_task(url, tk, taskid):
     """
     cancel_task_url = f"{url}/sessions/scheduledtasks/cancel/{taskid}"
 
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.post(cancel_task_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def run_task_now(url, tk, taskid, synchronous=False, step=0):
+def run_task_now(url, tk, taskid, synchronous=False, step=0, mtls_header=None):
     """
     Run a scheduled task immediately at a specific step.
 
@@ -305,10 +382,28 @@ def run_task_now(url, tk, taskid, synchronous=False, step=0):
     # Updated to match @Path("/scheduledtasks/{taskid}/{synchronous}/step/{step}")
     run_task_now_url = f"{url}/scheduledtasks/{taskid}/{str(synchronous).lower()}/step/{step}"
 
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/json"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/json"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/json"
+        }
     
     return requests.post(run_task_now_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
+
+def open_cert_file(file_location):
+    """
+    Opens the certificate file and returns the contents
+    Args:
+        file_location (str): The location of the certificate file
+    Returns:
+        str: The contents of the certificate file
+        """
+    with open(file_location, 'rb') as f:
+        return f.read().decode('utf-8').replace('\r', '').replace('\n', '')

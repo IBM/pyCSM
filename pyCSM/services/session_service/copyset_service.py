@@ -36,7 +36,7 @@ def change_properties(property_dictionary):
     return properties
 
 
-def get_copysets(url, tk, name):
+def get_copysets(url, tk, name, mtls_header=None):
     """
     Gets all copy sets and their info for a given session.
 
@@ -50,14 +50,20 @@ def get_copysets(url, tk, name):
         'I' = successful,'W' = warning, 'E' = error.
     """
     getcs_url = f"{url}/sessions/{name}/copysets"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+        }
     return requests.get(getcs_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def add_copysets(url, tk, name, copysets, roleorder=None):
+def add_copysets(url, tk, name, copysets, roleorder=None, mtls_header=None):
     """
     Add copy sets to a given session
 
@@ -79,12 +85,20 @@ def add_copysets(url, tk, name, copysets, roleorder=None):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     add_url = f"{url}/sessions/{name}/copysets"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
 
-    }
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+
+        }
     params = {
         "copysets": str(copysets),
         "roleOrder": str(roleorder)
@@ -93,7 +107,7 @@ def add_copysets(url, tk, name, copysets, roleorder=None):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def remove_copysets(url, tk, name, copysets, force=False, soft=False):
+def remove_copysets(url, tk, name, copysets, force=False, soft=False, mtls_header=None):
     """
     Removes Copy Sets from the given session.
 
@@ -113,11 +127,18 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     remove_url = f"{url}/sessions/{name}/{force}/{soft}/copysets"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "copysets": str(copysets)
     }
@@ -125,7 +146,7 @@ def remove_copysets(url, tk, name, copysets, force=False, soft=False):
                            data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def export_copysets(url, tk, name, file_name):
+def export_copysets(url, tk, name, file_name, mtls_header=None):
     """
     Exports copysets as a csv file and downloads it to the calling system.
 
@@ -139,18 +160,25 @@ def export_copysets(url, tk, name, file_name):
         JSON String representing the result of the command.
     """
     export_url = f"{url}/sessions/{name}/copysets/download"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     resp = requests.get(export_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
     with open(file_name, 'wb') as f:
         f.write(resp.content)
     return resp
 
 
-def get_pair_info(url, tk, name, rolepair):
+def get_pair_info(url, tk, name, rolepair, mtls_header=None):
     """
     Get all the pairs for the session in a given role pair.
 
@@ -165,10 +193,27 @@ def get_pair_info(url, tk, name, rolepair):
         'I' = successful,'W' = warning, 'E' = error.
     """
     get_url = f"{url}/sessions/{name}/pairs/{rolepair}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
+def open_cert_file(file_location):
+    """
+    Opens the certificate file and returns the contents
+    Args:
+        file_location (str): The location of the certificate file
+    Returns:
+        str: The contents of the certificate file
+        """
+    with open(file_location, 'rb') as f:
+        return f.read().decode('utf-8').replace('\r', '').replace('\n', '')

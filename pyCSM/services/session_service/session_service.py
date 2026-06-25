@@ -256,7 +256,7 @@ def modify_session_description(url, tk, name, desc, mtls_header=None):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def run_session_command(url, tk, ses_name, com_name, mtls_header=None):
+def run_session_command(url, tk, ses_name, com_name, options=None, mtls_header=None):
     """
     Run a command against a session.
 
@@ -265,6 +265,7 @@ def run_session_command(url, tk, ses_name, com_name, mtls_header=None):
         tk (str): Rest token for the CSM server.
         ses_name (str): The name of the session.
         com_name (str): The name of the command.
+        options (dict): (optional) JSON-serializable dictionary of options to run for the session.)
 
     Returns:
         JSON String representing the result of the command.
@@ -283,7 +284,8 @@ def run_session_command(url, tk, ses_name, com_name, mtls_header=None):
             "Content-Type": "application/x-www-form-urlencoded"
         }
     params = {
-        "cmd": com_name
+        "cmd": com_name, 
+        "options": str(options)
     }
     return requests.post(runc_url, headers=headers, data=params,
                          verify=properties["verify"], cert=properties["cert"])

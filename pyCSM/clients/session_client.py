@@ -280,21 +280,23 @@ class sessionClient:
                 return session_service.modify_session_description(self.base_url, self.tk, name, desc)
         return resp
 
-    def run_session_command(self, ses_name, com_name):
+    def run_session_command(self, ses_name, com_name, options=None):
         """
         Run a command against a session.
 
         Args:
             ses_name (str): The name of the session.
             com_name (str): The name of the command.
+            options (dict): (optional) JSON-serializable dictionary of options to run for the session.)
+
 
         Returns:
             JSON String representing the result of the command.
         """
         if self.tk is not None:
-            resp = session_service.run_session_command(self.base_url, self.tk, ses_name, com_name)
+            resp = session_service.run_session_command(self.base_url, self.tk, ses_name, com_name, options)
         else:
-            resp = session_service.run_session_command(self.base_url, None, ses_name, com_name, self.mtls_header)
+            resp = session_service.run_session_command(self.base_url, None, ses_name, com_name, options,  self.mtls_header)
         if resp.status_code == 401:
             if self.basicAuth == True:
                 self.tk = auth.get_token(self.base_url, self.username, self.password)

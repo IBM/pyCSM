@@ -283,10 +283,17 @@ def run_session_command(url, tk, ses_name, com_name, options=None, mtls_header=N
             "X-Client-Certificate": open_cert_file(mtls_header),
             "Content-Type": "application/x-www-form-urlencoded"
         }
-    params = {
+
+    if options is not None:
+        params = {
         "cmd": com_name, 
         "options": str(options)
-    }
+        }
+    else:
+        params = {
+        "cmd": com_name, 
+        }
+    
     return requests.post(runc_url, headers=headers, data=params,
                          verify=properties["verify"], cert=properties["cert"])
 

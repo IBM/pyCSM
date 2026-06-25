@@ -39,7 +39,7 @@ def change_properties(property_dictionary):
     return properties
 
 
-def create_session(url, tk, name, sess_type, desc=None):
+def create_session(url, tk, name, sess_type, desc=None, mtls_header=None):
     """
     Create a copy services manager session. A session must be created before
     copy sets can be placed into the session and managed by the server.
@@ -55,11 +55,18 @@ def create_session(url, tk, name, sess_type, desc=None):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     create_url = f"{url}/sessions/{name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "type": sess_type,
         "description": desc
@@ -68,7 +75,7 @@ def create_session(url, tk, name, sess_type, desc=None):
                         verify=properties["verify"], cert=properties["cert"])
 
 
-def delete_session(url, tk, name):
+def delete_session(url, tk, name, mtls_header=None):
     """
     Deletes a copy services manager session.
     Only inactive sessions can be deleted.
@@ -83,16 +90,23 @@ def delete_session(url, tk, name):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     delete_url = f"{url}/sessions/{name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.delete(delete_url, headers=headers,
                            verify=properties["verify"], cert=properties["cert"])
 
 
-def get_session_info(url, tk, name):
+def get_session_info(url, tk, name, mtls_header=None):
     """
     This method returns the detailed information for a given session.
 
@@ -106,15 +120,22 @@ def get_session_info(url, tk, name):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     getsi_url = f"{url}/sessions/{name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(getsi_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_session_overviews(url, tk):
+def get_session_overviews(url, tk, mtls_header=None):
     """
     This method returns the overview summary information
     for all sessions managed by the server
@@ -128,15 +149,22 @@ def get_session_overviews(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     gets_url = f"{url}/sessions"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(gets_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_session_overviews_short(url, tk):
+def get_session_overviews_short(url, tk, mtls_header=None):
     """
     This method returns minimal overview summary information
     for all sessions managed by the server.
@@ -150,15 +178,22 @@ def get_session_overviews_short(url, tk):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     gets_url = f"{url}/sessions/short"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(gets_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_available_commands(url, tk, name):
+def get_available_commands(url, tk, name, mtls_header=None):
     """
     Returns the list of available commands
     for a session based on the session's current state
@@ -173,15 +208,22 @@ def get_available_commands(url, tk, name):
         'I' = successful, 'W' = warning, 'E' = error.
     """
     getc_url = f"{url}/sessions/{name}/availablecommands"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(getc_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def modify_session_description(url, tk, name, desc):
+def modify_session_description(url, tk, name, desc, mtls_header=None):
     """
     Changes the description field for a given session.
 
@@ -195,11 +237,18 @@ def modify_session_description(url, tk, name, desc):
         JSON String representing the result of the command.
     """
     desc_url = f"{url}/sessions/{name}/description"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "description": desc
     }
@@ -207,7 +256,7 @@ def modify_session_description(url, tk, name, desc):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def run_session_command(url, tk, ses_name, com_name):
+def run_session_command(url, tk, ses_name, com_name, mtls_header=None):
     """
     Run a command against a session.
 
@@ -221,11 +270,18 @@ def run_session_command(url, tk, ses_name, com_name):
         JSON String representing the result of the command.
     """
     runc_url = f"{url}/sessions/{ses_name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "cmd": com_name
     }
@@ -233,7 +289,7 @@ def run_session_command(url, tk, ses_name, com_name):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
+def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False, mtls_header=None):
     """
     Runs until the session is in a given state
     or until it times out and returns the results.
@@ -251,7 +307,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
         and "session_info": JSON string representing the response of the command
     """
     start_time = datetime.utcnow()
-    resp = get_session_info(url, tk, ses_name)
+    resp = get_session_info(url, tk, ses_name, mtls_header)
     time_passed = (datetime.utcnow() - start_time).total_seconds()
     while str(json.loads(resp.text)['state']) != state \
             and time_passed < minutes * 60:
@@ -259,7 +315,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
             print("Status: " + json.loads(resp.text)['status']
                   + ", State: " + json.loads(resp.text)['state'])
         time.sleep(10)
-        resp = get_session_info(url, tk, ses_name)
+        resp = get_session_info(url, tk, ses_name, mtls_header)
         if resp.status_code == 401:
             return {"state_reached": False, "session_info": resp}
         time_passed = (datetime.utcnow() - start_time).total_seconds()
@@ -274,7 +330,7 @@ def wait_for_state(url, tk, ses_name, state, minutes=5, debug=False):
         return {"state_reached": False, "session_info": resp}
 
 
-def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
+def sgc_recover(url, tk, ses_name, com_name, role, backup_id, mtls_header=None):
     """
    Run a Recover command to the specified Safeguarded Copy backup ID.
 
@@ -290,11 +346,18 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
         JSON String representing the result of the command.
     """
     rec_url = f"{url}/sessions/{ses_name}/backups/{role}/{backup_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "cmd": com_name
     }
@@ -302,7 +365,7 @@ def sgc_recover(url, tk, ses_name, com_name, role, backup_id):
                          verify=properties["verify"], cert=properties["cert"])
 
 
-def get_backup_details(url, tk, name, role, backup_id):
+def get_backup_details(url, tk, name, role, backup_id, mtls_header=None):
     """
     Gets detailed information for a given backup in a session.
 
@@ -317,15 +380,22 @@ def get_backup_details(url, tk, name, role, backup_id):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
+def get_snapshot_details_by_name(url, tk, name, role, snapshot_name, mtls_header=None):
     """
     Gets detailed information for a given snapshot in a session.
 
@@ -340,15 +410,22 @@ def get_snapshot_details_by_name(url, tk, name, role, snapshot_name):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/snapshotsByName/{role}/{snapshot_name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def run_backup_command(url, tk, name, role, backup_id, cmd):
+def run_backup_command(url, tk, name, role, backup_id, cmd, mtls_header=None):
     """
     Used to perform a recover or expire for the specified backup.
 
@@ -364,11 +441,18 @@ def run_backup_command(url, tk, name, role, backup_id, cmd):
         JSON String representing the result of the command.
     """
     post_url = f"{url}/sessions/{name}/backups/{role}/{backup_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "cmd": cmd
     }
@@ -376,7 +460,7 @@ def run_backup_command(url, tk, name, role, backup_id, cmd):
 
 
 def export_lss_oos_history(url, tk, name, rolepair, start_time,
-                           end_time):
+                           end_time, mtls_header=None):
     """
     Export LSS OOS History for a session in csv format to a file
 
@@ -392,11 +476,18 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
         JSON String representing the result of the command.
     """
     put_url = f"{url}/sessions/{name}/exportlssooshistory/{rolepair}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "starttime": start_time,
         "endtime": end_time
@@ -405,7 +496,7 @@ def export_lss_oos_history(url, tk, name, rolepair, start_time,
 
 
 def export_device_writeio_history(url, tk, name, start_time,
-                                  end_time):
+                                  end_time, mtls_header=None):
     """
     Export ESE Box History for a session in csv format to a file
 
@@ -420,11 +511,18 @@ def export_device_writeio_history(url, tk, name, start_time,
         JSON String representing the result of the command.
     """
     put_url = f"{url}/sessions/{name}/exporteseboxhistory"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "starttime": start_time,
         "endtime": end_time
@@ -433,7 +531,7 @@ def export_device_writeio_history(url, tk, name, start_time,
 
 
 def get_rpo_history(url, tk, name, rolepair, start_time,
-                    end_time):
+                    end_time, mtls_header=None):
     """
     Export ESE Box History for a session in csv format to a file
 
@@ -448,11 +546,18 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
         JSON String representing the result of the command.
     """
     put_url = f"{url}/sessions/{name}/getrpohistory/{rolepair}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "starttime": start_time,
         "endtime": end_time
@@ -460,7 +565,7 @@ def get_rpo_history(url, tk, name, rolepair, start_time,
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_recovered_backups(url, tk, name):
+def get_recovered_backups(url, tk, name, mtls_header=None):
     """
     Gets all recovered backups for Spec V Safeguarded Copy session.
 
@@ -473,15 +578,22 @@ def get_recovered_backups(url, tk, name):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_recovered_backup_details(url, tk, name, backup_id):
+def get_recovered_backup_details(url, tk, name, backup_id, mtls_header=None):
     """
     Gets the pair information for a specific recovered backup on a specific session
 
@@ -495,15 +607,22 @@ def get_recovered_backup_details(url, tk, name, backup_id):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/recoveredbackups/{backup_id}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_snapshot_clones(url, tk, name):
+def get_snapshot_clones(url, tk, name, mtls_header=None):
     """
     Gets all clones for snapshots in for Spec V Safeguarded Copy session.
 
@@ -516,15 +635,22 @@ def get_snapshot_clones(url, tk, name):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/clones"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
+def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None, mtls_header=None):
     """
     Create a copy services manager session and automatically creates a session name
     and populates the session based on the passed in volume group
@@ -540,11 +666,18 @@ def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
         JSON String representing the result of the command.
     """
     put_url = f"{url}/sessions/byvolgroup"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     params = {
         "volgroup": volgroup,
         "type": type,
@@ -553,7 +686,7 @@ def create_session_by_volgroup_name(url, tk, volgroup, type, desc=None):
     return requests.put(put_url, headers=headers, data=params, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):
+def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name, mtls_header=None):
     """
     Gets the pair details for the thin clone of the specified snapshot in the session
 
@@ -567,15 +700,22 @@ def get_snapshot_clone_details_by_name(url, tk, name, snapshot_name):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/clonesBySnapshotName/{snapshot_name}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
 
-def get_rolepair_info(url, tk, name, rolepair):
+def get_rolepair_info(url, tk, name, rolepair, mtls_header=None):
     """
     Gets a summary for a given role pair in a session.
 
@@ -589,14 +729,21 @@ def get_rolepair_info(url, tk, name, rolepair):
         JSON String representing the result of the command.
     """
     get_url = f"{url}/sessions/{name}/sequences/{rolepair}"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties["cert"])
 
-def get_session_options(url, tk, name):
+def get_session_options(url, tk, name, mtls_header=None):
     """
     Gets the options for the given session. The results returned from this method will vary depending on the session type.
 
@@ -610,15 +757,22 @@ def get_session_options(url, tk, name):
     """
     get_url = f"{url}/sessions/{name}/options"
     
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/json" 
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/json"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/json"
+        }
     
     return requests.get(get_url, headers=headers, verify=properties["verify"], cert=properties.get("cert"))    
 
-def set_session_options(url, tk, name, options_str):
+def set_session_options(url, tk, name, options_str, mtls_header=None):
     """
     Sets Options for a given session.Call getOptions to get a list of the valid options for a session. The "type" field returned by getOptions is the name of the option to use in this restcall.
 
@@ -633,11 +787,18 @@ def set_session_options(url, tk, name, options_str):
     
     """
     set_url = f"{url}/sessions/{name}/options"
-    headers = {
-        "Accept-Language": properties["language"],
-        "X-Auth-Token": str(tk),
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    if tk is not None:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Auth-Token": str(tk),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    else:
+        headers = {
+            "Accept-Language": properties["language"],
+            "X-Client-Certificate": open_cert_file(mtls_header),
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
     payload = options_str
     if not isinstance(payload, str):
@@ -663,4 +824,13 @@ def set_session_options(url, tk, name, options_str):
     return requests.put( set_url, headers=headers,data=params, verify=properties["verify"],cert=properties["cert"])
 
 
-
+def open_cert_file(file_location):
+    """
+    Opens the certificate file and returns the contents
+    Args:
+        file_location (str): The location of the certificate file
+    Returns:
+        str: The contents of the certificate file
+        """
+    with open(file_location, 'rb') as f:
+        return f.read().decode('utf-8').replace('\r', '').replace('\n', '')

@@ -65,5 +65,15 @@ def get_token(url, username, password):
     warnings.filterwarnings("ignore")
     resp = requests.post(tk_url, headers=auth_headers,
                          data=params, verify=properties["verify"], cert=properties["cert"])
-    tk = json.loads(resp.text)['token']
-    return tk
+    if not resp.ok:
+        raise requests.HTTPError(
+            f"CSM token request to {tk_url} failed "
+            f"(status={resp.status_code}): {resp.text.strip() or '<empty body>'}",
+            response=resp)
+    try:
+        return json.loads(resp.text)['token']
+    except (ValueError, KeyError) as e:
+        raise requests.HTTPError(
+            f"CSM token request to {tk_url} returned an unexpected response "
+            f"(status={resp.status_code}): {resp.text.strip() or '<empty body>'}",
+            response=resp) from e
